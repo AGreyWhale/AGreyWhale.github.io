@@ -2,7 +2,7 @@ h1{
     color: rgb(121, 185, 168);
 }
 h2 {
-    color: rgb(255, 0, 195);
+    color: black;
 }
 body{
     margin: 0;
@@ -54,4 +54,10 @@ body{
 .content {
     margin-left: 200px;
     padding-left: 20px;
+}
+
+.boxShadow{
+    background-color: rgb(236, 187, 224);
+
+    box-shadow: 10px 10px 5px rgb(73, 181, 127);
 }
