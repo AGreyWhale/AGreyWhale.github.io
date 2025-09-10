@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="test-style.css">
+    <link id = "theme-style" rel="stylesheet" href="test-style.css">
     <title>Qualifications</title>
 </head>
 <body>
@@ -53,6 +53,20 @@
     <a href="https://www.linkedin.com/in/gauri-agrawal-0baba8321"><img src="linkedin.webp" alt = "Let's Connect!"></a>
     <a href="mailto:gauri4agrawal@gmail.com"><img src="gmail.png" alt="email me!"></a>
     <a href="https://github.com/AGreyWhale"><img src="github.png" alt="github"></a>
-  </div>
+    <button onclick="switchTheme()" 
+        style="margin:20px; padding:10px 15px; font-family:'Press Start 2P', monospace;">
+    Switch Theme
+    </button>  
+</div>
+<script>
+    function switchTheme(){
+        const theme = document.getElementById("theme-style");
+        if(theme.getAttribute("href") == "style2.css"){
+            theme.setAttribute("href", "test-style.css");
+        }else{
+            theme.setAttribute("href", "style2.css");
+        }
+    }
+</script>
 </body>
 </html>
