@@ -2,10 +2,97 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GenAI</title>
+    <title>Retro Game Favorites</title>
 </head>
-<body>
-    <a href = "index.html">Home</a><br>
+<body style="margin:0; font-family:'Press Start 2P', monospace; background-color:#0D0D0D; color:#FFFFFF; overflow-x:hidden;">
+
+    <!-- CRT scanline effect -->
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; background-image:repeating-linear-gradient(to bottom, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 2px); z-index:0;"></div>
+
+    <!-- Pixel stars background -->
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden;">
+        <div style="position:absolute; width:2px; height:2px; background:white; top:20%; left:10%; animation: star 5s linear infinite;"></div>
+        <div style="position:absolute; width:2px; height:2px; background:white; top:50%; left:40%; animation: star 7s linear infinite;"></div>
+        <div style="position:absolute; width:2px; height:2px; background:white; top:70%; left:70%; animation: star 6s linear infinite;"></div>
+    </div>
+
+    <!-- Header -->
+    <header style="text-align:center; padding:50px 20px; background-color:#1A1A1A; border-bottom:4px solid #FF3C38; position:relative; z-index:1;">
+        <h1 style="margin:0; font-size:2.5em; color:#FF3C38; text-shadow: 2px 2px #000000; animation: glow 1.5s infinite alternate;">Retro Game Favorites</h1>
+        <a href="index.html" style="display:inline-block; margin-top:20px; text-decoration:none; color:#1A1A1A; background-color:#00FF94; padding:12px 25px; border:3px solid #FFFFFF; border-radius:5px; font-weight:bold; transition: 0.2s;"
+           onmouseover="this.style.backgroundColor='#00FF70'; this.style.transform='scale(1.05)';"
+           onmouseout="this.style.backgroundColor='#00FF94'; this.style.transform='scale(1)';">
+            Back to Home
+        </a>
+    </header>
+
+    <!-- Game Section Container -->
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; padding:50px 20px; gap:40px; position:relative; z-index:1;">
+
+        <!-- Game 1 -->
+        <a href="https://supermario.nintendo.com/" target="_blank" style="text-decoration:none;">
+            <div style="width:280px; background-color:#2D2D2D; border:3px solid #FF3C38; border-radius:8px; padding:20px; box-shadow:0 5px 0 #FF3C38; transition: all 0.2s; filter: drop-shadow(0 0 5px #FF3C38); position:relative;"
+                 onmouseover="this.style.transform='translateY(-5px) scale(1.03)'; this.style.filter='drop-shadow(0 0 15px #FF3C38)'; this.querySelector('.selector').style.opacity='1';"
+                 onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.filter='drop-shadow(0 0 5px #FF3C38)'; this.querySelector('.selector').style.opacity='0';">
+                <div class="selector" style="position:absolute; left:-20px; top:20px; color:#FF3C38; font-size:20px; opacity:0; transition:0.2s;">▶</div>
+                <h2 style="color:#FF3C38; font-size:1.2em; margin-top:0;">Super Mario Odyssey</h2>
+                <p style="font-size:0.8em;">An iconic game for an iconic character, this game is definitely one of my favorites, just from the sheer amount of content and challenges presented.</p>
+            </div>
+        </a>
+
+        <!-- Game 2 -->
+        <a href="https://www.zelda.com/breath-of-the-wild/" target="_blank" style="text-decoration:none;">
+            <div style="width:280px; background-color:#2D2D2D; border:3px solid #FFD700; border-radius:8px; padding:20px; box-shadow:0 5px 0 #FFD700; transition: all 0.2s; filter: drop-shadow(0 0 5px #FFD700); position:relative;"
+                 onmouseover="this.style.transform='translateY(-5px) scale(1.03)'; this.style.filter='drop-shadow(0 0 15px #FFD700)'; this.querySelector('.selector').style.opacity='1';"
+                 onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.filter='drop-shadow(0 0 5px #FFD700)'; this.querySelector('.selector').style.opacity='0';">
+                <div class="selector" style="position:absolute; left:-20px; top:20px; color:#FFD700; font-size:20px; opacity:0; transition:0.2s;">▶</div>
+                <h2 style="color:#FFD700; font-size:1.2em; margin-top:0;">The Legend of Zelda</h2>
+                <p style="font-size:0.8em;">In both Breath of the Wild and Tears of the Kingdom, the sense of adventure and discovery through exploration and puzzle-solving is inimitable.</p>
+            </div>
+        </a>
+
+        <!-- Game 3 -->
+        <a href="https://celestegame.com/" target="_blank" style="text-decoration:none;">
+            <div style="width:280px; background-color:#2D2D2D; border:3px solid #00FFFF; border-radius:8px; padding:20px; box-shadow:0 5px 0 #00FFFF; transition: all 0.2s; filter: drop-shadow(0 0 5px #00FFFF); position:relative;"
+                 onmouseover="this.style.transform='translateY(-5px) scale(1.03)'; this.style.filter='drop-shadow(0 0 15px #00FFFF)'; this.querySelector('.selector').style.opacity='1';"
+                 onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.filter='drop-shadow(0 0 5px #00FFFF)'; this.querySelector('.selector').style.opacity='0';">
+                <div class="selector" style="position:absolute; left:-20px; top:20px; color:#00FFFF; font-size:20px; opacity:0; transition:0.2s;">▶</div>
+                <h2 style="color:#00FFFF; font-size:1.2em; margin-top:0;">Celeste</h2>
+                <p style="font-size:0.8em;">One of the most notoriously challenging and aesthetically pleasing platformers out there, Celeste is a game that I've spent hours slaving over simply trying to complete the main game. One day I'll 100% it!</p>
+            </div>
+        </a>
+
+        <!-- Game 4 -->
+        <a href="https://tetris.com/play-tetris" target="_blank" style="text-decoration:none;">
+            <div style="width:280px; background-color:#2D2D2D; border:3px solid #FF69B4; border-radius:8px; padding:20px; box-shadow:0 5px 0 #FF69B4; transition: all 0.2s; filter: drop-shadow(0 0 5px #FF69B4); position:relative;"
+                 onmouseover="this.style.transform='translateY(-5px) scale(1.03)'; this.style.filter='drop-shadow(0 0 15px #FF69B4)'; this.querySelector('.selector').style.opacity='1';"
+                 onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.filter='drop-shadow(0 0 5px #FF69B4)'; this.querySelector('.selector').style.opacity='0';">
+                <div class="selector" style="position:absolute; left:-20px; top:20px; color:#FF69B4; font-size:20px; opacity:0; transition:0.2s;">▶</div>
+                <h2 style="color:#FF69B4; font-size:1.2em; margin-top:0;">Tetris</h2>
+                <p style="font-size:0.8em;">Can't fix what's not broke! Tetris remains to be a perfect game no matter the occasion, down to the satisfaction from getting an All-Clear. Email me if you want to compete!</p>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- Footer -->
+    <footer style="text-align:center; padding:30px 20px; background-color:#1A1A1A; border-top:4px solid #FF3C38; color:#FFFFFF; position:relative; z-index:1;">
+        <p style="margin:0; font-size:0.8em;">Retro Video Game Showcase — Site Generated by AI</p>
+    </footer>
+
+    <!-- Animations -->
+    <style>
+        @keyframes glow {
+            0% { text-shadow: 2px 2px #000000; }
+            50% { text-shadow: 0 0 15px #FF3C38, 2px 2px #000000; }
+            100% { text-shadow: 2px 2px #000000; }
+        }
+
+        @keyframes star {
+            0% { transform: translateY(0); opacity:1; }
+            100% { transform: translateY(100vh); opacity:0; }
+        }
+    </style>
+
 </body>
 </html>
