@@ -1,0 +1,310 @@
+body {
+    margin: 0;
+    background-color: #6c4531;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #A63A50, #7a2837);
+  text-align: center;
+  font-size: 3rem;
+  padding: 30px 20px;
+  margin-bottom: 0; /* so nav sits snug under header */
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.header h1 {
+  color: #F0E7D8;
+  margin: 0;
+  font-family: "Georgia", serif;
+  letter-spacing: 2px;
+}
+
+/* NAVIGATION BAR */
+.sidenav {
+  display: flex;
+  justify-content: center;
+  background-color: #b63f2d;
+  padding: 0;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.sidenav a {
+  flex: 1;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+  color: #f2f2f2;
+  font-weight: bold;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.sidenav a:hover {
+  background-color: #995c52;
+  color: black;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  margin-top: 40px;
+  padding: 20px;
+  background: linear-gradient(135deg, #A63A50, #7a2837);
+  border-radius: 10px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.footer img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.footer img:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.footer p {
+  color: #F0E7D8;
+  font-family: "Georgia", serif;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/*PROFILE SECTION*/
+
+.profile-section {
+  flex: 1 1 350px;         /* grows/shrinks, minimum width 350px */
+  max-width: 450px;        /* limits profile box size */
+  position: relative;
+  padding: 30px;
+  background: #F0E7D8;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+/* Headings/subhead styling */
+.subhead h2 {
+  color: #A63A50;
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+}
+
+.subhead h3 {
+  color: #7a2837;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+}
+
+/* Profile picture */
+.profile-section img {
+  width: 280px;   /* increased size */
+  height: 280px;  /* square shape */
+  border-radius: 12px; /* subtle rounded corners instead of circle */
+  border: 5px solid #A63A50;
+  object-fit: cover; /* keeps proportions, crops if needed */
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+
+/* Text beside the image */
+.text-content {
+  flex: 1;
+}
+
+.text-content ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ABOUT ME SECTION */
+.about-section {
+  flex: 2 1 500px;         /* grows/shrinks, minimum width 500px */
+  max-width: 650px;
+  background: #F0E7D8;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  line-height: 1.7;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+
+.about-section h2, 
+.about-section h3 {
+  color: #A63A50;
+  margin-bottom: 15px;
+}
+
+/* Paragraph styling */
+.about-section p {
+  margin-bottom: 20px;
+}
+
+/* Optional: subtle hover effect if you want interactive feel */
+.about-section:hover {
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+
+
+.sections-container {
+  display: flex;
+  gap: 40px;               /* space between the two sections */
+  justify-content: center; /* center the two sections horizontally */
+  flex-wrap: wrap;         /* allows stacking on smaller screens */
+  margin: 40px auto;
+  max-width: 1200px;
+}
+
+
+/* CONTENT CONTAINER */
+.content {
+  max-width: 1200px;            /* keeps content centered and readable */
+  margin: 40px auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;                   /* spacing between each research section */
+}
+
+/* SECTION HEADINGS */
+.content .subhead h2 {
+  font-size: 1.8rem;
+  color: #A63A50;              /* matches header/profile color scheme */
+  margin: 0;
+  padding: 0;
+  background-color: #F0E7D8;
+  border-left: 5px solid #7a2837;  /* accent line for emphasis */
+  padding-left: 10px;
+  font-family: "Georgia", serif;
+}
+
+/* PARAGRAPHS */
+.content p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #333;
+  background-color: #ded6c8;       /* white card-like background */
+  padding: 20px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Hover effect for paragraphs */
+.content p:hover {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* LINKS inside content */
+.content a {
+  color: #b63f2d;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.content a:hover {
+  color: #A63A50;
+}
+
+
+/* QUALIFICATIONS CONTAINER (flex for text + PDF) */
+.qualifications {
+  display: flex;
+  gap: 40px;                  /* space between text and PDF */
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: nowrap;            /* stacks on small screens */
+  /* margin: 40px auto; */
+  width: 100%
+}
+
+/* Text column */
+.qualifications .text-boxes {
+  flex: 1 1 500px;            /* grows/shrinks, minimum width */
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* PDF column */
+.qualifications iframe {
+  flex: 1 1 500px;
+  max-width: 600px;
+  height: 700px;
+  border: 2px solid #A63A50;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+}
+.qualifications .text-boxes {
+    order: 1; /* text comes first */
+}
+
+.qualifications iframe {
+    order: 2; /* PDF comes second */
+}
+
+/* Headings in subhead */
+.text-boxes .subhead h2 {
+  font-size: 1.6rem;
+  color: #A63A50;
+  margin-bottom: 10px;
+  border-left: 5px solid #7a2837;
+  padding-left: 10px;
+  font-family: "Georgia", serif;
+}
+
+/* Lists and paragraphs */
+.text-boxes ul{
+  background-color: #F0E7D8;
+  margin: 0 0 15px 0;
+  padding-left: 20px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #333;
+}
+.text-boxes p{
+    background-color: #7a2837;
+    color: #ded6c8;
+}
+
+/* Definition lists */
+.text-boxes dl {
+  margin: 0;
+  padding-left: 0;
+}
+
+.text-boxes dt {
+  margin-top: 15px;
+  background-color: #F0E7D8;
+}
+
+.text-boxes dt h2 {
+  font-size: 1.3rem;
+  color: #7a2837;
+  margin-bottom: 5px;
+}
+
+.text-boxes dd {
+  margin-left: 20px;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #ded6c8;
+}
