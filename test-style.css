@@ -14,7 +14,7 @@ body {
     display: flex;
     align-items: center;
     gap: 30px;
-    flex-wrap: wrap; /* Wrap on smaller screens */
+    flex-wrap: wrap;
 }
 .profile-section img {
     width: 250px;
@@ -94,7 +94,6 @@ body {
         font-size: 2rem;
     }
 }
-
 .sidenav {
     height: 100%;
     width: 200px;
@@ -114,9 +113,8 @@ body {
 .sidenav a:hover {
     background-color: #4EA5D9;
 }
-
 .content {
-    margin-left: 220px; /* Space for sidenav */
+    margin-left: 220px;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -134,7 +132,6 @@ body {
 .subhead a{
     color: white;
 }
-
 .container{
     display: flex;
     justify-content: space-between;
@@ -181,8 +178,6 @@ body {
     border: 1px solid #ccc;
     width: 100%;
 }
-
-
 .text-content {
     flex: 1;
     text-align: left;

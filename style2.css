@@ -9,7 +9,7 @@ body {
   text-align: center;
   font-size: 3rem;
   padding: 30px 20px;
-  margin-bottom: 0; /* so nav sits snug under header */
+  margin-bottom: 0; 
   border-radius: 10px 10px 0 0;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
@@ -46,6 +46,8 @@ body {
   color: black;
 }
 
+
+/*FOOTER*/
 .footer {
   display: flex;
   justify-content: center;
@@ -78,11 +80,13 @@ body {
   margin: 0;
 }
 
-/*PROFILE SECTION*/
+
+
+/*INDEX SECTION*/
 
 .profile-section {
-  flex: 1 1 350px;         /* grows/shrinks, minimum width 350px */
-  max-width: 450px;        /* limits profile box size */
+  flex: 1 1 350px;         
+  max-width: 450px;        
   position: relative;
   padding: 30px;
   background: #F0E7D8;
@@ -90,7 +94,6 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
 
-/* Headings/subhead styling */
 .subhead h2 {
   color: #A63A50;
   margin-bottom: 10px;
@@ -105,15 +108,14 @@ body {
 
 /* Profile picture */
 .profile-section img {
-  width: 280px;   /* increased size */
-  height: 280px;  /* square shape */
-  border-radius: 12px; /* subtle rounded corners instead of circle */
+  width: 280px;   
+  height: 280px;  
+  border-radius: 12px; 
   border: 5px solid #A63A50;
-  object-fit: cover; /* keeps proportions, crops if needed */
+  object-fit: cover; 
   box-shadow: 0 6px 15px rgba(0,0,0,0.25);
 }
 
-/* Text beside the image */
 .text-content {
   flex: 1;
 }
@@ -126,9 +128,8 @@ body {
   line-height: 1.6;
 }
 
-/* ABOUT ME SECTION */
 .about-section {
-  flex: 2 1 500px;         /* grows/shrinks, minimum width 500px */
+  flex: 2 1 500px;    
   max-width: 650px;
   background: #F0E7D8;
   border-radius: 12px;
@@ -146,57 +147,48 @@ body {
   margin-bottom: 15px;
 }
 
-/* Paragraph styling */
 .about-section p {
   margin-bottom: 20px;
 }
 
-/* Optional: subtle hover effect if you want interactive feel */
 .about-section:hover {
   box-shadow: 0 6px 20px rgba(0,0,0,0.2);
   transition: box-shadow 0.3s ease;
 }
 
-
-
 .sections-container {
   display: flex;
-  gap: 40px;               /* space between the two sections */
-  justify-content: center; /* center the two sections horizontally */
-  flex-wrap: wrap;         /* allows stacking on smaller screens */
+  gap: 40px;               
+  justify-content: center; 
+  flex-wrap: wrap;         
   margin: 40px auto;
   max-width: 1200px;
 }
-
-
-/* CONTENT CONTAINER */
+/*PORTFOLIO AND SERVICES*/
 .content {
-  max-width: 1200px;            /* keeps content centered and readable */
+  max-width: 1200px;            
   margin: 40px auto;
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 30px;                   /* spacing between each research section */
+  gap: 30px;                   
 }
-
-/* SECTION HEADINGS */
 .content .subhead h2 {
   font-size: 1.8rem;
-  color: #A63A50;              /* matches header/profile color scheme */
+  color: #A63A50;              
   margin: 0;
   padding: 0;
   background-color: #F0E7D8;
-  border-left: 5px solid #7a2837;  /* accent line for emphasis */
+  border-left: 5px solid #7a2837;  
   padding-left: 10px;
   font-family: "Georgia", serif;
 }
 
-/* PARAGRAPHS */
 .content p {
   font-size: 1.1rem;
   line-height: 1.7;
   color: #333;
-  background-color: #ded6c8;       /* white card-like background */
+  background-color: #ded6c8;       
   padding: 20px;
   margin-top: 5px;
   margin-bottom: 15px;
@@ -204,13 +196,10 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   transition: box-shadow 0.3s ease;
 }
-
-/* Hover effect for paragraphs */
 .content p:hover {
   box-shadow: 0 6px 18px rgba(0,0,0,0.15);
 }
 
-/* LINKS inside content */
 .content a {
   color: #b63f2d;
   text-decoration: none;
@@ -223,27 +212,25 @@ body {
 }
 
 
-/* QUALIFICATIONS CONTAINER (flex for text + PDF) */
+/* QUALIFICATIONS*/
 .qualifications {
   display: flex;
-  gap: 40px;                  /* space between text and PDF */
+  gap: 40px;                  
   justify-content: flex-start;
   align-items: flex-start;
-  flex-wrap: nowrap;            /* stacks on small screens */
-  /* margin: 40px auto; */
+  flex-wrap: nowrap;       
   width: 100%
 }
 
-/* Text column */
 .qualifications .text-boxes {
-  flex: 1 1 500px;            /* grows/shrinks, minimum width */
+  flex: 1 1 500px;          
   max-width: 600px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* PDF column */
+/* PDF*/
 .qualifications iframe {
   flex: 1 1 500px;
   max-width: 600px;
@@ -253,14 +240,13 @@ body {
   box-shadow: 0 6px 15px rgba(0,0,0,0.25);
 }
 .qualifications .text-boxes {
-    order: 1; /* text comes first */
+    order: 1;
 }
 
 .qualifications iframe {
-    order: 2; /* PDF comes second */
+    order: 2;
 }
 
-/* Headings in subhead */
 .text-boxes .subhead h2 {
   font-size: 1.6rem;
   color: #A63A50;
@@ -270,7 +256,6 @@ body {
   font-family: "Georgia", serif;
 }
 
-/* Lists and paragraphs */
 .text-boxes ul{
   background-color: #F0E7D8;
   margin: 0 0 15px 0;
@@ -284,7 +269,6 @@ body {
     color: #ded6c8;
 }
 
-/* Definition lists */
 .text-boxes dl {
   margin: 0;
   padding-left: 0;
@@ -307,4 +291,22 @@ body {
   font-size: 1.1rem;
   line-height: 1.6;
   color: #ded6c8;
+}
+
+.theme-toggle {
+  margin: 20px;
+  padding: 10px 15px;
+  font-family: 'Press Start 2P', monospace;
+  background-color: #b63f2d;   /* matches your sidenav */
+  color: #f2f2f2;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background-color: #995c52;
+  color: black;
+  transform: scale(1.05);
 }

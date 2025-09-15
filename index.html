@@ -9,14 +9,13 @@
     document.write('<link id="theme-style" rel="stylesheet" href="' + savedTheme + '">');
   </script>  
   <title>Gauri Agrawal</title>
+  <link rel = "icon" type = "image/png" href = "homeicon.png">
 </head>
 <body>
-    <!-- Header -->
     <div class="header">
       <h1>Gauri Agrawal</h1>
     </div>
 
-      <!-- Side Navigation -->
   <div class="sidenav">
     <a href="portfolio.html">Portfolio</a>
     <a href="qualifications.html">Qualifications</a>
@@ -24,13 +23,7 @@
     <a href="genai.html">Generative AI</a>
   </div>
 
-
-  <!-- Main Content -->
   <div class="content center-content">
-
-
-  
-    <!-- Profile Section -->
   <div class = "sections-container">
     <div class="profile-section subhead">
       <img src="IMG_6967.jpg" alt="Gauri Agrawal">
@@ -40,13 +33,12 @@
         <ul>
           <li>I'm a Computer Science Major</li>
           <li>With Minors in Math and Game Development & Design</li>
-          <li>and currently going through my 3rd Year at Texas A&M University!</li>
+          <li>And currently going through my 3rd year at Texas A&M University!</li>
         </ul>
 
       </div>
     </div>
 
-    <!-- About Me Section -->
     <div class="about-section subhead">
       <p>
         I love combining creativity and problem-solving to build technology that makes a difference. Over the past seven years, I’ve worked on projects ranging from VR rehabilitation environments for stroke recovery to designing VR-based esports competitions for math education.
@@ -63,7 +55,6 @@
       </div>
     </div>
 
-    <!-- Footer / Social Links -->
     <div class="footer">
       <a href="https://www.linkedin.com/in/gauri-agrawal-0baba8321">
         <img src="linkedin.webp" alt="LinkedIn">
@@ -74,10 +65,9 @@
       <a href="https://github.com/AGreyWhale">
         <img src="github.png" alt="GitHub">
       </a>
-      <button onclick="switchTheme()" 
-        style="margin:20px; padding:10px 15px; font-family:'Press Start 2P', monospace;">
-        Switch Theme
-        </button>
+      <button class="theme-toggle" onclick="switchTheme()">
+        Let's Switch it Up!
+      </button>
     </div>
   </div>
 <script>

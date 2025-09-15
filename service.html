@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
-        // pick saved theme before CSS loads
         const savedTheme = localStorage.getItem("theme") || "test-style.css";
         document.write('<link id="theme-style" rel="stylesheet" href="' + savedTheme + '">');
     </script>
     <title>Service</title>
+    <link rel = "icon" type = "image/png" href = "serviceicon.png">
+
 </head>
 <body>
     <div class = "header">
@@ -47,10 +48,9 @@
     <a href="https://www.linkedin.com/in/gauri-agrawal-0baba8321"><img src="linkedin.webp" alt = "Let's Connect!"></a>
     <a href="mailto:gauri4agrawal@gmail.com"><img src="gmail.png" alt="email me!"></a>
     <a href="https://github.com/AGreyWhale"><img src="github.png" alt="github"></a>
-    <button onclick="switchTheme()" 
-            style="margin:20px; padding:10px 15px; font-family:'Press Start 2P', monospace;">
-        Switch Theme
-    </button>
+      <button class="theme-toggle" onclick="switchTheme()">
+        Let's Switch it Up!
+      </button>
 </div>
 </html>
 
