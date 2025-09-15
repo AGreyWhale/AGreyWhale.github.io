@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link id = "theme-style" rel="stylesheet" href="test-style.css">
+    <script>
+        // pick saved theme before CSS loads
+        const savedTheme = localStorage.getItem("theme") || "test-style.css";
+        document.write('<link id="theme-style" rel="stylesheet" href="' + savedTheme + '">');
+    </script>
     <title>Service</title>
 </head>
 <body>
+    <div class = "header">
+        <h1>Service</h1>
+    </div>
     <div class = "sidenav">
-    <p>
         <a href = "index.html">Home</a><br>
         <a href = "portfolio.html">Portfolio</a><br>
         <a href = "qualifications.html">Qualifications</a><br>
         <a href = "genai.html">Generative AI</a><br>
-    </p>
-    </div>
-    <div class = "header">
-        <h1>Service</h1>
     </div>
     <div class = "content">
     <div class = "subhead">
@@ -29,14 +31,16 @@
     <p>Each spring, I participate in The Big Event, the largest one-day, student-run service project in the nation. This annual tradition unites tens of thousands of Texas A&M students to express gratitude to the Bryan-College Station community through various service projects, such as yard work, window washing, and painting. By engaging in these activities, I contribute to fostering a culture of service and appreciation, strengthening the bond between the university and its surrounding community.</p>
 </div>
 <script>
-    function switchTheme(){
-        const theme = document.getElementById("theme-style");
-        if(theme.getAttribute("href") == "style2.css"){
-            theme.setAttribute("href", "test-style.css");
-        }else{
-            theme.setAttribute("href", "style2.css");
-        }
-    }
+  function switchTheme(){
+      const theme = document.getElementById("theme-style");
+      if(theme.getAttribute("href") === "style2.css"){
+          theme.setAttribute("href", "test-style.css");
+          localStorage.setItem("theme", "test-style.css");  // save choice
+      } else {
+          theme.setAttribute("href", "style2.css");
+          localStorage.setItem("theme", "style2.css");      // save choice
+      }
+  }
 </script>
 </body>
 <div class = "footer">

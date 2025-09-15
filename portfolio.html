@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link id = "theme-style" rel="stylesheet" href="test-style.css">
+  <script>
+    // pick saved theme before CSS loads
+    const savedTheme = localStorage.getItem("theme") || "test-style.css";
+    document.write('<link id="theme-style" rel="stylesheet" href="' + savedTheme + '">');
+  </script>
   <title>Portfolio</title>
 </head>
 <body>
@@ -57,14 +61,16 @@
 </div>
 
 <script>
-    function switchTheme(){
-        const theme = document.getElementById("theme-style");
-        if(theme.getAttribute("href") == "style2.css"){
-            theme.setAttribute("href", "test-style.css");
-        }else{
-            theme.setAttribute("href", "style2.css");
-        }
-    }
+  function switchTheme(){
+      const theme = document.getElementById("theme-style");
+      if(theme.getAttribute("href") === "style2.css"){
+          theme.setAttribute("href", "test-style.css");
+          localStorage.setItem("theme", "test-style.css");  // save choice
+      } else {
+          theme.setAttribute("href", "style2.css");
+          localStorage.setItem("theme", "style2.css");      // save choice
+      }
+  }
 </script>
 </body>
 </html>
