@@ -3,57 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script>
-    // pick saved theme before CSS loads
-    const savedTheme = localStorage.getItem("theme") || "test-style.css";
-    document.write('<link id="theme-style" rel="stylesheet" href="' + savedTheme + '">');
-  </script>  
   <title>Gauri Agrawal</title>
-  <link rel = "icon" type = "image/png" href = "homeicon.png">
+  <link rel="icon" type="image/png" href="homeicon.png">
+  <link id="theme-style" rel="stylesheet" href="style2.css">
 </head>
 <body>
-    <div class="header">
-      <h1>Gauri Agrawal</h1>
-    </div>
+  <div class="header">
+    <h1>Gauri Agrawal</h1>
+  </div>
 
   <div class="sidenav">
     <a href="portfolio.html">Portfolio</a>
     <a href="qualifications.html">Qualifications</a>
     <a href="service.html">Service</a>
-    <a href="genai.html">Generative AI</a>
+    <!-- <a href="genai.html">Generative AI</a> -->
   </div>
 
   <div class="content center-content">
-  <div class = "sections-container">
-    <div class="profile-section subhead">
-      <img src="IMG_6967.jpg" alt="Gauri Agrawal">
-      <div class="text-content">
-        <h2>Welcome to my corner of the web!</h2>
-        <h3>Who am I? Well...</h3>
-        <ul>
-          <li>I'm a Computer Science Major</li>
-          <li>With Minors in Math and Game Development & Design</li>
-          <li>And currently going through my 3rd year at Texas A&M University!</li>
-        </ul>
+    <div class="sections-container">
+      <div class="profile-section subhead">
+        <img src="IMG_6967.jpg" alt="Gauri Agrawal">
+        <div class="text-content">
+          <h2>Welcome to my corner of the web!</h2>
+          <h3>Who am I? Well...</h3>
+          <ul>
+            <li>I'm a Computer Science Major</li>
+            <li>With Minors in Math and Game Development & Design</li>
+            <li>And currently going through my 3rd year at Texas A&M University!</li>
+          </ul>
+        </div>
+      </div>
 
+      <div class="about-section subhead">
+        <p>
+          I love combining creativity and problem-solving to build technology that makes a difference. Over the past seven years, I’ve worked on projects ranging from VR rehabilitation environments for stroke recovery to designing VR-based esports competitions for math education.
+        </p>
+        <p>
+          I also had the chance to present research on the impact of AI in social media at an international conference, which was an incredible experience.
+        </p>
+        <p>
+          Beyond research, I enjoy collaborating with diverse teams through the Society of Women Engineers, Aggie Coding Club, and hackathons like HowdyHack. Every challenge is a chance to learn something new!
+        </p>
+        <p>
+          If you’re curious about my work or just want to connect, I’d love to hear from you. Welcome to my site—I’m glad you’re here!
+        </p>
       </div>
     </div>
 
-    <div class="about-section subhead">
-      <p>
-        I love combining creativity and problem-solving to build technology that makes a difference. Over the past seven years, I’ve worked on projects ranging from VR rehabilitation environments for stroke recovery to designing VR-based esports competitions for math education.
-      </p>
-      <p>
-        I also had the chance to present research on the impact of AI in social media at an international conference, which was an incredible experience.
-      </p>
-      <p>
-        Beyond research, I enjoy collaborating with diverse teams through the Society of Women Engineers, Aggie Coding Club, and hackathons like HowdyHack. Every challenge is a chance to learn something new!
-      </p>
-      <p>
-        If you’re curious about my work or just want to connect, I’d love to hear from you. Welcome to my site—I’m glad you’re here!
-      </p>
-      </div>
-    </div>
     <div class="footer">
       <a href="https://www.linkedin.com/in/gauri-agrawal-0baba8321">
         <img src="linkedin.webp" alt="LinkedIn">
@@ -64,23 +60,7 @@
       <a href="https://github.com/AGreyWhale">
         <img src="github.png" alt="GitHub">
       </a>
-      <button class="theme-toggle" onclick="switchTheme()">
-        Let's Switch it Up!
-      </button>
     </div>
   </div>
-<script>
-  function switchTheme(){
-      const theme = document.getElementById("theme-style");
-      if(theme.getAttribute("href") === "style2.css"){
-          theme.setAttribute("href", "test-style.css");
-          localStorage.setItem("theme", "test-style.css");  // save choice
-      } else {
-          theme.setAttribute("href", "style2.css");
-          localStorage.setItem("theme", "style2.css");      // save choice
-      }
-  }
-</script>
 </body>
 </html>
-

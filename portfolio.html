@@ -3,12 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script>
-    const savedTheme = localStorage.getItem("theme") || "test-style.css";
-    document.write('<link id="theme-style" rel="stylesheet" href="' + savedTheme + '">');
-  </script>
   <title>Portfolio</title>
     <link rel = "icon" type = "image/png" href = "portfolioimage.png">
+    <link id="theme-style" rel="stylesheet" href="style2.css">
 </head>
 <body>
     <div class = "header">
@@ -18,11 +15,8 @@
     <a href="index.html">Home</a>
     <a href="qualifications.html">Qualifications</a>
     <a href="service.html">Service</a>
-    <a href="genai.html">Generative AI</a>
+    <!-- <a href="genai.html">Generative AI</a> -->
   </div>
-    
-    
-  
   <div class = "content">
     <div class = "subhead">
         <h2>VR Stroke Rehabilitation Research</h2>
@@ -53,22 +47,6 @@
     <a href="https://www.linkedin.com/in/gauri-agrawal-0baba8321"><img src="linkedin.webp" alt = "Let's Connect!"></a>
     <a href="mailto:gauri4agrawal@gmail.com"><img src="gmail.png" alt="email me!"></a>
     <a href="https://github.com/AGreyWhale"><img src="github.png" alt="github"></a>
-      <button class="theme-toggle" onclick="switchTheme()">
-        Let's Switch it Up!
-      </button>
-
 </div>
-<script>
-  function switchTheme(){
-      const theme = document.getElementById("theme-style");
-      if(theme.getAttribute("href") === "style2.css"){
-          theme.setAttribute("href", "test-style.css");
-          localStorage.setItem("theme", "test-style.css");  // save choice
-      } else {
-          theme.setAttribute("href", "style2.css");
-          localStorage.setItem("theme", "style2.css");      // save choice
-      }
-  }
-</script>
 </body>
 </html>

@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        const savedTheme = localStorage.getItem("theme") || "test-style.css";
-        document.write('<link id="theme-style" rel="stylesheet" href="' + savedTheme + '">');
-    </script>
     <title>Service</title>
     <link rel = "icon" type = "image/png" href = "serviceicon.png">
-
+    <link id="theme-style" rel="stylesheet" href="style2.css">
 </head>
 <body>
     <div class = "header">
@@ -19,7 +15,7 @@
         <a href = "index.html">Home</a><br>
         <a href = "portfolio.html">Portfolio</a><br>
         <a href = "qualifications.html">Qualifications</a><br>
-        <a href = "genai.html">Generative AI</a><br>
+        <!-- <a href = "genai.html">Generative AI</a><br> -->
     </div>
     <div class = "content">
     <div class = "subhead">
@@ -48,9 +44,6 @@
     <a href="https://www.linkedin.com/in/gauri-agrawal-0baba8321"><img src="linkedin.webp" alt = "Let's Connect!"></a>
     <a href="mailto:gauri4agrawal@gmail.com"><img src="gmail.png" alt="email me!"></a>
     <a href="https://github.com/AGreyWhale"><img src="github.png" alt="github"></a>
-      <button class="theme-toggle" onclick="switchTheme()">
-        Let's Switch it Up!
-      </button>
 </div>
 </html>
 
