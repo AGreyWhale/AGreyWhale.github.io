@@ -4,63 +4,425 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gauri Agrawal</title>
+  <meta name="description" content="Gauri Agrawal — Computer Science student and researcher at Texas A&M University. AI/ML research, full-stack development, VR systems.">
   <link rel="icon" type="image/png" href="homeicon.png">
-  <link id="theme-style" rel="stylesheet" href="style2.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="header">
-    <h1>Gauri Agrawal</h1>
-  </div>
+  <div class="scroll-progress"></div>
 
-  <div class="sidenav">
-    <a href="portfolio.html">Portfolio</a>
-    <a href="qualifications.html">Qualifications</a>
-    <a href="service.html">Service</a>
-    <!-- <a href="genai.html">Generative AI</a> -->
-  </div>
+  <nav class="topnav">
+    <a href="#hero" class="brand">Gauri<span>.</span></a>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="topnav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#service">Service</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="courses.html" class="pill-link">Coursework ↗</a></li>
+    </ul>
+  </nav>
 
-  <div class="content center-content">
-    <div class="sections-container">
-      <div class="profile-section subhead">
-        <img src="IMG_6967.jpg" alt="Gauri Agrawal">
-        <div class="text-content">
-          <h2>Welcome to my corner of the web!</h2>
-          <h3>Who am I? Well...</h3>
-          <ul>
-            <li>I'm a Computer Science Major</li>
-            <li>With Minors in Math and Game Development & Design</li>
-            <li>And currently going through my 3rd year at Texas A&M University!</li>
-          </ul>
+  <aside class="dot-nav">
+    <a href="#hero"><span class="dot-label">Home</span></a>
+    <a href="#about"><span class="dot-label">About</span></a>
+    <a href="#research"><span class="dot-label">Research</span></a>
+    <a href="#projects"><span class="dot-label">Projects</span></a>
+    <a href="#skills"><span class="dot-label">Skills</span></a>
+    <a href="#service"><span class="dot-label">Service</span></a>
+    <a href="#contact"><span class="dot-label">Contact</span></a>
+  </aside>
+
+  <main>
+    <section id="hero" class="hero">
+      <div class="wrap hero-inner">
+        <div class="hero-text">
+          <span class="eyebrow">Computer Science @ Texas A&amp;M University</span>
+          <h1>Gauri Agrawal</h1>
+          <h2>Software Engineer &amp; ML Research Assistant</h2>
+          <p class="tagline">
+            Hi! Glad you could make it! I'm Gauri—a Computer Science student, 
+            software engineer, and machine learning researcher. I love building everything 
+            from polished web applications to AI-powered systems, and this website is 
+            where I document what I've been learning and creating along the way.
+          </p>
+          <div class="cta-row">
+            <a href="#projects" class="btn btn-primary">View Projects</a>
+            <a href="mailto:gauri4agrawal@gmail.com" class="btn btn-outline">Get In Touch</a>
+          </div>
+        </div>
+        <div class="hero-photo">
+          <img src="IMG_7007.JPG?v=20260805" alt="Gauri Agrawal">
+          <span class="tag">College Station, TX</span>
         </div>
       </div>
+      <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+    </section>
 
-      <div class="about-section subhead">
-        <p>
-          I love combining creativity and problem-solving to build technology that makes a difference. Over the past seven years, I’ve worked on projects ranging from VR rehabilitation environments for stroke recovery to designing VR-based esports competitions for math education.
-        </p>
-        <p>
-          I also had the chance to present research on the impact of AI in social media at an international conference, which was an incredible experience.
-        </p>
-        <p>
-          Beyond research, I enjoy collaborating with diverse teams through the Society of Women Engineers, Aggie Coding Club, and hackathons like HowdyHack. Every challenge is a chance to learn something new!
-        </p>
-        <p>
-          If you’re curious about my work or just want to connect, I’d love to hear from you. Welcome to my site—I’m glad you’re here!
-        </p>
+    <section id="about" class="section section-alt">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">About</span>
+          <h2>Where engineering, research, and real people meet</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-copy reveal" style="--d:1">
+            <p>
+              Hi! I'm Gauri, a Computer Science student at Texas A&amp;M University 
+              with minors in Mathematics and Game Development & Design.
+            </p>
+            <div class="highlight-box">
+              <strong>Recent highlight:</strong> Outside of research, I'm always building something. I enjoy turning ideas into polished applications, 
+              experimenting with new technologies, and refining products until they feel intuitive and enjoyable to use. 
+              Lately, that has meant creating PaperTrail, an AI-powered research paper assistant designed to make reading 
+              and organizing academic literature feel less like using a chatbot and more like using a thoughtfully 
+              crafted reading app.
+            </div>
+            <p>
+              I enjoy building software that solves interesting problems, whether that's designing 
+              a full-stack web application from scratch, developing machine learning models for
+              scientific research, or exploring how AI can make complex information more 
+              accessible. Over the past few years, I've worked on everything from modern 
+              web applications and distributed systems to computer architecture and machine 
+              learning research. Along the way, I've realized that what excites me most is 
+              combining strong engineering with thoughtful design to create tools people genuinely enjoy using.
+            </p>
+            <p>
+              My path into machine learning wasn't a straight line. I spent time working in virtual reality research 
+              before discovering that I was most drawn to the data, algorithms, and engineering behind intelligent 
+              systems. Today, I'm a researcher in Texas A&M's DIVE Lab, where I develop machine learning models for 
+              scientific computing, including predicting complex physical phenomena from simulation data. At the same 
+              time, I love building production-quality software, which is why many of my personal projects focus on 
+              full-stack development, backend architecture, and developer experience.
+            </p>
+            <p>
+              I also love talking to people. Whether you want to discuss machine learning, software engineering, research, 
+              career advice, or just share something you're excited about, I'd be happy to chat. Some of the best 
+              opportunities I've had started with simple conversations, and I'm always interested in meeting people who 
+              enjoy building, learning, and solving interesting problems.
+            </p>
+            <p>
+              When I'm away from my computer, you'll probably find me exploring new coffee shops, taking photos, 
+              playing games with friends, or planning my next project before I've finished the current one.
+            </p>
+            
+          </div>
+          <dl class="facts reveal" style="--d:2">
+            <dt>Based in</dt>
+            <dd>Frisco &amp; College Station, TX</dd>
+            <dt>Studying</dt>
+            <dd>B.S. Computer Science, Minors in Math &amp; Game Design and Development</dd>
+            <dt>Currently</dt>
+            <dd>ML Research @ DIVE Lab · Curriculum Developer, CSCE 312</dd>
+            <dt>Focus areas</dt>
+            <dd>AI/ML, Full-Stack Dev</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="research" class="section">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Research &amp; Teaching</span>
+          <h2>Research &amp; Teaching Timeline</h2>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-track"></div>
+          <div class="timeline-fill"></div>
+
+          <div class="tl-item reveal" style="--d:0">
+            <span class="tl-date">Nov 2024 – Nov 2025</span>
+            <h3>AI-Powered Stroke Rehabilitation Research</h3>
+            <div class="tl-org">LIVE Lab, Texas A&amp;M University</div>
+            <ul>
+              <li>Developed an AI-powered patient assistance system using Retrieval-Augmented Generation (RAG) and NLP to answer stroke rehabilitation questions with context-aware, evidence-based guidance.</li>
+              <li>Designed and evaluated the retrieval pipeline, integrating domain-specific rehabilitation knowledge to generate personalized responses that support patient education and engagement.</li>
+              <li>Collaborated with an interdisciplinary research team to influence system architecture and UX decisions for a VR rehabilitation platform, keeping the AI component aligned with clinical workflows and accessibility goals.</li>
+              <li>Presented this research at Texas A&amp;M Student Research Week 2025, earning 2nd Place in Computational &amp; Data Science (Undergraduate).</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag">RAG</span><span class="tag">NLP</span><span class="tag">VR</span><span class="tag">Human-Centered Computing</span>
+            </div>
+          </div>
+
+          <div class="tl-item reveal" style="--d:0">
+            <span class="tl-date">Dec 2024 – Feb 2025</span>
+            <h3>AI &amp; Social Media Research</h3>
+            <div class="tl-org">AGGIES Lab, Texas A&amp;M University</div>
+            <ul>
+              <li>Studied the societal impacts of AI in social media, with a focus on cybercrime and gender dynamics.</li>
+              <li>Led the human-subjects research process, guided the team through IRB compliance, and contributed to study design, data collection, and analysis.</li>
+              <li>Published and presented findings at the European Conference on Social Media (ECSM 2025).</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag">AI Ethics</span><span class="tag">IRB Compliance</span><span class="tag">Data Analysis</span><span class="tag">Research Design</span>
+            </div>
+            <a href="https://papers.academic-conferences.org/index.php/ecsm/article/view/3640" class="tl-link" target="_blank" rel="noopener">Read Paper →</a>
+          </div>
+
+          <div class="tl-item reveal" style="--d:0">
+            <span class="tl-date">May 2026 – Present</span>
+            <h3>Machine Learning for Particle Collision Prediction</h3>
+            <div class="tl-org">DIVE Lab, Texas A&amp;M University</div>
+            <ul>
+              <li>Develop machine learning models to predict particle collision behavior from scientific simulation data, reducing computational cost while maintaining predictive accuracy.</li>
+              <li>Process and analyze large-scale physics datasets, engineering features and evaluating model performance across diverse simulation conditions.</li>
+              <li>Collaborate with faculty and graduate researchers to compare learned models against traditional computational methods and identify opportunities for improved efficiency.</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag">Machine Learning</span><span class="tag">Scientific Computing</span><span class="tag">Physics Simulation</span>
+            </div>
+          </div>
+
+          
+
+          <div class="tl-item reveal" style="--d:0">
+            <span class="tl-date">Jun 2026 – Present</span>
+            <h3>Curriculum Developer, CSCE 312 (Computer Organization)</h3>
+            <div class="tl-org">Texas A&amp;M University · College Station, TX</div>
+            <ul>
+              <li>Redesigned the CSCE 312 (Computer Organization) lab curriculum at Texas A&amp;M, converting the course's ISA to RISC-V and building an 8-lab sequence that has students construct a working CPU from the gate level up.</li>
+              <li>Authored full instructional materials — student manuals, answer keys, and grading rubrics — for all labs and the course's team-based final project.</li>
+              <li>Collaborated with faculty to iteratively refine lab pacing and scope based on prior student experiences.</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag">RISC-V</span><span class="tag">Curriculum Design</span><span class="tag">Computer Architecture</span><span class="tag">Technical Writing</span>
+            </div>
+          </div>
+
+          <div class="tl-item reveal" style="--d:0">
+            <span class="tl-date">Jul 2026 – Present</span>
+            <h3>Machine Learning for Mars Atmospheric Reentry Flow Prediction</h3>
+            <div class="tl-org">DIVE Lab, Texas A&amp;M University</div>
+            <ul>
+              <li>Develop machine learning models to predict the flow field surrounding a capsule during atmospheric reentry on Mars, accelerating computationally intensive fluid dynamics simulations.</li>
+              <li>Train and evaluate deep learning models on high-dimensional simulation data to capture complex aerodynamic behavior under reentry conditions.</li>
+              <li>Build data preprocessing and model training pipelines for large-scale scientific datasets, analyzing predictive accuracy and computational efficiency.</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag">Deep Learning</span><span class="tag">CFD</span><span class="tag">Aerospace</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section section-alt">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Projects</span>
+          <h2>Selected Projects</h2>
+        </div>
+
+        <div class="project-card open reveal" style="--d:0">
+          <button class="project-head">
+            <div class="project-head-text">
+              <h3>Machine Learning for Particle Collision Prediction</h3>
+              <div class="project-tagline">A two-phase deep learning framework for emulating quasi-classical trajectory (QCT) simulations of the N + N₂ → N₂ + N / N + N + N reactive collision system.</div>
+            </div>
+            <span class="project-toggle">+</span>
+          </button>
+          <div class="project-body">
+            <div class="project-body-inner">
+              <p style="margin-bottom:14px; color:var(--ink-soft); font-family:var(--font-mono); font-size:0.85rem;">May 2026 – Present</p>
+              <ul> 
+                <li>Designed and implemented a <strong>two-stage deep learning framework</strong> to emulate quasi-classical trajectory (QCT) simulations for N + N₂ reactive collisions, reducing reliance on computationally expensive physics simulations.</li> 
+                <li>Developed a <strong>residual MLP</strong> to predict dissociation probability and product-state distributions from molecular initial conditions, using multi-task learning with binary cross-entropy and KL divergence losses.</li> 
+                <li>Built a <strong>conditional variational autoencoder (CVAE)</strong> in <strong>PyTorch</strong> to generate full three-atom collision trajectories conditioned on molecular states, reaction outcomes, and quantum mechanical features.</li> 
+                <li>Implemented and evaluated conditioning strategies, including explicit <strong>(E, v, J)</strong> quantum-state features and FiLM-based conditioning, performing ablation studies and out-of-distribution generalization experiments across energy levels.</li> 
+                <li>Created scalable training and evaluation pipelines for a dataset of <strong>5.5 million+</strong> simulated trajectories, leveraging <strong>SLURM</strong>, GPU acceleration, automated evaluation scripts, and visualization tools for model validation.</li> 
+                <li>Analyzed generated trajectories using physics-informed metrics, including bond-length reconstruction, KL divergence, and differential cross-section estimation, to validate model performance against ground-truth QCT simulations.</li> 
+              </ul>
+              <div class="tag-row"> <span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">Deep Learning</span>  <span class="tag">Conditional VAE</span>  <span class="tag">Machine Learning</span>  <span class="tag">Scientific Computing</span>  <span class="tag">SLURM</span>  <span class="tag">CUDA</span> <span class="tag">NumPy</span>  <span class="tag">Matplotlib</span></div>
+              <a href="https://github.com/AGreyWhale/N2_Collision_CVAE" class="tl-link" target="_blank" rel="noopener">Visit Git Repo →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card open reveal" style="--d:0">
+          <button class="project-head">
+            <div class="project-head-text">
+              <h3>PaperTrail — AI Research Paper Assistant</h3>
+              <div class="project-tagline">Full-stack research paper manager with RAG-powered document understanding</div>
+            </div>
+            <span class="project-toggle">+</span>
+          </button>
+          <div class="project-body">
+            <div class="project-body-inner">
+              <p style="margin-bottom:14px; color:var(--ink-soft); font-family:var(--font-mono); font-size:0.85rem;">Jul 2026 – Present</p>
+              <ul>
+                <li>Designed and developed a full-stack web application using <strong>React, TypeScript, FastAPI, and PostgreSQL</strong>, following a layered backend architecture (API → Services → Repositories → Models) with automated testing.</li>
+                <li>Built secure authentication and per-user data isolation using <strong>Clerk</strong> with JWT verification.</li>
+                <li>Implemented DOI-based paper importing through the <strong>CrossRef API</strong>, including metadata validation and an editable review workflow before saving.</li>
+                <li>Developed a PDF ingestion pipeline using <strong>pdfplumber</strong> and custom sentence-aware chunking to prepare research papers for retrieval-augmented generation (RAG).</li>
+                <li>Created a modular file storage abstraction supporting local storage today with seamless migration to S3-compatible object storage in the future.</li>
+                <li>Configured database migrations with <strong>Alembic</strong>, containerized local development using <strong>Docker Compose</strong>, and maintained a CI-ready test suite with 40+ automated tests.</li>
+              </ul>
+              <div class="tag-row">
+                <span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Vite</span><span class="tag">Tailwind CSS</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span><span class="tag">SQLAlchemy</span><span class="tag">Alembic</span><span class="tag">Docker</span><span class="tag">Clerk</span>
+              </div>
+              <a href="https://github.com/AGreyWhale/PaperTrail" class="tl-link" target="_blank" rel="noopener">Visit Git Repo →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal" style="--d:1">
+          <button class="project-head">
+            <div class="project-head-text">
+              <h3>Boba Point-of-Sale System</h3>
+              <div class="project-tagline">Full-stack POS system — led as Project Lead &amp; Scrum Master</div>
+            </div>
+            <span class="project-toggle">+</span>
+          </button>
+          <div class="project-body">
+            <div class="project-body-inner">
+              <p style="margin-bottom:14px; color:var(--ink-soft); font-family:var(--font-mono); font-size:0.85rem;">Aug 2025 – Dec 2025</p>
+              <ul>
+                <li>Led a team of five as <strong>Project Lead</strong> and <strong>Scrum Master</strong> through the complete software development lifecycle, coordinating sprint planning, task management, code reviews, and team communication.</li>
+                <li>Architected and developed a full-stack point-of-sale system featuring secure role-based authentication, inventory management, order processing, and administrative dashboards.</li>
+                <li>Built the backend using <strong>Python Flask</strong> and <strong>PostgreSQL</strong>, with a responsive <strong>React</strong> frontend, implementing RESTful APIs for seamless communication between services.</li>
+                <li>Delivered a fully functional application capable of supporting day-to-day operations for a boba shop, emphasizing maintainability, usability, and collaborative software engineering practices.</li>
+              </ul>
+              <div class="tag-row">
+                <span class="tag">React</span><span class="tag">Flask</span><span class="tag">PostgreSQL</span><span class="tag">Python</span><span class="tag">Agile</span>
+              </div>
+              <a href="https://bobastore-gang72.onrender.com/" class="tl-link" target="_blank" rel="noopener">Visit Site →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card reveal" style="--d:2">
+          <button class="project-head">
+            <div class="project-head-text">
+              <h3>64-bit x86 CPU Design</h3>
+              <div class="project-tagline">Five-stage pipelined CPU built in Logisim, team of three</div>
+            </div>
+            <span class="project-toggle">+</span>
+          </button>
+          <div class="project-body">
+            <div class="project-body-inner">
+              <p style="margin-bottom:14px; color:var(--ink-soft); font-family:var(--font-mono); font-size:0.85rem;">Mar 2025 – Apr 2025</p>
+              <ul>
+                <li>Collaborated with a team of three to design and implement a functional 64-bit x86-inspired CPU using <strong>Logisim</strong> and <strong>WaveDrom</strong>, capable of executing x86 assembly instructions.</li>
+                <li>Designed a classic five-stage pipelined architecture consisting of Fetch, Decode, Execute, Memory, and Writeback, translating processor design concepts into working digital hardware.</li>
+                <li>Developed datapath components, control logic, and instruction execution workflows while validating processor behavior through simulation and testing.</li>
+                <li>Helped coordinate project milestones, mentor teammates through technical challenges, and ensure successful delivery under tight academic deadlines.</li>
+              </ul>
+              <div class="tag-row">
+                <span class="tag">Logisim</span><span class="tag">WaveDrom</span><span class="tag">Computer Architecture</span><span class="tag">Digital Logic</span>
+              </div>
+              <a href="courses.html#detail-comp-org" class="tl-link">Full build notes &amp; timing diagrams →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="section">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Skills</span>
+          <h2>Qualifications</h2>
+        </div>
+        <div class="skills-grid">
+          <div class="reveal" style="--d:0">
+            <div class="skill-block">
+              <h3>Languages</h3>
+              <div class="pill-row">
+                <span class="skill-pill">Python</span><span class="skill-pill">Java</span><span class="skill-pill">C++</span>
+                <span class="skill-pill">C#</span><span class="skill-pill">JavaScript</span><span class="skill-pill">TypeScript</span>
+                <span class="skill-pill">SQL</span><span class="skill-pill">HTML/CSS</span><span class="skill-pill">Haskell</span>
+                <span class="skill-pill">x86 Assembly</span>
+              </div>
+            </div>
+            <div class="skill-block">
+              <h3>Frameworks &amp; Libraries</h3>
+              <div class="pill-row">
+                <span class="skill-pill">React</span><span class="skill-pill">FastAPI</span><span class="skill-pill">Flask</span>
+                <span class="skill-pill">Tailwind CSS</span><span class="skill-pill">SQLAlchemy</span><span class="skill-pill">pdfplumber</span>
+              </div>
+            </div>
+            <div class="skill-block">
+              <h3>Machine Learning &amp; AI</h3>
+              <div class="pill-row">
+                <span class="skill-pill">PyTorch</span><span class="skill-pill">Graph Neural Networks</span>
+                <span class="skill-pill">Conditional VAEs</span><span class="skill-pill">Retrieval-Augmented Generation</span>
+                <span class="skill-pill">NLP</span>
+              </div>
+            </div>
+            <div class="skill-block">
+              <h3>Databases &amp; Infrastructure</h3>
+              <div class="pill-row">
+                <span class="skill-pill">PostgreSQL</span><span class="skill-pill">Alembic</span>
+                <span class="skill-pill">Docker</span><span class="skill-pill">Docker Compose</span><span class="skill-pill">AWS</span>
+              </div>
+            </div>
+            <div class="skill-block">
+              <h3>Tools &amp; Concepts</h3>
+              <div class="pill-row">
+                <span class="skill-pill">Git</span><span class="skill-pill">REST APIs</span><span class="skill-pill">CI/CD</span>
+                <span class="skill-pill">Agile/Scrum</span><span class="skill-pill">RISC-V</span><span class="skill-pill">Computer Architecture</span>
+              </div>
+            </div>
+          </div>
+          <div class="resume-panel reveal" style="--d:1">
+            <iframe src="resume.pdf?v=20260805#view=FitH" title="Gauri Agrawal's resume"></iframe>
+            <a href="resume.pdf?v=20260805" download="Gauri Agrawal Resume.pdf" class="btn btn-primary" style="width:100%; justify-content:center;">Download Resume</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="service" class="section section-alt">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="eyebrow">Service</span>
+          <h2>Giving Back</h2>
+        </div>
+        <div class="service-grid">
+          <div class="service-card reveal" style="--d:0">
+            <h3><a href="https://ntfb.org/" target="_blank" rel="noopener">North Texas Food Bank</a></h3>
+            <p>During the summer, I volunteer regularly at the North Texas Food Bank, typically at least once a week. This experience has given me the opportunity to support my local community, develop teamwork skills in fast-paced environments, and contribute to addressing food insecurity.</p>
+          </div>
+          <div class="service-card reveal" style="--d:1">
+            <h3><a href="https://bigevent.tamu.edu/" target="_blank" rel="noopener">Big Event</a></h3>
+            <p>Each spring, I participate in The Big Event, the largest one-day, student-run service project in the nation. This annual tradition unites tens of thousands of Texas A&amp;M students to give back to the Bryan-College Station community through yard work, window washing, painting, and more.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact" class="footer">
+    <div class="wrap">
+      <h2>Let's build something.</h2>
+      <p class="tagline">Open to software engineering internships and research collaborations — reach out any time.</p>
+      <div class="social-row">
+        <a href="https://www.linkedin.com/in/gauri-agrawal-0baba8321" aria-label="LinkedIn" target="_blank" rel="noopener">
+          <img src="linkedin.webp" alt="LinkedIn">
+        </a>
+        <a href="mailto:gauri4agrawal@gmail.com" aria-label="Email">
+          <img src="gmail.png" alt="Email">
+        </a>
+        <a href="https://github.com/AGreyWhale" aria-label="GitHub" target="_blank" rel="noopener">
+          <img src="github.png" alt="GitHub">
+        </a>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Gauri Agrawal</span>
+        <a href="courses.html">Coursework →</a>
       </div>
     </div>
+  </footer>
 
-    <div class="footer">
-      <a href="https://www.linkedin.com/in/gauri-agrawal-0baba8321">
-        <img src="linkedin.webp" alt="LinkedIn">
-      </a>
-      <a href="mailto:gauri4agrawal@gmail.com">
-        <img src="gmail.png" alt="Email Me">
-      </a>
-      <a href="https://github.com/AGreyWhale">
-        <img src="github.png" alt="GitHub">
-      </a>
-    </div>
-  </div>
+  <script src="script.js"></script>
 </body>
 </html>
