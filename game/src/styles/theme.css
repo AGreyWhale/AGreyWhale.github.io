@@ -1,0 +1,47 @@
+/* Theme tokens. Day/night is the light/dark mode for every overlay.
+   Day palette echoes the classic site (cream paper, sunset reds). */
+:root,
+:root[data-theme='day'] {
+  color-scheme: light;
+  --bg: #fbf3e7;
+  --surface: #fffaf3;
+  --surface-2: #f6ebdc;
+  --surface-glass: rgba(255, 250, 243, 0.86);
+  --ink: #2b2522;
+  --ink-soft: #6a5f58;
+  --accent: #c8483c;
+  --accent-soft: #fbe1d9;
+  --accent-ink: #ffffff;
+  --gold: #e9a23b;
+  --line: rgba(43, 37, 34, 0.12);
+  --chip: #f3e6d4;
+  --focus: #1f5fd1;
+  --shadow: 0 18px 50px rgba(90, 55, 35, 0.22), 0 2px 6px rgba(90, 55, 35, 0.12);
+  --backdrop: rgba(56, 40, 48, 0.32);
+}
+
+:root[data-theme='night'] {
+  color-scheme: dark;
+  --bg: #171a2e;
+  --surface: #222744;
+  --surface-2: #2b3157;
+  --surface-glass: rgba(34, 39, 68, 0.88);
+  --ink: #f3ece2;
+  --ink-soft: #b8b2c8;
+  --accent: #ff9a86;
+  --accent-soft: #3d3358;
+  --accent-ink: #1b1630;
+  --gold: #ffd479;
+  --line: rgba(255, 255, 255, 0.13);
+  --chip: #343b66;
+  --focus: #ffd479;
+  --shadow: 0 18px 50px rgba(5, 6, 20, 0.55), 0 2px 6px rgba(5, 6, 20, 0.4);
+  --backdrop: rgba(8, 10, 26, 0.5);
+}
+
+:root {
+  --font: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --radius: 18px;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}

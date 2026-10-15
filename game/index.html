@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" data-theme="day">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Gauri's Town · Gauri Agrawal</title>
+    <meta name="description" content="Walk around a cozy little town to explore Gauri Agrawal's projects, ML research, coursework and more." />
+    <meta name="theme-color" content="#fbf3e7" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='12' y='28' width='40' height='28' rx='4' fill='%23f6e3c9'/%3E%3Cpath d='M6 32 32 10l26 22z' fill='%23d9705a' stroke='%23d9705a' stroke-width='4' stroke-linejoin='round'/%3E%3Crect x='27' y='38' width='10' height='18' rx='5' fill='%238a5a44'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <script>
+      // Apply the saved/system theme before first paint to avoid a flash.
+      (function () {
+        var mode = matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day';
+        try {
+          var s = JSON.parse(localStorage.getItem('gauri-town-save-v1') || 'null');
+          if (s && (s.themeOverride === 'day' || s.themeOverride === 'night')) mode = s.themeOverride;
+        } catch (e) {}
+        document.documentElement.dataset.theme = mode;
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game-canvas" role="img" aria-label="A cozy top-down town with a fountain, a cottage, the DIVE Lab and a workshop. Walk with WASD or arrow keys, or drag on touch screens."></canvas>
+      <div id="ui-layer"></div>
+    </div>
+    <noscript>
+      <p class="noscript">This little town needs JavaScript. <a href="%CLASSIC_URL%">Visit the quick version of my portfolio</a>.</p>
+    </noscript>
+    <p class="boot-error">Something went wrong loading the town. <a href="%CLASSIC_URL%">Visit the quick version instead</a>.</p>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

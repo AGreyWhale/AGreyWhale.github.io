@@ -1,0 +1,27 @@
+{
+  "name": "gauri-town",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Interactive cozy-town version of Gauri Agrawal's portfolio.",
+  "scripts": {
+    "extract": "node scripts/extract-content.mjs",
+    "predev": "npm run extract",
+    "dev": "vite",
+    "typecheck": "tsc --noEmit",
+    "prebuild": "npm run extract",
+    "build": "tsc --noEmit && vite build",
+    "assemble": "node scripts/assemble.mjs",
+    "build:site": "npm run build && npm run assemble",
+    "preview:site": "npm run build:site && node scripts/serve-site.mjs",
+    "pretest": "npm run extract",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "node-html-parser": "^9.0.4",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5"
+  }
+}
