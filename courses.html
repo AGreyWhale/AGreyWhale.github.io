@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coursework - Gauri Agrawal</title>
+  <link rel="icon" type="image/png" href="homeicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="scroll-progress"></div>
+
+  <nav class="topnav">
+    <a href="index.html" class="brand">Gauri<span>.</span></a>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="topnav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#research">Research</a></li>
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="index.html#skills">Skills</a></li>
+      <li><a href="index.html#service">Service</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="index.html" class="pill-link active">← Home</a></li>
+    </ul>
+  </nav>
+
+  <header class="page-header">
+    <div class="wrap">
+      <span class="eyebrow">Academics</span>
+      <h1>Coursework</h1>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap" style="padding-bottom: var(--section-pad);">
+      <div class="ide-window">
+
+        <div class="ide-titlebar">
+          <div class="ide-dots" aria-hidden="true">
+            <span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span>
+          </div>
+          <div class="ide-path">root@gauri:~/coursework$ <span class="ide-cmd">tree --dirsfirst</span><span class="ide-caret" aria-hidden="true"></span></div>
+        </div>
+
+        <div class="ide-body">
+          <p class="tree-legend">
+            <span class="cmt">#</span>
+            <span class="legend-chip"><span class="legend-star" aria-hidden="true">&#10022;</span> expandable</span>
+            <span class="legend-chip"><span class="legend-dot completed" aria-hidden="true"></span> completed</span>
+            <span class="legend-chip"><span class="legend-dot current" aria-hidden="true"></span> in progress</span>
+          </p>
+
+          <ul class="file-tree root-tree">
+
+            <!-- CS CORE -->
+            <li class="tree-node">
+              <details class="tree-folder" open>
+                <summary class="folder-row">
+                  <span class="chevron" aria-hidden="true">&#9656;</span>
+                  <span class="folder-icon" aria-hidden="true"></span>
+                  <span class="folder-name">cs-core<span class="folder-slash">/</span></span>
+                  <span class="folder-meta">17 files &middot; 4 in progress</span>
+                </summary>
+                <ul class="file-tree">
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">intro_to_computing<span class="file-ext ext-py">.py</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <details id="detail-prog-design">
+                      <summary class="tree-row">
+                        <span class="chevron" aria-hidden="true">&#9656;</span>
+                        <span class="file-icon" aria-hidden="true">&#128196;</span>
+                        <span class="file-name">program_design<span class="file-ext ext-java">.java</span></span>
+                        <span class="file-star" aria-hidden="true">&#10022;</span>
+                        <span class="file-status status-done">done</span>
+                      </summary>
+                      <div class="file-body">
+                        <div class="file-attrs">
+                          <span><span class="attr-key">language</span><span class="attr-val">Java</span></span>
+                          <span><span class="attr-key">topics</span><span class="attr-val">OOP, inheritance, recursion</span></span>
+                        </div>
+                        <div class="code-view">
+                          <p>Foundational course covering core programming principles in Java — object-oriented design, inheritance, recursion, and basic data structures. Established the problem-solving habits I've carried through every course since.</p>
+                        </div>
+                      </div>
+                    </details>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">discrete_structures<span class="file-ext ext-hs">.hs</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <details id="detail-dsa">
+                      <summary class="tree-row">
+                        <span class="chevron" aria-hidden="true">&#9656;</span>
+                        <span class="file-icon" aria-hidden="true">&#128196;</span>
+                        <span class="file-name">data_structures<span class="file-ext ext-cpp">.cpp</span></span>
+                        <span class="file-star" aria-hidden="true">&#10022;</span>
+                        <span class="file-status status-done">done</span>
+                      </summary>
+                      <div class="file-body">
+                        <div class="file-attrs">
+                          <span><span class="attr-key">topics</span><span class="attr-val">trees, graphs, hash tables, heaps</span></span>
+                          <span><span class="attr-key">focus</span><span class="attr-val">complexity analysis</span></span>
+                        </div>
+                        <div class="code-view">
+                          <p>In-depth study of fundamental data structures (trees, graphs, hash tables, heaps) and the algorithms that operate on them. Covered time and space complexity analysis, sorting, searching, and dynamic programming.</p>
+                        </div>
+                      </div>
+                    </details>
+                  </li>
+
+                  <li class="tree-node">
+                    <details id="detail-comp-org">
+                      <summary class="tree-row">
+                        <span class="chevron" aria-hidden="true">&#9656;</span>
+                        <span class="file-icon" aria-hidden="true">&#128196;</span>
+                        <span class="file-name">computer_organization<span class="file-ext ext-circ">.circ</span></span>
+                        <span class="file-star" aria-hidden="true">&#10022;</span>
+                        <span class="file-status status-done">done</span>
+                      </summary>
+                      <div class="file-body">
+                        <div class="file-attrs">
+                          <span><span class="attr-key">tool</span><span class="attr-val">Logisim</span></span>
+                          <span><span class="attr-key">isa</span><span class="attr-val">Y86-64</span></span>
+                          <span><span class="attr-key">pipeline</span><span class="attr-val">5-stage</span></span>
+                        </div>
+                        <div class="code-view">
+                          <p>Designed and implemented a fully functional processor capable of executing programs written in the Y86-64 instruction set architecture — a teaching ISA closely modeled on 64-bit x86. Built from scratch in Logisim, with each processing block — fetch, decode, control, ALU, registers, and data memory — developed and verified independently before integration into a five-stage pipeline. This is the CPU design project featured on the <a href="index.html#projects">Projects</a> page.</p>
+                        </div>
+                        <details class="sub-details">
+                          <summary>Project Details</summary>
+                          <div class="sub-body"><ul>
+                            <li>Designed a scaled-down ISA and verified each functional stage (instruction fetch, decoder, control unit, ALU, register file, data memory read/write, and full datapath).</li>
+                            <li>Implemented ROM-to-RAM boot loading: program instructions and initial matrix data were loaded into ROM, then copied to RAM at simulation start.</li>
+                            <li>Demonstrated the processor running at least 3 Y86-64 programs covering all supported instructions, including a 2×2 matrix addition stored in and read from RAM.</li>
+                            <li>Generated a full processor timing diagram (via WaveDrom) showing icode, ifun, rA, rB, valC, valP, valA, valB, valE, valM, and the new PC at each pipeline stage output.</li>
+                            <li>Modularized the Logisim circuit using sub-circuits to clearly demarcate each component for readability and grading clarity.</li>
+                          </ul></div>
+                        </details>
+                      </div>
+                    </details>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">programming_languages<span class="file-ext ext-ml">.ml</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">intro_to_systems<span class="file-ext ext-c">.c</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <details id="detail-swe">
+                      <summary class="tree-row">
+                        <span class="chevron" aria-hidden="true">&#9656;</span>
+                        <span class="file-icon" aria-hidden="true">&#128196;</span>
+                        <span class="file-name">software_engineering<span class="file-ext ext-jsx">.jsx</span></span>
+                        <span class="file-star" aria-hidden="true">&#10022;</span>
+                        <span class="file-status status-done">done</span>
+                      </summary>
+                      <div class="file-body">
+                        <div class="file-attrs">
+                          <span><span class="attr-key">role</span><span class="attr-val">Project Lead / Scrum Master</span></span>
+                          <span><span class="attr-key">stack</span><span class="attr-val">React, Flask, PostgreSQL</span></span>
+                          <span><span class="attr-key">team</span><span class="attr-val">5</span></span>
+                        </div>
+                        <div class="code-view">
+                          <p>Led a team of 5 as Project Lead and Scrum Master to design and deliver a full-stack Point-of-Sale system for a boba shop. Built with React on the frontend and Flask on the backend, with a PostgreSQL database.</p>
+                        </div>
+                        <details class="sub-details">
+                          <summary>Project Details</summary>
+                          <div class="sub-body"><ul>
+                            <li>Served as Project Lead and Scrum Master, coordinating sprint planning, task delegation, and code reviews across a team of 5 developers.</li>
+                            <li>Built a customer-facing ordering interface in React, allowing users to browse the menu, customize drinks, and place orders in real time.</li>
+                            <li>Developed manager and cashier views with separate permission levels — managers could update menu items and view sales history, cashiers could process transactions.</li>
+                            <li>Designed and maintained a PostgreSQL database schema to handle menu items, orders, and transaction records.</li>
+                            <li>Connected a Flask REST API to serve data between the frontend and database.</li>
+                            <li>Followed Scrum methodology with defined sprints, a shared backlog, and regular retrospectives to keep the team aligned and on schedule.</li>
+                          </ul></div>
+                        </details>
+                        <div class="slideshow-wrapper">
+                          <label>Project Photos</label>
+                          <div class="slideshow" id="slideshow-boba">
+                            <div class="slide active"><div class="slide-placeholder">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                              <span>Photos coming soon</span>
+                            </div></div>
+                          </div>
+                          <div class="slideshow-controls">
+                            <button class="slide-btn" onclick="prevSlide('boba')">&#8592;</button>
+                            <span class="slide-counter" id="counter-boba">— / —</span>
+                            <button class="slide-btn" onclick="nextSlide('boba')">&#8594;</button>
+                          </div>
+                        </div>
+                      </div>
+                    </details>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">operating_systems<span class="file-ext ext-sh">.sh</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">design_analysis_algorithms<span class="file-ext ext-py">.py</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">machine_learning<span class="file-ext ext-ipynb">.ipynb</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">parallel_computing<span class="file-ext ext-cu">.cu</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <details id="detail-graphics">
+                      <summary class="tree-row">
+                        <span class="chevron" aria-hidden="true">&#9656;</span>
+                        <span class="file-icon" aria-hidden="true">&#128196;</span>
+                        <span class="file-name">computer_graphics<span class="file-ext ext-glsl">.glsl</span></span>
+                        <span class="file-star" aria-hidden="true">&#10022;</span>
+                        <span class="file-status status-done">done</span>
+                      </summary>
+                      <div class="file-body">
+                        <div class="file-attrs">
+                          <span><span class="attr-key">topics</span><span class="attr-val">rasterization, shading, transforms</span></span>
+                        </div>
+                        <div class="code-view">
+                          <p>Currently exploring the mathematics and algorithms behind rendering 3D scenes — rasterization, shading models, transformations, and the graphics pipeline.</p>
+                        </div>
+                        <details class="sub-details">
+                          <summary>Project: Rasterized Rabbit with Lighting Models</summary>
+                          <div class="sub-body"><ul>
+                            <li>Rasterized a 3D rabbit mesh and applied multiple lighting models to compare how different shading algorithms affect the perception of surface geometry and material properties.</li>
+                          </ul></div>
+                        </details>
+                        <div class="slideshow-wrapper">
+                          <label>Renders &amp; Results</label>
+                          <div class="slideshow" id="slideshow-graphics">
+                            <div class="slide active"><div class="slide-placeholder">
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                              <span>Photos coming soon</span>
+                            </div></div>
+                          </div>
+                          <div class="slideshow-controls">
+                            <button class="slide-btn" onclick="prevSlide('graphics')">&#8592;</button>
+                            <span class="slide-counter" id="counter-graphics">— / —</span>
+                            <button class="slide-btn" onclick="nextSlide('graphics')">&#8594;</button>
+                          </div>
+                        </div>
+                      </div>
+                    </details>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">human_computer_interaction<span class="file-ext ext-jsx">.jsx</span></span>
+                      <span class="file-status status-current">in progress</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">seminar<span class="file-ext ext-md">.md</span></span>
+                      <span class="file-status status-current">in progress</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">capstone_design<span class="file-ext ext-md">.md</span></span>
+                      <span class="file-status status-current">in progress</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">honors_research<span class="file-ext ext-md">.md</span></span>
+                      <span class="file-status status-current">in progress</span>
+                    </span>
+                  </li>
+
+                </ul>
+              </details>
+            </li>
+
+            <!-- MATH -->
+            <li class="tree-node">
+              <details class="tree-folder">
+                <summary class="folder-row">
+                  <span class="chevron" aria-hidden="true">&#9656;</span>
+                  <span class="folder-icon" aria-hidden="true"></span>
+                  <span class="folder-name">math<span class="folder-slash">/</span></span>
+                  <span class="folder-meta">9 files &middot; 3 in progress</span>
+                </summary>
+                <ul class="file-tree">
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">calculus_i<span class="file-ext ext-tex">.tex</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">calculus_ii<span class="file-ext ext-tex">.tex</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">calculus_iii<span class="file-ext ext-tex">.tex</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <details id="detail-linalg">
+                      <summary class="tree-row">
+                        <span class="chevron" aria-hidden="true">&#9656;</span>
+                        <span class="file-icon" aria-hidden="true">&#128196;</span>
+                        <span class="file-name">linear_algebra<span class="file-ext ext-m">.m</span></span>
+                        <span class="file-star" aria-hidden="true">&#10022;</span>
+                        <span class="file-status status-done">done</span>
+                      </summary>
+                      <div class="file-body">
+                        <div class="file-attrs">
+                          <span><span class="attr-key">topics</span><span class="attr-val">vectors, matrices, eigenvectors</span></span>
+                          <span><span class="attr-key">applies to</span><span class="attr-val">ML, graphics</span></span>
+                        </div>
+                        <div class="code-view">
+                          <p>Covered vectors, matrices, systems of linear equations, eigenvalues and eigenvectors, and linear transformations. Directly applicable to machine learning (matrix operations, dimensionality reduction) and computer graphics (transformation matrices, projections).</p>
+                        </div>
+                      </div>
+                    </details>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">statistics<span class="file-ext ext-r">.r</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">newtonian_mechanics<span class="file-ext ext-py">.py</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">differential_equations<span class="file-ext ext-m">.m</span></span>
+                      <span class="file-status status-current">in progress</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">probability<span class="file-ext ext-r">.r</span></span>
+                      <span class="file-status status-current">in progress</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">cryptography<span class="file-ext ext-hs">.hs</span></span>
+                      <span class="file-status status-current">in progress</span>
+                    </span>
+                  </li>
+
+                </ul>
+              </details>
+            </li>
+
+            <!-- BEYOND CS -->
+            <li class="tree-node">
+              <details class="tree-folder">
+                <summary class="folder-row">
+                  <span class="chevron" aria-hidden="true">&#9656;</span>
+                  <span class="folder-icon" aria-hidden="true"></span>
+                  <span class="folder-name">beyond-cs<span class="folder-slash">/</span></span>
+                  <span class="folder-meta">4 files</span>
+                </summary>
+                <ul class="file-tree">
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">public_speaking<span class="file-ext ext-md">.md</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">philosophy<span class="file-ext ext-md">.md</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <span class="tree-row-plain">
+                      <span class="file-icon" aria-hidden="true">&#128196;</span>
+                      <span class="file-name">yoga<span class="file-ext ext-yaml">.yaml</span></span>
+                      <span class="file-status status-done">done</span>
+                    </span>
+                  </li>
+
+                  <li class="tree-node">
+                    <details id="detail-floral">
+                      <summary class="tree-row">
+                        <span class="chevron" aria-hidden="true">&#9656;</span>
+                        <span class="file-icon" aria-hidden="true">&#128196;</span>
+                        <span class="file-name">floral_design<span class="file-ext ext-svg">.svg</span></span>
+                        <span class="file-star" aria-hidden="true">&#10022;</span>
+                        <span class="file-status status-done">done</span>
+                      </summary>
+                      <div class="file-body">
+                        <div class="file-attrs">
+                          <span><span class="attr-key">focus</span><span class="attr-val">color theory, composition, balance</span></span>
+                        </div>
+                        <div class="floral-layout">
+                          <div class="floral-text code-view">
+                            <p>A hands-on studio course exploring the principles of floral arrangement — color theory, composition, balance, and the use of texture and form. A creative outlet that sharpened my eye for design and visual storytelling, skills that translate more than you'd expect into UI and presentation work.</p>
+                          </div>
+                          <div>
+                            <div class="slideshow-sm" id="slideshow-floral">
+                              <div class="slide active"><div class="slide-placeholder-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                <span>Photos coming soon</span>
+                              </div></div>
+                            </div>
+                            <div class="slideshow-controls-sm">
+                              <button class="slide-btn-sm" onclick="prevSlide('floral')">&#8592;</button>
+                              <span class="slide-counter-sm" id="counter-floral">— / —</span>
+                              <button class="slide-btn-sm" onclick="nextSlide('floral')">&#8594;</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </details>
+                  </li>
+
+                </ul>
+              </details>
+            </li>
+
+          </ul>
+        </div><!-- /ide-body -->
+      </div><!-- /ide-window -->
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <h2>Let's build something.</h2>
+      <p class="tagline">Open to software engineering internships and research collaborations — reach out any time.</p>
+      <div class="social-row">
+        <a href="https://www.linkedin.com/in/gauri-agrawal-0baba8321" aria-label="LinkedIn" target="_blank" rel="noopener">
+          <img src="linkedin.webp" alt="LinkedIn">
+        </a>
+        <a href="mailto:gauri4agrawal@gmail.com" aria-label="Email">
+          <img src="gmail.png" alt="Email">
+        </a>
+        <a href="https://github.com/AGreyWhale" aria-label="GitHub" target="_blank" rel="noopener">
+          <img src="github.png" alt="GitHub">
+        </a>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Gauri Agrawal</span>
+        <a href="index.html">Back to site →</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    const slideshowImages = {
+      boba:     [],
+      graphics: ["images/bunny1.png", "images/bunny2.png", "images/bunny3.png", "images/bunny4.png", "images/bunny5.png", "images/bunny6.png"],
+      floral:   ["images/plants/plant1.png", "images/plants/plant2.png", "images/plants/plant3.png", "images/plants/plant4.png"]
+    };
+
+    const slideshows = {
+      boba:     { current: 0 },
+      graphics: { current: 0 },
+      floral:   { current: 0 }
+    };
+
+    function renderSlideshow(id) {
+      const images  = slideshowImages[id];
+      const state   = slideshows[id];
+      const el      = document.getElementById('slideshow-' + id);
+      const counter = document.getElementById('counter-' + id);
+      const isSmall = el.classList.contains('slideshow-sm');
+
+      el.innerHTML = '';
+
+      if (images.length === 0) {
+        const slide = document.createElement('div');
+        slide.className = 'slide active';
+        slide.innerHTML = isSmall
+          ? `<div class="slide-placeholder-sm"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><span>Photos coming soon</span></div>`
+          : `<div class="slide-placeholder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><span>Photos coming soon</span></div>`;
+        el.appendChild(slide);
+        counter.textContent = '— / —';
+        return;
+      }
+
+      images.forEach((src, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'slide' + (i === state.current ? ' active' : '');
+        const img = document.createElement('img');
+        img.src = src; img.alt = 'Photo ' + (i + 1);
+        slide.appendChild(img);
+        el.appendChild(slide);
+      });
+
+      counter.textContent = (state.current + 1) + ' / ' + images.length;
+    }
+
+    function nextSlide(id) {
+      const images = slideshowImages[id];
+      if (!images.length) return;
+      slideshows[id].current = (slideshows[id].current + 1) % images.length;
+      renderSlideshow(id);
+    }
+
+    function prevSlide(id) {
+      const images = slideshowImages[id];
+      if (!images.length) return;
+      slideshows[id].current = (slideshows[id].current - 1 + images.length) % images.length;
+      renderSlideshow(id);
+    }
+
+    ['boba', 'graphics', 'floral'].forEach(renderSlideshow);
+
+    // Auto-open a file (and its parent folder) if linked to directly
+    // (e.g. index.html#projects -> courses.html#detail-comp-org).
+    if (location.hash) {
+      const target = document.querySelector(location.hash);
+      if (target && target.tagName === 'DETAILS') {
+        target.open = true;
+        let ancestor = target.parentElement.closest('details');
+        while (ancestor) {
+          ancestor.open = true;
+          ancestor = ancestor.parentElement.closest('details');
+        }
+        setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
+      }
+    }
+  </script>
+</body>
+</html>
