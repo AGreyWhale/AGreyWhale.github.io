@@ -45,13 +45,4 @@ Coursework photos and images are compressed to WebP at build time
 
 ## Music
 
-Music is generated live with WebAudio (no files, nothing copyrighted). To use
-real tracks, drop **properly licensed**, short looping files in
-`src/assets/audio/` and follow the instructions at the top of
-`src/content/audio.ts`.
-
-## Root vs /world/
-
-`GAME_PATH` (in `site.config.ts`, and the env in `.github/workflows/deploy.yml`)
-controls where the town lives. `/world/` = classic at `/`, town at `/world/`.
-`/` = town at `/`, classic at `/classic/`.
+Music is generated live with WebAudio (no files, nothing copyrighted).
