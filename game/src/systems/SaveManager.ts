@@ -1,4 +1,4 @@
-import type { CharacterAppearance } from '../content/types';
+import type { Accessory, CharacterAppearance } from '../content/types';
 
 export type ThemeMode = 'day' | 'night';
 export type Season = 'spring' | 'summer' | 'autumn' | 'winter';
@@ -13,6 +13,10 @@ export interface SaveData {
   seasonOverride: Season | null;
   /** Ids of collectibles found so far. */
   collected: string[];
+  /** Best Boba Rush score. */
+  bobaBest: number;
+  /** True once the 'found everything' reward has been shown. */
+  rewardClaimed: boolean;
 }
 
 /** The subset of the Web Storage API we use, so tests can pass a fake. */
@@ -29,9 +33,34 @@ export const DEFAULT_SAVE: Readonly<SaveData> = Object.freeze({
   themeOverride: null,
   seasonOverride: null,
   collected: [],
+  bobaBest: 0,
+  rewardClaimed: false,
 });
 
 const SEASONS: readonly Season[] = ['spring', 'summer', 'autumn', 'winter'];
+const ACCESSORIES: readonly Accessory[] = ['beanie', 'bow', 'glasses', 'headphones', 'cap', 'flower', 'crown'];
+const HAIR = ['short', 'hijab', 'bun', 'long'] as const;
+const isColor = (v: unknown): v is string => typeof v === 'string' && /^#[0-9a-f]{3,8}$/i.test(v);
+
+/**
+ * Validates a saved character, migrating older shapes (a single `accessory`,
+ * the retired "bob" hair). Returns null if it's unusable.
+ */
+export function sanitizeCharacter(input: unknown): CharacterAppearance | null {
+  if (!input || typeof input !== 'object') return null;
+  const o = input as Record<string, unknown>;
+  if (!isColor(o.skin) || !isColor(o.hairColor) || !isColor(o.outfit)) return null;
+  const rawAcc = Array.isArray(o.accessories) ? o.accessories : typeof o.accessory === 'string' ? [o.accessory] : [];
+  const hair = o.hair === 'bob' ? 'hijab' : (HAIR as readonly unknown[]).includes(o.hair) ? (o.hair as CharacterAppearance['hair']) : 'short';
+  return {
+    body: o.body === 'tall' ? 'tall' : 'round',
+    hair,
+    skin: o.skin,
+    hairColor: o.hairColor,
+    outfit: o.outfit,
+    accessories: [...new Set(rawAcc.filter((a): a is Accessory => (ACCESSORIES as readonly unknown[]).includes(a)))],
+  };
+}
 
 /** Best-effort access to localStorage; returns null when blocked (private mode, sandboxed iframes…). */
 export function browserStorage(): StorageLike | null {
@@ -52,12 +81,14 @@ export function sanitizeSave(input: unknown): SaveData {
   const d: SaveData = { ...DEFAULT_SAVE, collected: [] };
   if (!input || typeof input !== 'object') return d;
   const o = input as Record<string, unknown>;
-  if (o.character && typeof o.character === 'object') d.character = o.character as CharacterAppearance;
+  d.character = sanitizeCharacter(o.character);
   if (typeof o.muted === 'boolean') d.muted = o.muted;
   if (o.themeOverride === 'day' || o.themeOverride === 'night') d.themeOverride = o.themeOverride;
   if (typeof o.seasonOverride === 'string' && (SEASONS as string[]).includes(o.seasonOverride)) {
     d.seasonOverride = o.seasonOverride as Season;
   }
+  if (typeof o.bobaBest === 'number' && Number.isFinite(o.bobaBest) && o.bobaBest >= 0) d.bobaBest = Math.floor(o.bobaBest);
+  if (typeof o.rewardClaimed === 'boolean') d.rewardClaimed = o.rewardClaimed;
   if (Array.isArray(o.collected)) d.collected = [...new Set(o.collected.filter((x): x is string => typeof x === 'string'))];
   return d;
 }

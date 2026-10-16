@@ -1,5 +1,6 @@
 import type { RenderEnv } from '../render/draw';
 import type { AudioManager } from '../systems/AudioManager';
+import type { CollectibleSystem } from '../systems/CollectibleSystem';
 import type { InputManager } from '../systems/InputManager';
 import type { LightingSystem } from '../systems/LightingSystem';
 import type { SaveManager } from '../systems/SaveManager';
@@ -19,6 +20,7 @@ export interface GameContext {
   readonly theme: ThemeManager;
   readonly audio: AudioManager;
   readonly lighting: LightingSystem;
+  readonly collectibles: CollectibleSystem;
   /** Per-frame values shared by all painters. */
   readonly env: RenderEnv;
 }

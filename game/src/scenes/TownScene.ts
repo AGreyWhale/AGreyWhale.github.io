@@ -1,4 +1,5 @@
 import { buildings } from '../content/buildings';
+import { collectibles } from '../content/collectibles';
 import { town, type TownPropDef } from '../content/town';
 import type { ActionDef, CharacterAppearance } from '../content/types';
 import type { GameContext } from '../core/GameContext';
@@ -32,12 +33,18 @@ export class TownScene extends WorldScene {
     const act = (action: ActionDef) => ctx.bus.emit('action', { action });
     this.entities.push(this.player);
     for (const def of buildings) {
-      this.entities.push(new Building(def));
-      this.entities.push(new Door(def, this.player, () => act({ type: 'enter', building: def.id })));
+      if (def.interior) {
+        this.entities.push(new Building(def));
+        this.entities.push(new Door(def, this.player, () => act({ type: 'enter', building: def.id })));
+      } else if (def.panel) {
+        const panel = def.panel;
+        this.entities.push(new Building(def, () => act({ type: 'panel', panel })));
+      }
     }
     for (const def of town.props) this.entities.push(new Prop(def, (i) => act(i.action)));
     for (const def of town.npcs) this.entities.push(new Npc(def, this.player, (i) => act(i.action)));
     for (const def of this.decorTrees()) this.entities.push(new Prop(def, () => undefined));
+    this.spawnCollectibles('town');
     this.rebuildSolids();
   }
 
@@ -109,6 +116,7 @@ export class TownScene extends WorldScene {
       ...buildings.map((b) => ({ x: b.x - b.width / 2 - 50, y: b.y - b.wallHeight - b.roofHeight - 30, w: b.width + 100, h: b.wallHeight + b.roofHeight + 110 })),
       ...town.props.map((p) => ({ x: p.x - 55, y: p.y - 70, w: 110, h: 110 })),
       ...town.npcs.map((n) => ({ x: n.x - 40, y: n.y - 50, w: 80, h: 80 })),
+      ...collectibles.filter((c) => c.where === 'town').map((c) => ({ x: c.x - 30, y: c.y - 30, w: 60, h: 50 })),
       { x: town.spawn.x - 50, y: town.spawn.y - 60, w: 100, h: 100 },
     ];
     const ok = (x: number, y: number) =>

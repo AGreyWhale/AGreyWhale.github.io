@@ -5,7 +5,7 @@ import { FileTrack, type MusicSource } from './audio/MusicSource';
 import { ProceduralAmbience } from './audio/ProceduralAmbience';
 import type { SaveManager, ThemeMode } from './SaveManager';
 
-export type Sfx = 'blip' | 'open' | 'close' | 'door';
+export type Sfx = 'blip' | 'open' | 'close' | 'door' | 'collect' | 'success' | 'fail';
 
 /**
  * Music + sound effects. Nothing is created until `unlock()` runs inside the
@@ -120,6 +120,16 @@ export class AudioManager {
         break;
       case 'close':
         tone(880, t, 0.25, 0.25, 'triangle', 600);
+        break;
+      case 'collect':
+        [784, 988, 1319].forEach((f, i) => tone(f, t + i * 0.07, 0.3, 0.22, 'triangle'));
+        break;
+      case 'success':
+        tone(659, t, 0.2, 0.25, 'triangle');
+        tone(988, t + 0.1, 0.35, 0.25, 'triangle');
+        break;
+      case 'fail':
+        tone(330, t, 0.3, 0.25, 'sine', 220);
         break;
       case 'door':
         tone(220, t, 0.25, 0.5, 'sine', 110);

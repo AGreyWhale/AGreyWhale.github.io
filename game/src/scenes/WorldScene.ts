@@ -1,4 +1,5 @@
 import type { GameContext } from '../core/GameContext';
+import { Collectible } from '../entities/Collectible';
 import type { Entity } from '../entities/Entity';
 import { Player } from '../entities/Player';
 import type { RenderEnv } from '../render/draw';
@@ -48,6 +49,23 @@ export abstract class WorldScene extends Scene {
 
   protected nightAmbient: [number, number, number] = [74, 84, 150];
 
+  /** Places this scene's not-yet-found collectibles ("town" or an interior id). */
+  protected spawnCollectibles(where: string): void {
+    for (const def of this.ctx.collectibles.remainingIn(where)) this.entities.push(new Collectible(def));
+  }
+
+  /** Walking over a collectible picks it up. */
+  private pickUpCollectibles(): void {
+    const { x, y } = this.player.pos;
+    for (const e of this.entities) {
+      if (!(e instanceof Collectible) || Math.hypot(e.pos.x - x, e.pos.y - y) > Collectible.PICKUP_RADIUS) continue;
+      this.entities = this.entities.filter((o) => o !== e);
+      this.ctx.audio.play('collect');
+      this.ctx.collectibles.collect(e.def);
+      return;
+    }
+  }
+
   /** Recomputes solids from entity colliders; call after adding/removing entities. */
   protected rebuildSolids(extra: Rect[] = []): void {
     const solids: Rect[] = [...extra];
@@ -88,6 +106,7 @@ export abstract class WorldScene extends Scene {
     camera.follow(this.cameraTarget(), dt, true);
 
     if (this.controllable) {
+      this.pickUpCollectibles();
       const items: Interactable[] = [];
       for (const e of this.entities) {
         const it = e.interactable();

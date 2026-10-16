@@ -1,4 +1,4 @@
-import type { CharacterAppearance } from '../content/types';
+import type { Accessory, CharacterAppearance } from '../content/types';
 import { circle, ellipse, fillRoundRect, shade, shadow, type Ctx } from './draw';
 
 export type Facing = 'down' | 'up' | 'left' | 'right';
@@ -78,20 +78,25 @@ export function drawCharacter(g: Ctx, x: number, y: number, a: CharacterAppearan
 
   // Head + hair
   const hair = a.hairColor;
-  if (a.hair === 'bob' && !back) fillRoundRect(g, x - hr - 2.5, hy - 3, hr * 2 + 5, hr + 9, 7, hair);
+  if (a.hair === 'hijab' && !back) fillRoundRect(g, x - hr - 2.5, hy - 3, hr * 2 + 5, hr + 9, 7, hair);
   circle(g, x, hy - 0.5, hr + 1.5, hair);
   if (a.hair === 'bun') circle(g, x, hy - hr - 2.5, 5.5, hair);
   if (back && a.hair === 'long') fillRoundRect(g, x - hr - 1, hy, hr * 2 + 2, hr + 14, 9, hair);
-  if (back && a.hair === 'bob') fillRoundRect(g, x - hr - 2.5, hy - 3, hr * 2 + 5, hr + 9, 7, hair);
+  if (back && a.hair === 'hijab') fillRoundRect(g, x - hr - 2.5, hy - 3, hr * 2 + 5, hr + 9, 7, hair);
 
   if (!back) {
     const fx = side ? x + dir * 3 : x;
-    ellipse(g, fx, hy + 3, side ? hr - 3 : hr - 1.5, hr - 3.5, a.skin);
+    ellipse(g, fx, hy + 4.5, side ? hr - 3 : hr - 1.5, hr - 3.5, a.skin);
     drawFace(g, fx, hy, side ? dir : 0, pose.time);
   }
 
-  drawAccessory(g, x, hy, hr, a, front, back, dir);
+  // Layer order: ear things, then hats, then face and hair decorations.
+  for (const acc of ACCESSORY_ORDER) {
+    if (a.accessories.includes(acc)) drawAccessory(g, x, hy, hr, acc, a, front, back, dir);
+  }
 }
+
+const ACCESSORY_ORDER: readonly Accessory[] = ['headphones', 'beanie', 'cap', 'crown', 'glasses', 'bow', 'flower'];
 
 function drawFace(g: Ctx, x: number, hy: number, dir: number, time: number): void {
   const blink = time % 4.2 > 4.05;
@@ -113,9 +118,19 @@ function drawFace(g: Ctx, x: number, hy: number, dir: number, time: number): voi
   }
 }
 
-function drawAccessory(g: Ctx, x: number, hy: number, hr: number, a: CharacterAppearance, front: boolean, back: boolean, dir: number): void {
+function drawAccessory(
+  g: Ctx,
+  x: number,
+  hy: number,
+  hr: number,
+  acc: Accessory,
+  a: CharacterAppearance,
+  front: boolean,
+  back: boolean,
+  dir: number,
+): void {
   const side = !front && !back;
-  switch (a.accessory) {
+  switch (acc) {
     case 'beanie': {
       const c = shade(a.outfit, -0.2);
       g.beginPath();
@@ -203,7 +218,23 @@ function drawAccessory(g: Ctx, x: number, hy: number, hr: number, a: CharacterAp
       circle(g, fx, fy, 1.8, '#f3bd45');
       break;
     }
-    case 'none':
+    case 'crown': {
+      const top = hy - hr - 1;
+      g.fillStyle = '#f2c14e';
+      g.beginPath();
+      g.moveTo(x - 9, top + 6);
+      g.lineTo(x - 9, top - 4);
+      g.lineTo(x - 4.5, top + 1);
+      g.lineTo(x, top - 7);
+      g.lineTo(x + 4.5, top + 1);
+      g.lineTo(x + 9, top - 4);
+      g.lineTo(x + 9, top + 6);
+      g.closePath();
+      g.fill();
+      circle(g, x, top - 1, 1.6, '#e0685a');
+      circle(g, x - 5, top + 3, 1.2, '#6ea2d6');
+      circle(g, x + 5, top + 3, 1.2, '#87b48b');
       break;
+    }
   }
 }

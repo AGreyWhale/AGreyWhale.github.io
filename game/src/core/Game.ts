@@ -1,5 +1,6 @@
 import { findBuilding } from '../content/buildings';
 import { characterPresets } from '../content/characters';
+import { collectibleKinds, funFacts } from '../content/collectibles';
 import { panels } from '../content/panels';
 import type { ActionDef, CharacterAppearance } from '../content/types';
 import type { RenderEnv } from '../render/draw';
@@ -7,12 +8,15 @@ import type { InteriorScene } from '../scenes/InteriorScene';
 import { StartScene } from '../scenes/StartScene';
 import { TownScene } from '../scenes/TownScene';
 import { AudioManager } from '../systems/AudioManager';
+import { CollectibleSystem } from '../systems/CollectibleSystem';
+import { createContactHandler } from '../systems/contact/ContactHandler';
 import { InputManager } from '../systems/InputManager';
 import { LightingSystem } from '../systems/LightingSystem';
 import { Router, type Route } from '../systems/Router';
 import { SaveManager } from '../systems/SaveManager';
 import { ThemeManager } from '../systems/ThemeManager';
 import { CharacterSelect } from '../ui/CharacterSelect';
+import { burstConfetti } from '../ui/Confetti';
 import { DialogOverlay } from '../ui/DialogOverlay';
 import { Hud } from '../ui/Hud';
 import { TouchControls } from '../ui/TouchControls';
@@ -37,6 +41,7 @@ export class Game implements GameContext {
   readonly viewport: Viewport;
   readonly theme: ThemeManager;
   readonly audio: AudioManager;
+  readonly collectibles: CollectibleSystem;
   readonly env: RenderEnv = { time: 0, night: 0, reducedMotion: false };
 
   private readonly scenes: SceneManager;
@@ -51,10 +56,13 @@ export class Game implements GameContext {
   private currentBuilding: string | null = null;
   private playing = false;
   private blocking = false;
+  private miniGameOpen = false;
+  private readonly ui: HTMLElement;
 
   constructor(root: HTMLElement) {
     const canvas = root.querySelector<HTMLCanvasElement>('#game-canvas')!;
     const ui = root.querySelector<HTMLElement>('#ui-layer')!;
+    this.ui = ui;
     this.viewport = new Viewport(canvas);
 
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -65,22 +73,35 @@ export class Game implements GameContext {
     this.theme = new ThemeManager(this.save, this.bus);
     this.audio = new AudioManager(this.save, this.bus);
     this.scenes = new SceneManager(() => this.env.reducedMotion);
+    this.collectibles = new CollectibleSystem(this.save, this.bus);
 
     this.hud = new Hud(ui, this.bus, {
       toggleTheme: () => this.theme.toggle(),
       toggleMute: () => this.audio.toggleMute(),
       interact: () => this.input.queueInteract(),
+      openCollection: () => this.runAction({ type: 'panel', panel: 'collection' }),
     });
-    this.dialog = new DialogOverlay(ui, this.bus);
+    this.dialog = new DialogOverlay(ui, this.bus, {
+      runAction: (a) => this.runAction(a),
+      progress: () => this.collectibles.progress,
+      contact: createContactHandler(),
+    });
     this.touch = new TouchControls(ui, canvas, this.input, this.bus);
 
     const appearance = this.save.data.character ?? characterPresets[0].appearance;
     this.town = new TownScene(this, appearance);
-    this.select = new CharacterSelect(ui, this.save.data.character, (a) => this.beginPlay(a));
+    this.select = new CharacterSelect(
+      ui,
+      this.save.data.character,
+      (a) => this.beginPlay(a),
+      () => (this.collectibles.progress.allFound ? ['crown'] : []),
+    );
 
     this.wireEvents();
     this.hud.setTheme(this.theme.mode);
     this.hud.setMuted(this.audio.muted);
+    const p = this.collectibles.progress;
+    this.hud.setCollected(p.found, p.total);
     this.viewport.onResize(() => this.scenes.resize());
     this.loop = new GameLoop(
       (dt) => this.update(dt),
@@ -105,6 +126,35 @@ export class Game implements GameContext {
       this.syncInput();
     });
     this.router.onChange((r) => this.onRoute(r));
+    this.bus.on('collected', (e) => this.onCollected(e));
+  }
+
+  /** Feedback for a found collectible: counter, toast or fun fact, unlocks, final reward. */
+  private onCollected({ def, progress, galleryJustUnlocked, allJustFound }: GameEvents['collected']): void {
+    this.hud.setCollected(progress.found, progress.total);
+    const kind = collectibleKinds[def.kind];
+    const { found, total } = progress.byKind[def.kind];
+    if (def.kind === 'coffee' && funFacts[def.id]) {
+      this.dialog.openSpeech(`${kind.icon} Coffee cup ${found}/${total}`, [funFacts[def.id]]);
+    } else {
+      this.hud.toast(`${kind.icon} Found a ${kind.singular}! (${found}/${total})`);
+    }
+    if (galleryJustUnlocked) {
+      window.setTimeout(() => this.hud.toast('📷 Photo gallery unlocked! Visit the camera in the Cottage.'), 1800);
+    }
+    if (allJustFound && !this.save.data.rewardClaimed) {
+      this.save.update({ rewardClaimed: true });
+      burstConfetti(this.ui, this.env.reducedMotion);
+      this.audio.play('success');
+      window.setTimeout(
+        () =>
+          this.dialog.openSpeech('✦ You found everything!', [
+            'Every cup, polaroid, pearl and flower. Thank you so much for exploring my little town!',
+            'As a reward, a golden crown is now in your wardrobe. Choose it under Customize next time you visit.',
+          ]),
+        900,
+      );
+    }
   }
 
   private syncInput(): void {
@@ -133,7 +183,7 @@ export class Game implements GameContext {
     this.syncInput();
 
     const route = this.router.current;
-    if (route.name === 'building' && findBuilding(route.id)) {
+    if (route.name === 'building' && findBuilding(route.id)?.interior) {
       this.town.placeAtDoor(route.id);
       this.enterBuilding(route.id);
     } else {
@@ -159,12 +209,36 @@ export class Game implements GameContext {
       case 'exit':
         this.exitBuilding();
         break;
+      case 'minigame':
+        void this.openMiniGame();
+        break;
+    }
+  }
+
+  /** Lazy-loads and opens the Boba mini game over the current scene. */
+  private async openMiniGame(): Promise<void> {
+    if (this.miniGameOpen) return;
+    this.miniGameOpen = true;
+    this.dialog.close();
+    try {
+      const { BobaGame } = await import('../minigames/BobaGame');
+      this.bus.emit('ui:blocking', true);
+      const game = new BobaGame(this.ui, { audio: this.audio, save: this.save, reducedMotion: this.env.reducedMotion }, () => {
+        this.miniGameOpen = false;
+        this.bus.emit('ui:blocking', false);
+      });
+      game.open();
+    } catch (err) {
+      console.error(err);
+      this.miniGameOpen = false;
+      this.hud.toast('The mini game could not load. Please try again.');
     }
   }
 
   private enterBuilding(id: string): void {
     const def = findBuilding(id);
-    if (!def || this.scenes.transitioning) return;
+    if (!def?.interior || this.scenes.transitioning) return;
+    const interiorId = def.interior;
     this.audio.play('door');
     this.currentBuilding = id;
     this.router.set({ name: 'building', id });
@@ -172,7 +246,7 @@ export class Game implements GameContext {
     this.scenes.switchTo(
       async () => {
         const { InteriorScene } = await import('../scenes/InteriorScene');
-        this.interior = new InteriorScene(this, def.interior, appearance, () => this.exitBuilding());
+        this.interior = new InteriorScene(this, interiorId, appearance, () => this.exitBuilding());
         return this.interior;
       },
       { then: () => this.hud.setPlace(def.name) },
@@ -199,7 +273,7 @@ export class Game implements GameContext {
   private onRoute(r: Route): void {
     if (!this.playing) return;
     if (r.name === 'town' && this.interior) this.exitBuilding();
-    else if (r.name === 'building' && !this.interior && findBuilding(r.id)) {
+    else if (r.name === 'building' && !this.interior && findBuilding(r.id)?.interior) {
       this.town.placeAtDoor(r.id);
       this.enterBuilding(r.id);
     }

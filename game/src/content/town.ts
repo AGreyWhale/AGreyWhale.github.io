@@ -1,4 +1,6 @@
-import type { CharacterAppearance, InteractionDef } from './types';
+import type { InteractionDef, NpcDef } from './types';
+
+export type { NpcDef };
 
 /** Decorative and interactive things placed around town. */
 export type TownPropKind =
@@ -11,7 +13,6 @@ export type TownPropKind =
   | 'fountain'
   | 'noticeBoard'
   | 'mailbox'
-  | 'lotSign'
   | 'rock';
 
 export interface TownPropDef {
@@ -24,15 +25,6 @@ export interface TownPropDef {
   /** Text drawn on signs. */
   text?: string;
   interact?: InteractionDef;
-}
-
-export interface NpcDef {
-  id: string;
-  name: string;
-  x: number;
-  y: number;
-  appearance: CharacterAppearance;
-  interact: InteractionDef;
 }
 
 const plaza = { x: 900, y: 700, r: 160 };
@@ -55,12 +47,11 @@ export const town = {
     [[900, 700], [640, 688], [430, 668]],
     [[900, 700], [900, 396]],
     [[900, 700], [1160, 688], [1370, 668]],
-    // Paths to lots that open in later phases:
     [[900, 700], [700, 900], [440, 1080]],
     [[900, 700], [1100, 900], [1360, 1080]],
     [[900, 700], [900, 1190]],
     [[900, 396], [700, 330], [440, 300]],
-    [[900, 396], [1100, 330], [1360, 300]],
+    [[900, 396], [1100, 330], [1340, 300]],
   ] as Array<Array<[number, number]>>,
 
   props: [
@@ -84,8 +75,8 @@ export const town = {
       x: 1085,
       y: 862,
       interact: {
-        label: 'Check the mailbox',
-        action: { type: 'say', lines: ['The post office opens soon. Until then, the quick version has all my contact links.'] },
+        label: 'Send me a letter',
+        action: { type: 'panel', panel: 'mail' },
       },
     },
     ...plazaLamps,
@@ -113,35 +104,48 @@ export const town = {
     { kind: 'pine', x: 1560, y: 520, scale: 1.1 },
     { kind: 'rock', x: 1040, y: 950 },
     { kind: 'rock', x: 610, y: 780, scale: 0.8 },
-    // Lots for buildings arriving in Phase 2:
-    { kind: 'lotSign', x: 440, y: 1110, text: 'Boba Shop · soon' },
-    { kind: 'lotSign', x: 1360, y: 1110, text: 'Post Office · soon' },
-    { kind: 'lotSign', x: 900, y: 1215, text: 'Community corner · soon' },
-    { kind: 'lotSign', x: 440, y: 325, text: 'Schoolhouse · soon' },
-    { kind: 'lotSign', x: 1360, y: 325, text: 'Greenhouse · soon' },
   ] as TownPropDef[],
 
   npcs: [
     {
       id: 'greeter',
-      name: 'Pip',
+      name: 'Gauri',
       x: 1010,
       y: 780,
-      appearance: { body: 'round', hair: 'bun', skin: '#eec3a2', hairColor: '#5e3b27', outfit: '#8fc7c0', accessory: 'none' },
+      appearance: { body: 'round', hair: 'long', skin: '#d49c74', hairColor: '#0c0906', outfit: '#982040', accessories: ['glasses'] },
       interact: {
-        label: 'Talk to Pip',
+        label: 'Talk to Gauri',
         action: {
           type: 'say',
-          speaker: 'Pip',
+          speaker: 'Gauri',
           lines: [
-            "Oh, hi! Welcome to town. This is Gauri's little corner of the internet.",
+            "Oh, hi! Welcome to town. This is my little corner of the internet!",
             'Walk up to a door and press E (or tap the hand button) to go inside.',
-            'The notice board by the fountain says what Gauri is working on right now.',
+            'The notice board by the fountain says what is currently being worked on.',
             'In a hurry? The "quick version" link at the top has everything on one page.',
           ],
         },
       },
     },
+    {
+      id: 'wizard',
+      name: 'Riya',
+      x: 1500,
+      y: 200,
+      appearance: { body: 'tall', hair: 'short', skin: '#d49c74', hairColor: '#0c0906', outfit: '#1b0a61', accessories: ['flower'] },
+      interact: {
+        label: 'Talk to Riya',
+        action: {
+          type: 'say',
+          speaker: 'Riya',
+          lines: [
+            "Hey! I'm Gauri's roomate Riya! Been so for the past 4 years!",
+            'I\'m not entirely sure what I\'m doing here but I REALLY wanted to be in the game',
+            '...I may be a couple of bucks short.',
+          ],
+        },
+      },
+    }
   ] as NpcDef[],
 
   /** Seed for the decorative tree ring and grass detail. */

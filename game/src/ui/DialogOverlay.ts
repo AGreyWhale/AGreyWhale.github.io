@@ -2,7 +2,7 @@ import type { PanelDef } from '../content/types';
 import type { EventBus } from '../core/EventBus';
 import type { GameEvents } from '../core/events';
 import { h, iconSpan, icons } from './dom';
-import { renderPanel } from './PanelRenderer';
+import { renderPanel, type PanelContext } from './PanelRenderer';
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, summary, [tabindex]:not([tabindex="-1"])';
 
@@ -26,6 +26,7 @@ export class DialogOverlay {
   constructor(
     host: HTMLElement,
     private readonly bus: EventBus<GameEvents>,
+    private readonly panelCtx: PanelContext,
   ) {
     this.eyebrow = h('p', { class: 'dialog-eyebrow' });
     this.title = h('h2', { id: 'dialog-title', class: 'dialog-title', tabindex: '-1' });
@@ -59,7 +60,7 @@ export class DialogOverlay {
     this.eyebrow.textContent = def.eyebrow ?? '';
     this.eyebrow.hidden = !def.eyebrow;
     this.title.textContent = def.title;
-    this.body.replaceChildren(renderPanel(def));
+    this.body.replaceChildren(renderPanel(def, this.panelCtx));
     this.body.scrollTop = 0;
     this.footer.replaceChildren(this.button('Close', () => this.close(), 'btn btn-quiet'));
     this.show(this.title);

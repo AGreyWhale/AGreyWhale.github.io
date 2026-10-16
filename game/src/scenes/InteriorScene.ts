@@ -3,6 +3,7 @@ import type { ActionDef, CharacterAppearance } from '../content/types';
 import type { GameContext } from '../core/GameContext';
 import { Entity } from '../entities/Entity';
 import { InteriorProp } from '../entities/InteriorProp';
+import { Npc } from '../entities/Npc';
 import { Player } from '../entities/Player';
 import { fillRoundRect, shade, type RenderEnv } from '../render/draw';
 import type { Interactable } from '../systems/InteractionSystem';
@@ -59,6 +60,8 @@ export class InteriorScene extends WorldScene {
     const act = (action: ActionDef) => ctx.bus.emit('action', { action });
     this.entities.push(this.player, new ExitMat(W / 2, H + 2, () => this.leave()));
     for (const p of def.props) this.entities.push(new InteriorProp(p, WH, (i) => act(i.action)));
+    for (const n of def.npcs ?? []) this.entities.push(new Npc(n, this.player, (i) => act(i.action)));
+    this.spawnCollectibles(def.id);
     this.rebuildSolids();
   }
 

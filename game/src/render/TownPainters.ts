@@ -1,6 +1,6 @@
 import type { TownPropKind } from '../content/town';
 import { seededRandom } from '../core/random';
-import { circle, ellipse, fillRoundRect, mixColor, shade, shadow, UI_FONT, type Ctx, type RenderEnv } from './draw';
+import { circle, ellipse, fillRoundRect, mixColor, shade, shadow, type Ctx, type RenderEnv } from './draw';
 
 export interface PropDrawArgs {
   x: number;
@@ -183,29 +183,6 @@ const mailbox: Painter = (g, { x, y }) => {
   fillRoundRect(g, x + 13, y - 55, 9, 6, 2, '#f2c14e');
 };
 
-const lotSign: Painter = (g, { x, y, text = '' }) => {
-  g.font = `600 11px ${UI_FONT}`;
-  const tw = g.measureText(text).width + 18;
-  shadow(g, x, y, tw / 2, 5, 0.12);
-  fillRoundRect(g, x - 2.5, y - 26, 5, 26, 2, '#8c6448');
-  fillRoundRect(g, x - tw / 2, y - 46, tw, 22, 7, '#ecd2a6');
-  fillRoundRect(g, x - tw / 2, y - 28, tw, 4, [0, 0, 7, 7], '#d5b583');
-  g.fillStyle = '#5a4535';
-  g.textAlign = 'center';
-  g.textBaseline = 'middle';
-  g.fillText(text, x, y - 36);
-  // Little traffic cones either side
-  for (const cx of [x - tw / 2 - 14, x + tw / 2 + 14]) {
-    g.fillStyle = '#f29a5a';
-    g.beginPath();
-    g.moveTo(cx - 6, y);
-    g.lineTo(cx, y - 16);
-    g.lineTo(cx + 6, y);
-    g.fill();
-    fillRoundRect(g, cx - 3.5, y - 9, 7, 3, 1.5, '#fff4e6');
-  }
-};
-
 const rock: Painter = (g, { x, y, scale: s }) => {
   shadow(g, x, y, 16 * s, 5 * s, 0.15);
   ellipse(g, x, y - 7 * s, 15 * s, 10 * s, '#b9b3ad');
@@ -222,6 +199,5 @@ export const townPainters: Record<TownPropKind, Painter> = {
   fountain,
   noticeBoard,
   mailbox,
-  lotSign,
   rock,
 };

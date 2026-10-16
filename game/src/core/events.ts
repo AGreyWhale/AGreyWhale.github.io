@@ -1,4 +1,6 @@
+import type { CollectibleDef } from '../content/collectibles';
 import type { ActionDef } from '../content/types';
+import type { Progress } from '../systems/CollectibleSystem';
 import type { ThemeMode } from '../systems/SaveManager';
 
 /** Every event on the game's EventBus, with its payload type. */
@@ -11,4 +13,5 @@ export interface GameEvents {
   prompt: { label: string } | null;
   'ui:blocking': boolean;
   toast: string;
+  collected: { def: CollectibleDef; progress: Progress; galleryJustUnlocked: boolean; allJustFound: boolean };
 }

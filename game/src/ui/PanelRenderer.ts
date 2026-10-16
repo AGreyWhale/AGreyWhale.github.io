@@ -1,6 +1,23 @@
-import { classicUrl, findProject, findResearch, isExternal, site, type ProjectItem, type ResearchItem } from '../content/site';
-import type { PanelBlock, PanelDef } from '../content/types';
+import '../content/generated/coursework.css';
+import { links } from '../content/links';
+import {
+  classicUrl,
+  findCourseEntry,
+  findProject,
+  findResearch,
+  isExternal,
+  mediaUrl,
+  site,
+  type ProjectItem,
+  type ResearchItem,
+} from '../content/site';
+import type { ActionDef, PanelBlock, PanelDef } from '../content/types';
+import type { Progress } from '../systems/CollectibleSystem';
+import type { ContactHandler } from '../systems/contact/ContactHandler';
+import { renderCollection, renderGallery } from './CollectionView';
+import { createContactForm } from './ContactForm';
 import { h } from './dom';
+import { createSlideshow, wireCourseworkSlideshows } from './Slideshow';
 
 /** Sets sanitized HTML from site.json and makes its links work from the game. */
 function richHtml<K extends keyof HTMLElementTagNameMap>(tag: K, html: string, cls?: string): HTMLElementTagNameMap[K] {
@@ -61,8 +78,96 @@ function missing(what: string): HTMLElement {
   return h('p', { class: 'missing' }, `(Couldn't find "${what}" on the classic site.)`);
 }
 
-function renderBlock(b: PanelBlock): Node | null {
+function figure(path: string, alt: string, caption?: string): HTMLElement {
+  const m = site.media[path];
+  return h(
+    'figure',
+    { class: 'panel-figure' },
+    h('img', { src: mediaUrl(path), alt, loading: 'lazy', decoding: 'async', width: m ? String(m.w) : undefined, height: m ? String(m.h) : undefined }),
+    caption ? h('figcaption', null, caption) : null,
+  );
+}
+
+function coursework(open?: string): HTMLElement {
+  const root = h('div', { class: 'cw' });
+  root.innerHTML = site.coursework.html; // extracted from courses.html at build time (scripts and inline handlers stripped)
+  fixLinks(root);
+  wireCourseworkSlideshows(root);
+  if (open) {
+    const entry = findCourseEntry(open);
+    const el = entry ? root.querySelector<HTMLDetailsElement>(`#${CSS.escape(entry.id)}`) : null;
+    for (let d: HTMLElement | null = el; d; d = d.parentElement?.closest('details') ?? null) (d as HTMLDetailsElement).open = true;
+  }
+  return root;
+}
+
+function courseEntry(match: string): HTMLElement {
+  const e = findCourseEntry(match);
+  if (!e) return missing(match);
+  return h(
+    'article',
+    { class: 'entry' },
+    h('h3', { class: 'mono' }, e.name),
+    e.attrs.length ? tags(e.attrs.map((a) => `${a.key}: ${a.value}`)) : null,
+    ...e.paragraphs.map((p) => richHtml('p', p)),
+  );
+}
+
+function resumeLetter(): HTMLElement {
+  const href = classicUrl(site.resume.href);
+  // The PDF preview only loads on request (it's large, and some browsers steal scroll/focus for embedded PDFs).
+  const preview = h('button', { type: 'button', class: 'btn btn-quiet resume-preview-btn' }, 'Preview here');
+  const letter = h(
+    'div',
+    { class: 'letter' },
+    h('p', { class: 'letter-greeting' }, 'Dear visitor,'),
+    h('p', null, 'Thanks for stopping by the post office! Here is my resume. Open it to read, or take a copy with you.'),
+    h('p', { class: 'letter-sign' }, `Warmly, ${site.hero.name}`),
+    h(
+      'div',
+      { class: 'letter-actions' },
+      h('a', { class: 'btn btn-primary', href, target: '_blank', rel: 'noopener' }, 'Open resume (PDF)', h('span', { class: 'sr-only' }, ' (opens in a new tab)')),
+      h('a', { class: 'btn btn-quiet', href, download: site.resume.downloadName }, 'Download'),
+      preview,
+    ),
+  );
+  preview.addEventListener('click', () => {
+    preview.replaceWith(h('iframe', { class: 'resume-frame', src: `${href}#view=FitH`, title: `${site.hero.name}'s resume` }));
+  });
+  return letter;
+}
+
+function socialLinks(): HTMLElement {
+  const items = [...site.contact.links, { label: 'Resume (PDF)', href: site.resume.href }];
+  if (links.oldSchoolSite) items.push(links.oldSchoolSite);
+  return h('ul', { class: 'social-list' }, ...items.map((l) => h('li', null, linkEl(l.href, l.label))));
+}
+
+function renderBlock(b: PanelBlock, ctx: PanelContext): Node | null {
   switch (b.kind) {
+    case 'coursework':
+      return coursework(b.open);
+    case 'courseEntry':
+      return courseEntry(b.match);
+    case 'image':
+      return figure(b.src, b.alt, b.caption);
+    case 'slideshow':
+      return createSlideshow(site.coursework.slideshows[b.set] ?? [], b.label);
+    case 'resume':
+      return resumeLetter();
+    case 'contact':
+      return createContactForm(ctx.contact);
+    case 'socialLinks':
+      return socialLinks();
+    case 'gallery':
+      return renderGallery(ctx.progress());
+    case 'collection':
+      return renderCollection(ctx.progress(), ctx.runAction);
+    case 'button': {
+      const btn = h('button', { type: 'button', class: 'btn btn-primary panel-button' }, b.label);
+      btn.addEventListener('click', () => ctx.runAction(b.action));
+      return btn;
+    }
     case 'aboutIntro':
       return h('div', { class: 'intro' }, h('p', { class: 'lead' }, site.hero.tagline), richHtml('div', site.about.highlight, 'highlight'));
     case 'aboutParagraphs': {
@@ -110,11 +215,18 @@ function renderBlock(b: PanelBlock): Node | null {
   }
 }
 
+/** What interactive blocks (buttons, contact form, collection) need from the game. */
+export interface PanelContext {
+  runAction(action: ActionDef): void;
+  progress(): Progress;
+  contact: ContactHandler | null;
+}
+
 /** Builds the DOM for a content panel. */
-export function renderPanel(def: PanelDef): DocumentFragment {
+export function renderPanel(def: PanelDef, ctx: PanelContext): DocumentFragment {
   const frag = document.createDocumentFragment();
   for (const b of def.blocks) {
-    const node = renderBlock(b);
+    const node = renderBlock(b, ctx);
     if (node) frag.append(node);
   }
   if (def.hint) frag.append(h('p', { class: 'panel-hint' }, def.hint));

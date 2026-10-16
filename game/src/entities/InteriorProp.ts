@@ -48,6 +48,9 @@ export class InteriorProp extends Entity {
     if (kind === 'tvConsole') return [{ x, y: y - 50, radius: 90, color: [140, 190, 255], intensity: 0.6 }];
     if (kind === 'computerDesk') return [{ x, y: y - 55, radius: 110, color: [170, 205, 255], intensity: 0.7 }];
     if (kind === 'serverRack') return [{ x, y: y - 50, radius: 70, color: [120, 230, 170], intensity: 0.5 }];
+    if (kind === 'terminal') return [{ x, y: y - 48, radius: 80, color: [140, 240, 180], intensity: 0.6 }];
+    if (kind === 'register') return [{ x: x - 30, y: y - 70, radius: 80, color: [170, 205, 255], intensity: 0.5 }];
+    if (kind === 'teacherDesk' || kind === 'postCounter') return [{ x, y: y - 60, radius: 130, color: [255, 205, 140], intensity: 0.6 }];
     if (kind === 'coffeeCorner') return [{ x, y: y - 60, radius: 110, color: [255, 200, 140], intensity: 0.6 }];
     return [];
   }

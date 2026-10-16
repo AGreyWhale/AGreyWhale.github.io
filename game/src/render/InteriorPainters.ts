@@ -1,5 +1,5 @@
 import type { InteriorPropKind } from '../content/interiors';
-import { circle, ellipse, fillRoundRect, mixColor, shade, shadow, type Ctx, type RenderEnv } from './draw';
+import { circle, ellipse, fillRoundRect, mixColor, shade, shadow, UI_FONT, type Ctx, type RenderEnv } from './draw';
 
 export interface InteriorDrawArgs {
   x: number;
@@ -390,7 +390,337 @@ const crate: Painter = (g, { x, y }) => {
   g.stroke();
 };
 
+// ── Boba Shop ────────────────────────────────────────────────────
+const counterBase = (g: Ctx, x: number, y: number, w: number, front: string) => {
+  shadow(g, x, y, w / 2 + 4, 7);
+  fillRoundRect(g, x - w / 2, y - 40, w, 40, 4, front);
+  fillRoundRect(g, x - w / 2 - 4, y - 46, w + 8, 10, 4, '#fff7ec');
+  for (let i = 0; i < Math.floor(w / 28); i++) fillRoundRect(g, x - w / 2 + 6 + i * 28, y - 32, 20, 24, 3, shade(front, 0.1));
+};
+
+const teaStation: Painter = (g, { x, y }) => {
+  counterBase(g, x, y, 164, '#c88a5c');
+  // Tea dispensers
+  const teas = ['#c98a4e', '#d9b48f', '#c9dc8f'];
+  teas.forEach((c, i) => {
+    const tx = x - 58 + i * 28;
+    fillRoundRect(g, tx - 10, y - 92, 20, 46, 6, 'rgba(255,255,255,0.75)');
+    fillRoundRect(g, tx - 8, y - 78, 16, 30, 4, c);
+    fillRoundRect(g, tx - 3, y - 50, 6, 5, 1, '#5a5469');
+  });
+  // Cup sealer
+  fillRoundRect(g, x + 24, y - 84, 44, 38, 6, '#e58aa2');
+  fillRoundRect(g, x + 30, y - 76, 32, 8, 3, '#fff7ec');
+  fillRoundRect(g, x + 38, y - 64, 16, 14, 3, '#5a5469');
+};
+
+const register: Painter = (g, { x, y }, env) => {
+  counterBase(g, x, y, 164, '#c88a5c');
+  // POS terminal
+  fillRoundRect(g, x - 34, y - 54, 10, 10, 2, '#5a5469');
+  g.save();
+  g.translate(x - 30, y - 60);
+  g.rotate(-0.12);
+  fillRoundRect(g, -26, -30, 52, 34, 4, '#3a3645');
+  fillRoundRect(g, -22, -26, 44, 26, 2, mixColor('#e9f4ff', '#a7c8ff', env.night * 0.5));
+  for (let i = 0; i < 3; i++) fillRoundRect(g, -18 + i * 13, -22, 10, 8, 2, ['#e58aa2', '#f2c14e', '#87b48b'][i]);
+  fillRoundRect(g, -18, -10, 36, 5, 2, '#c7d1db');
+  g.restore();
+  // Stack of cups + tip jar
+  for (let i = 0; i < 4; i++) fillRoundRect(g, x + 20, y - 58 - i * 5, 18, 6, 2, i % 2 ? '#fff7ec' : '#f4ece0');
+  fillRoundRect(g, x + 48, y - 62, 18, 18, 5, 'rgba(255,255,255,0.7)');
+  circle(g, x + 54, y - 50, 2.5, '#f2c14e');
+  circle(g, x + 60, y - 52, 2.5, '#87b48b');
+};
+
+const menuBoard: Painter = (g, { x, y }) => {
+  fillRoundRect(g, x - 92, y - 40, 184, 82, 8, '#8a5d40');
+  fillRoundRect(g, x - 86, y - 34, 172, 70, 5, '#2f3b37');
+  g.fillStyle = '#fdf6ea';
+  g.font = `700 13px ${UI_FONT}`;
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.fillText('BOBA RUSH', x, y - 20);
+  g.fillStyle = 'rgba(253, 246, 234, 0.6)';
+  for (let i = 0; i < 3; i++) {
+    g.fillRect(x - 70, y - 4 + i * 11, 54, 2.5);
+    g.fillRect(x + 16, y - 4 + i * 11, 54, 2.5);
+  }
+  // Chalk cup doodles
+  for (const cx of [x - 78, x + 78]) {
+    g.strokeStyle = '#f49cb0';
+    g.lineWidth = 1.5;
+    g.beginPath();
+    g.moveTo(cx - 6, y - 26);
+    g.lineTo(cx + 6, y - 26);
+    g.lineTo(cx + 4, y - 10);
+    g.lineTo(cx - 4, y - 10);
+    g.closePath();
+    g.stroke();
+  }
+};
+
+const cafeTable: Painter = (g, { x, y, variant }) => {
+  shadow(g, x, y, 26, 6);
+  fillRoundRect(g, x - 3, y - 22, 6, 22, 2, '#7d5a43');
+  ellipse(g, x, y - 24, 28, 10, variant ? '#f2c4b3' : '#cfe3d6');
+  ellipse(g, x, y - 26, 26, 8.5, variant ? '#f8d6c8' : '#e1efe6');
+  fillRoundRect(g, x - 10, y - 38, 9, 13, [1, 1, 3, 3], '#d9b48f');
+  fillRoundRect(g, x + 4, y - 36, 9, 11, [1, 1, 3, 3], '#b9a3e3');
+};
+
+const stool: Painter = (g, { x, y }) => {
+  shadow(g, x, y, 11, 4);
+  fillRoundRect(g, x - 2, y - 14, 4, 14, 2, '#5a5469');
+  ellipse(g, x, y - 15, 11, 5, '#e58aa2');
+};
+
+// ── Schoolhouse ──────────────────────────────────────────────────
+const chalkboard: Painter = (g, { x, y }) => {
+  fillRoundRect(g, x - 116, y - 42, 232, 86, 6, '#a0774f');
+  fillRoundRect(g, x - 110, y - 36, 220, 74, 4, '#3d5a4c');
+  g.strokeStyle = 'rgba(253, 246, 234, 0.85)';
+  g.lineWidth = 1.8;
+  g.lineCap = 'round';
+  // An AND gate and a little datapath doodle
+  const gx = x - 80;
+  g.beginPath();
+  g.moveTo(gx - 10, y - 18);
+  g.lineTo(gx, y - 18);
+  g.arc(gx, y - 8, 10, -Math.PI / 2, Math.PI / 2);
+  g.lineTo(gx - 10, y + 2);
+  g.closePath();
+  g.moveTo(gx - 20, y - 14);
+  g.lineTo(gx - 10, y - 14);
+  g.moveTo(gx - 20, y - 2);
+  g.lineTo(gx - 10, y - 2);
+  g.moveTo(gx + 10, y - 8);
+  g.lineTo(gx + 26, y - 8);
+  g.stroke();
+  for (let i = 0; i < 3; i++) g.strokeRect(x - 34 + i * 34, y - 18, 24, 18);
+  g.beginPath();
+  g.moveTo(x - 10, y - 9);
+  g.lineTo(x, y - 9);
+  g.moveTo(x + 24, y - 9);
+  g.lineTo(x + 34, y - 9);
+  g.stroke();
+  g.fillStyle = 'rgba(253, 246, 234, 0.9)';
+  g.font = `600 12px ${UI_FONT}`;
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.fillText('RISC-V', x + 74, y - 10);
+  g.fillText('lab 1 → 8', x + 74, y + 8);
+  g.fillText('IF  ID  EX', x, y + 18);
+  fillRoundRect(g, x - 40, y + 40, 80, 5, 2, '#a0774f');
+  fillRoundRect(g, x - 26, y + 37, 14, 4, 1, '#fdf6ea');
+};
+
+const teacherDesk: Painter = (g, { x, y }) => {
+  shadow(g, x, y, 64, 7);
+  fillRoundRect(g, x - 62, y - 40, 124, 40, 4, '#a0774f');
+  fillRoundRect(g, x - 66, y - 46, 132, 10, 4, '#b98c62');
+  fillRoundRect(g, x - 52, y - 32, 40, 26, 3, shade('#a0774f', 0.1));
+  // Apple + books
+  circle(g, x + 40, y - 52, 6, '#e0685a');
+  fillRoundRect(g, x + 39, y - 62, 2, 5, 1, '#6b4a35');
+  ['#6ea2d6', '#f2c14e', '#87b48b'].forEach((c, i) => fillRoundRect(g, x - 20, y - 52 - i * 6, 34 - i * 4, 6, 1.5, c));
+};
+
+const schoolDesk: Painter = (g, { x, y }) => {
+  shadow(g, x, y, 34, 6);
+  // Desk
+  fillRoundRect(g, x - 30, y - 30, 4, 18, 1, '#7d5a43');
+  fillRoundRect(g, x + 26, y - 30, 4, 18, 1, '#7d5a43');
+  fillRoundRect(g, x - 34, y - 38, 68, 10, 3, '#c99a6b');
+  fillRoundRect(g, x - 12, y - 42, 20, 7, 1, '#fffaf2');
+  fillRoundRect(g, x + 12, y - 41, 12, 3, 1, '#f2c14e');
+  // Chair
+  fillRoundRect(g, x - 14, y - 12, 28, 8, 3, '#6e5a7e');
+  fillRoundRect(g, x - 12, y - 4, 3, 4, 1, '#4a3f55');
+  fillRoundRect(g, x + 9, y - 4, 3, 4, 1, '#4a3f55');
+};
+
+const terminal: Painter = (g, { x, y }, env) => {
+  shadow(g, x, y, 32, 6);
+  fillRoundRect(g, x - 30, y - 24, 60, 24, 3, '#8a96a6');
+  fillRoundRect(g, x - 28, y - 70, 56, 46, 8, '#e9e0cf');
+  fillRoundRect(g, x - 22, y - 64, 44, 32, 4, '#1f2a24');
+  g.fillStyle = '#7be0a5';
+  for (let i = 0; i < 4; i++) g.fillRect(x - 18, y - 59 + i * 6, 14 + ((i * 9) % 18), 2.5);
+  if (env.reducedMotion || Math.floor(env.time * 2) % 2 === 0) g.fillRect(x - 18, y - 35, 5, 3);
+  fillRoundRect(g, x - 24, y - 20, 48, 8, 2, '#d7cdb9');
+};
+
+const globe: Painter = (g, { x, y }) => {
+  shadow(g, x, y, 14, 4);
+  fillRoundRect(g, x - 10, y - 6, 20, 6, 3, '#7d5a43');
+  fillRoundRect(g, x - 1.5, y - 16, 3, 12, 1, '#7d5a43');
+  circle(g, x, y - 30, 15, '#7fb7e0');
+  ellipse(g, x - 5, y - 34, 6, 4, '#87b48b');
+  ellipse(g, x + 6, y - 24, 5, 3.5, '#87b48b');
+  g.strokeStyle = '#c9a24d';
+  g.lineWidth = 2;
+  g.beginPath();
+  g.arc(x, y - 30, 18, Math.PI * 0.6, Math.PI * 1.9);
+  g.stroke();
+};
+
+// ── Greenhouse ───────────────────────────────────────────────────
+const plantTable: Painter = (g, { x, y, variant }, env) => {
+  shadow(g, x, y, 58, 6);
+  fillRoundRect(g, x - 52, y - 26, 6, 26, 2, '#8c6448');
+  fillRoundRect(g, x + 46, y - 26, 6, 26, 2, '#8c6448');
+  fillRoundRect(g, x - 56, y - 32, 112, 10, 3, '#b98c62');
+  const petals = variant ? ['#f7d36b', '#b9a3e3', '#f49cb0'] : ['#f49cb0', '#ffffff', '#f2a65a'];
+  for (let i = 0; i < 3; i++) {
+    const px = x - 34 + i * 34;
+    const sway = env.reducedMotion ? 0 : Math.sin(env.time * 1.3 + i + x) * 1.2;
+    fillRoundRect(g, px - 10, y - 50, 20, 18, [2, 2, 6, 6], '#d7826a');
+    circle(g, px - 6 + sway, y - 56, 7, '#6aa75f');
+    circle(g, px + 6 + sway, y - 57, 7, '#7cb86c');
+    for (let k = 0; k < 3; k++) circle(g, px - 6 + k * 6 + sway, y - 64 - (k % 2) * 4, 3.6, petals[(i + k) % 3]);
+  }
+};
+
+const easel: Painter = (g, { x, y }) => {
+  shadow(g, x, y, 30, 6);
+  g.strokeStyle = '#8c6448';
+  g.lineWidth = 4;
+  g.lineCap = 'round';
+  g.beginPath();
+  g.moveTo(x - 22, y);
+  g.lineTo(x - 6, y - 88);
+  g.moveTo(x + 22, y);
+  g.lineTo(x + 6, y - 88);
+  g.moveTo(x, y - 6);
+  g.lineTo(x, y - 80);
+  g.stroke();
+  fillRoundRect(g, x - 30, y - 34, 60, 5, 2, '#a97754');
+  // Framed photo of an arrangement
+  fillRoundRect(g, x - 30, y - 92, 60, 58, 3, '#fffdf8');
+  fillRoundRect(g, x - 25, y - 87, 50, 44, 2, '#f6e3e8');
+  fillRoundRect(g, x - 6, y - 58, 12, 14, [2, 2, 4, 4], '#9fc8e4');
+  for (const [px, py, c] of [
+    [-8, -64, '#f49cb0'],
+    [0, -70, '#f7d36b'],
+    [8, -64, '#b9a3e3'],
+    [-3, -76, '#e0685a'],
+    [5, -77, '#ffffff'],
+  ] as const) {
+    circle(g, x + px, y + py, 5, c);
+  }
+  // Slide dots
+  for (let i = 0; i < 4; i++) circle(g, x - 9 + i * 6, y - 38, 1.6, i === 0 ? '#e0685a' : '#d9cfc2');
+};
+
+const wateringCan: Painter = (g, { x, y }) => {
+  shadow(g, x, y, 15, 4);
+  fillRoundRect(g, x - 11, y - 20, 22, 20, 5, '#87b48b');
+  g.strokeStyle = '#87b48b';
+  g.lineWidth = 3.5;
+  g.lineCap = 'round';
+  g.beginPath();
+  g.moveTo(x + 9, y - 12);
+  g.lineTo(x + 20, y - 24);
+  g.moveTo(x - 6, y - 20);
+  g.quadraticCurveTo(x, y - 30, x + 6, y - 20);
+  g.stroke();
+  ellipse(g, x + 21, y - 25, 3, 2, '#6aa75f');
+};
+
+// ── Post Office ──────────────────────────────────────────────────
+const postCounter: Painter = (g, { x, y }) => {
+  shadow(g, x, y, 108, 8);
+  fillRoundRect(g, x - 104, y - 40, 208, 40, 4, '#5f7fa8');
+  fillRoundRect(g, x - 108, y - 46, 216, 10, 4, '#fffaf2');
+  for (let i = 0; i < 6; i++) fillRoundRect(g, x - 96 + i * 33, y - 32, 26, 24, 3, shade('#5f7fa8', 0.12));
+  // Bell, scale, stamps, letter tray
+  ellipse(g, x - 70, y - 48, 10, 3, '#8a96a6');
+  g.fillStyle = '#f2c14e';
+  g.beginPath();
+  g.arc(x - 70, y - 50, 8, Math.PI, 0);
+  g.fill();
+  circle(g, x - 70, y - 59, 2, '#f2c14e');
+  fillRoundRect(g, x - 18, y - 52, 36, 8, 2, '#c7d1db');
+  fillRoundRect(g, x - 12, y - 62, 24, 10, 2, '#e9eef2');
+  fillRoundRect(g, x + 40, y - 58, 44, 12, 3, '#c99367');
+  for (let i = 0; i < 3; i++) fillRoundRect(g, x + 44 + i * 13, y - 64, 10, 8, 1, ['#fffaf2', '#fde1e6', '#cfe8f7'][i]);
+};
+
+const mailSlots: Painter = (g, { x, y }) => {
+  fillRoundRect(g, x - 76, y - 40, 152, 82, 5, '#a0774f');
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 5; c++) {
+      const cx = x - 70 + c * 28.5;
+      const cy = y - 34 + r * 25.5;
+      fillRoundRect(g, cx, cy, 25, 22, 2, '#6b4a35');
+      if ((r * 5 + c) % 3 !== 1) fillRoundRect(g, cx + 4, cy + 4, 17, 12, 1, ['#fffaf2', '#fde1e6', '#cfe8f7', '#ffe6a8'][(r + c) % 4]);
+    }
+  }
+};
+
+const letterDesk: Painter = (g, { x, y }) => {
+  shadow(g, x, y, 58, 6);
+  fillRoundRect(g, x - 52, y - 26, 6, 26, 2, '#7d5a43');
+  fillRoundRect(g, x + 46, y - 26, 6, 26, 2, '#7d5a43');
+  fillRoundRect(g, x - 56, y - 34, 112, 12, 3, '#b98c62');
+  // Open envelope + letter
+  fillRoundRect(g, x - 34, y - 46, 40, 16, 2, '#fffaf2');
+  g.fillStyle = '#f1e6d6';
+  g.beginPath();
+  g.moveTo(x - 34, y - 46);
+  g.lineTo(x - 14, y - 36);
+  g.lineTo(x + 6, y - 46);
+  g.fill();
+  circle(g, x - 14, y - 38, 3.5, '#d85770');
+  g.save();
+  g.translate(x + 26, y - 42);
+  g.rotate(0.12);
+  fillRoundRect(g, -14, -12, 28, 22, 1.5, '#ffffff');
+  g.fillStyle = 'rgba(80, 80, 100, 0.4)';
+  for (let i = 0; i < 4; i++) g.fillRect(-10, -8 + i * 5, 20 - (i % 2) * 6, 1.5);
+  g.restore();
+  // Pen
+  g.strokeStyle = '#3f5f8a';
+  g.lineWidth = 2.5;
+  g.lineCap = 'round';
+  g.beginPath();
+  g.moveTo(x - 46, y - 36);
+  g.lineTo(x - 38, y - 48);
+  g.stroke();
+};
+
+const parcels: Painter = (g, { x, y }) => {
+  shadow(g, x, y, 32, 6);
+  const box = (bx: number, by: number, w: number, h: number) => {
+    fillRoundRect(g, bx, by, w, h, 3, '#c99367');
+    g.fillStyle = '#e9d4b0';
+    g.fillRect(bx + w / 2 - 2, by, 4, h);
+    g.fillRect(bx, by + h / 2 - 2, w, 4);
+  };
+  box(x - 30, y - 30, 34, 30);
+  box(x + 2, y - 24, 28, 24);
+  box(x - 22, y - 52, 26, 22);
+};
+
 export const interiorPainters: Record<InteriorPropKind, Painter> = {
+  teaStation,
+  register,
+  menuBoard,
+  cafeTable,
+  stool,
+  chalkboard,
+  teacherDesk,
+  schoolDesk,
+  terminal,
+  globe,
+  plantTable,
+  easel,
+  wateringCan,
+  postCounter,
+  mailSlots,
+  letterDesk,
+  parcels,
   rug,
   bookshelf,
   coffeeCorner,
@@ -414,7 +744,16 @@ export const interiorPainters: Record<InteriorPropKind, Painter> = {
 };
 
 /** Props that hang on the back wall (no floor footprint, interact from below). */
-export const WALL_PROPS: ReadonlySet<InteriorPropKind> = new Set(['window', 'painting', 'whiteboard', 'certificate', 'pegboard']);
+export const WALL_PROPS: ReadonlySet<InteriorPropKind> = new Set([
+  'window',
+  'painting',
+  'whiteboard',
+  'certificate',
+  'pegboard',
+  'menuBoard',
+  'chalkboard',
+  'mailSlots',
+]);
 
 /** Props that lie flat on the floor (drawn under everything). */
 export const FLAT_PROPS: ReadonlySet<InteriorPropKind> = new Set(['rug']);
@@ -435,5 +774,19 @@ export const INTERIOR_FOOTPRINTS: Partial<Record<InteriorPropKind, { x: number; 
   circuitTable: { x: -56, y: -30, w: 112, h: 30 },
   toolbox: { x: -24, y: -14, w: 48, h: 14 },
   crate: { x: -22, y: -18, w: 44, h: 18 },
+  teaStation: { x: -82, y: -34, w: 164, h: 34 },
+  register: { x: -82, y: -34, w: 164, h: 34 },
+  cafeTable: { x: -26, y: -14, w: 52, h: 14 },
+  stool: { x: -10, y: -6, w: 20, h: 8 },
+  teacherDesk: { x: -64, y: -30, w: 128, h: 30 },
+  schoolDesk: { x: -34, y: -26, w: 68, h: 26 },
+  terminal: { x: -30, y: -24, w: 60, h: 24 },
+  globe: { x: -14, y: -8, w: 28, h: 10 },
+  plantTable: { x: -56, y: -28, w: 112, h: 28 },
+  easel: { x: -30, y: -12, w: 60, h: 12 },
+  wateringCan: { x: -14, y: -8, w: 28, h: 10 },
+  postCounter: { x: -106, y: -34, w: 212, h: 34 },
+  letterDesk: { x: -56, y: -28, w: 112, h: 28 },
+  parcels: { x: -32, y: -18, w: 64, h: 18 },
 };
 

@@ -1,6 +1,6 @@
-import { characterOptions, characterPresets } from '../content/characters';
+import { characterOptions, characterPresets, HAT_ACCESSORIES, rewardAccessories } from '../content/characters';
 import { links } from '../content/links';
-import type { CharacterAppearance } from '../content/types';
+import type { Accessory, CharacterAppearance } from '../content/types';
 import { drawCharacter } from '../render/CharacterPainter';
 import { h, iconSpan, icons } from './dom';
 
@@ -10,12 +10,18 @@ const OPTION_LABELS: Record<OptionKey, string> = {
   body: 'Body',
   hair: 'Hair',
   skin: 'Skin tone',
-  hairColor: 'Hair color',
+  hairColor: 'Hair / hijab color',
   outfit: 'Outfit',
-  accessory: 'Accessory',
+  accessories: 'Accessories (mix and match)',
 };
 
 const COLOR_KEYS: ReadonlySet<OptionKey> = new Set(['skin', 'hairColor', 'outfit']);
+
+/** Same look, ignoring accessory order. */
+function sameLook(a: CharacterAppearance, b: CharacterAppearance): boolean {
+  const norm = (c: CharacterAppearance) => JSON.stringify({ ...c, accessories: [...c.accessories].sort() });
+  return norm(a) === norm(b);
+}
 
 /** Draws a character centered in a small canvas at the device pixel ratio. */
 function paintPortrait(c: HTMLCanvasElement, a: CharacterAppearance, time: number, walking: boolean): void {
@@ -50,9 +56,11 @@ export class CharacterSelect {
     host: HTMLElement,
     saved: CharacterAppearance | null,
     private readonly onStart: (a: CharacterAppearance) => void,
+    /** Reward accessories the player has earned (e.g. the crown). */
+    private readonly unlocked: () => Accessory[],
   ) {
     this.appearance = { ...(saved ?? characterPresets[0].appearance) };
-    const presetIdx = characterPresets.findIndex((p) => JSON.stringify(p.appearance) === JSON.stringify(this.appearance));
+    const presetIdx = characterPresets.findIndex((p) => sameLook(p.appearance, this.appearance));
     this.name = presetIdx >= 0 ? characterPresets[presetIdx].name : 'You';
 
     this.preview = h('canvas', { class: 'preview-canvas', 'aria-hidden': 'true', 'data-size': '150' });
@@ -69,7 +77,7 @@ export class CharacterSelect {
           const c = h('canvas', { class: 'preset-canvas', 'aria-hidden': 'true', 'data-size': '56' });
           const input = h('input', { type: 'radio', name: 'preset', value: String(i), class: 'sr-only', checked: i === presetIdx });
           input.addEventListener('change', () => {
-            this.appearance = { ...p.appearance };
+            this.appearance = { ...p.appearance, accessories: [...p.appearance.accessories] };
             this.name = p.name;
             this.syncCustomInputs();
             this.previewName.textContent = this.name;
@@ -123,6 +131,7 @@ export class CharacterSelect {
   }
 
   show(): void {
+    this.refreshRewards();
     this.root.hidden = false;
     requestAnimationFrame(() => this.startBtn.focus({ preventScroll: true }));
   }
@@ -138,6 +147,7 @@ export class CharacterSelect {
   }
 
   private optionGroup(key: OptionKey): HTMLFieldSetElement {
+    if (key === 'accessories') return this.accessoryGroup();
     const isColor = COLOR_KEYS.has(key);
     const opts = characterOptions[key] as ReadonlyArray<{ value: string; label: string }>;
     return h(
@@ -146,22 +156,55 @@ export class CharacterSelect {
       h('legend', null, OPTION_LABELS[key]),
       ...opts.map((o) => {
         const input = h('input', { type: 'radio', name: `opt-${key}`, value: o.value, class: 'sr-only' });
-        input.addEventListener('change', () => {
-          this.appearance = { ...this.appearance, [key]: o.value } as CharacterAppearance;
-          this.name = 'You';
-          this.previewName.textContent = this.name;
-          this.root.querySelectorAll<HTMLInputElement>('input[name="preset"]').forEach((p) => (p.checked = false));
-        });
+        input.addEventListener('change', () => this.customize({ [key]: o.value }));
         const face = isColor ? h('span', { class: 'swatch', style: `--swatch:${o.value}` }) : h('span', { class: 'pill' }, o.label);
         return h('label', { class: 'option', title: o.label }, input, face, isColor ? h('span', { class: 'sr-only' }, o.label) : null);
       }),
     );
   }
 
+  /** Checkboxes: wear any combination, but only one hat at a time. */
+  private accessoryGroup(): HTMLFieldSetElement {
+    const group = h('fieldset', { class: 'option-group pills accessories' }, h('legend', null, OPTION_LABELS.accessories));
+    const opts = [...characterOptions.accessories, ...rewardAccessories];
+    for (const o of opts) {
+      const value = o.value as Accessory;
+      const input = h('input', { type: 'checkbox', name: 'opt-accessories', value, class: 'sr-only' });
+      input.addEventListener('change', () => {
+        let next = this.appearance.accessories.filter((a) => a !== value);
+        if (input.checked) {
+          if (HAT_ACCESSORIES.includes(value)) next = next.filter((a) => !HAT_ACCESSORIES.includes(a));
+          next.push(value);
+        }
+        this.customize({ accessories: next });
+        this.syncCustomInputs();
+      });
+      const isReward = rewardAccessories.some((r) => r.value === value);
+      group.append(h('label', { class: isReward ? 'option reward' : 'option', 'data-value': value }, input, h('span', { class: 'pill' }, o.label)));
+    }
+    return group;
+  }
+
+  /** Shows earned reward accessories (hidden until unlocked). */
+  private refreshRewards(): void {
+    const have = new Set(this.unlocked());
+    this.root.querySelectorAll<HTMLElement>('.option.reward').forEach((el) => (el.hidden = !have.has(el.dataset.value as Accessory)));
+  }
+
+  private customize(patch: Partial<CharacterAppearance>): void {
+    this.appearance = { ...this.appearance, ...patch };
+    const preset = characterPresets.find((p) => sameLook(p.appearance, this.appearance));
+    this.name = preset?.name ?? 'You';
+    this.previewName.textContent = this.name;
+    this.root.querySelectorAll<HTMLInputElement>('input[name="preset"]').forEach((p) => (p.checked = characterPresets[Number(p.value)] === preset));
+  }
+
   private syncCustomInputs(): void {
     for (const key of Object.keys(characterOptions) as OptionKey[]) {
       const value = this.appearance[key];
-      this.root.querySelectorAll<HTMLInputElement>(`input[name="opt-${key}"]`).forEach((i) => (i.checked = i.value === value));
+      this.root.querySelectorAll<HTMLInputElement>(`input[name="opt-${key}"]`).forEach((i) => {
+        i.checked = Array.isArray(value) ? value.includes(i.value as Accessory) : i.value === value;
+      });
     }
   }
 }

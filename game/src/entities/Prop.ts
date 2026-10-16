@@ -17,7 +17,6 @@ const FOOTPRINTS: Partial<Record<TownPropKind, Rect>> = {
   fountain: { x: -72, y: -52, w: 144, h: 68 },
   noticeBoard: { x: -34, y: -10, w: 68, h: 12 },
   mailbox: { x: -9, y: -8, w: 18, h: 10 },
-  lotSign: { x: -6, y: -6, w: 12, h: 8 },
   rock: { x: -14, y: -10, w: 28, h: 12 },
 };
 

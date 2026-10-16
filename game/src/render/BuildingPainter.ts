@@ -10,8 +10,9 @@ export interface WindowSpot {
 
 /** Window rectangles for a building (used for drawing and for night lights). */
 export function windowSpots(b: BuildingDef): WindowSpot[] {
-  const ww = b.style === 'lab' ? 46 : 36;
-  const wh = b.style === 'lab' ? 36 : 30;
+  if (b.style === 'pavilion') return [];
+  const ww = b.style === 'lab' ? 46 : b.style === 'boba' ? 44 : 36;
+  const wh = b.style === 'lab' ? 36 : b.style === 'school' ? 38 : 30;
   const cy = b.y - b.wallHeight * 0.56;
   return [-0.29, 0.29].map((k) => ({ x: b.x + b.width * k - ww / 2, y: cy - wh / 2, w: ww, h: wh }));
 }
@@ -28,6 +29,8 @@ export function drawBuilding(g: Ctx, b: BuildingDef, env: RenderEnv): void {
   const left = x - w / 2;
 
   shadow(g, x + 8, y + 2, w / 2 + 18, 14, 0.14);
+  if (b.style === 'pavilion') return drawPavilion(g, b, env);
+  if (b.style === 'greenhouse') return drawGreenhouse(g, b, env);
 
   // Walls with a little side shading for depth.
   fillRoundRect(g, left, y - wh, w, wh, [4, 4, 6, 6], p.wall);
@@ -51,6 +54,15 @@ export function drawBuilding(g: Ctx, b: BuildingDef, env: RenderEnv): void {
       break;
     case 'workshop':
       drawWorkshopRoof(g, b);
+      break;
+    case 'school':
+      drawSchoolRoof(g, b);
+      break;
+    case 'boba':
+      drawBobaShop(g, b, env);
+      break;
+    case 'postOffice':
+      drawPostOffice(g, b, env);
       break;
   }
 
@@ -249,4 +261,280 @@ export function drawDoor(g: Ctx, b: BuildingDef, open: number): void {
     g.lineTo(x + visible - 4, y + DOOR_H + 10);
     g.fill();
   }
+}
+
+/** A rounded gable roof shared by several styles. Returns its base and ridge y. */
+function gable(g: Ctx, b: BuildingDef, color: string, overhang = 14, inset = 26): { base: number; top: number } {
+  const { x, y, width: w, wallHeight: wh, roofHeight: rh } = b;
+  const base = y - wh + 8;
+  const top = y - wh - rh;
+  g.save();
+  g.lineJoin = 'round';
+  g.lineWidth = 12;
+  g.beginPath();
+  g.moveTo(x - w / 2 - overhang, base);
+  g.lineTo(x - w / 2 + inset, top);
+  g.lineTo(x + w / 2 - inset, top);
+  g.lineTo(x + w / 2 + overhang, base);
+  g.closePath();
+  g.fillStyle = color;
+  g.strokeStyle = color;
+  g.fill();
+  g.stroke();
+  g.restore();
+  fillRoundRect(g, x - w / 2 - overhang - 6, base - 2, w + overhang * 2 + 12, 9, 5, shade(color, -0.2));
+  return { base, top };
+}
+
+function drawSchoolRoof(g: Ctx, b: BuildingDef): void {
+  const { x, palette: p } = b;
+  const top = b.y - b.wallHeight - b.roofHeight;
+  // Bell tower first, so the roof overlaps its base.
+  fillRoundRect(g, x - 17, top - 36, 34, 44, 3, p.wall);
+  fillRoundRect(g, x - 9, top - 28, 18, 22, [9, 9, 0, 0], shade(p.wall, -0.45));
+  circle(g, x, top - 14, 6, p.accent);
+  g.fillStyle = p.roof;
+  g.beginPath();
+  g.moveTo(x - 24, top - 34);
+  g.lineTo(x, top - 58);
+  g.lineTo(x + 24, top - 34);
+  g.closePath();
+  g.fill();
+
+  const r = gable(g, b, p.roof);
+  g.strokeStyle = shade(p.roof, 0.14);
+  g.lineWidth = 2;
+  for (let i = 1; i < 4; i++) {
+    const yy = r.top + ((r.base - r.top) * i) / 4;
+    g.beginPath();
+    g.moveTo(x - b.width / 2 + 30 - i * 9, yy);
+    g.lineTo(x + b.width / 2 - 30 + i * 9, yy);
+    g.stroke();
+  }
+  // Apple on the gable
+  circle(g, x, r.top + 34, 9, '#e0685a');
+  fillRoundRect(g, x - 1, r.top + 21, 2, 6, 1, '#6b4a35');
+  ellipse(g, x + 4, r.top + 23, 4, 2, '#87b48b');
+}
+
+function drawBobaShop(g: Ctx, b: BuildingDef, env: RenderEnv): void {
+  const { x, y, width: w, wallHeight: wh, palette: p } = b;
+  const top = y - wh;
+  // Flat roof + parapet
+  fillRoundRect(g, x - w / 2 - 8, top - 14, w + 16, 20, 6, p.roof);
+  fillRoundRect(g, x - w / 2 - 8, top + 2, w + 16, 6, 3, shade(p.roof, -0.2));
+  // Striped, scalloped awning
+  const ay = top + 10;
+  const stripes = 10;
+  const sw = (w + 20) / stripes;
+  for (let i = 0; i < stripes; i++) {
+    const sx = x - w / 2 - 10 + i * sw;
+    g.fillStyle = i % 2 ? p.trim : p.accent;
+    g.fillRect(sx, ay, sw + 0.5, 16);
+    g.beginPath();
+    g.arc(sx + sw / 2, ay + 16, sw / 2, 0, Math.PI);
+    g.fill();
+  }
+  // Giant boba cup sign on the roof
+  const sway = env.reducedMotion ? 0 : Math.sin(env.time * 1.5) * 0.04;
+  g.save();
+  g.translate(x + w * 0.3, top - 14);
+  g.rotate(sway);
+  const cup = (topY: number, color: string) => {
+    g.fillStyle = color;
+    g.beginPath();
+    g.moveTo(-15 + (topY + 44) * 0.09, topY);
+    g.lineTo(15 - (topY + 44) * 0.09, topY);
+    g.lineTo(11, 0);
+    g.lineTo(-11, 0);
+    g.closePath();
+    g.fill();
+  };
+  cup(-44, 'rgba(255,255,255,0.92)');
+  cup(-34, '#d9b48f');
+  for (const [px, py] of [
+    [-6, -6],
+    [0, -4],
+    [6, -7],
+    [-3, -11],
+    [4, -12],
+  ]) {
+    circle(g, px, py, 3, '#3a2b30');
+  }
+  ellipse(g, 0, -44, 16, 5, p.accent);
+  fillRoundRect(g, 3, -66, 5, 26, 2, '#e0685a');
+  g.restore();
+}
+
+function drawPostOffice(g: Ctx, b: BuildingDef, env: RenderEnv): void {
+  const { x, y, width: w, wallHeight: wh, palette: p } = b;
+  // Flagpole beside the building, with a gently waving flag
+  const fx = x - w / 2 - 26;
+  fillRoundRect(g, fx - 2, y - wh - 70, 4, wh + 70, 2, '#8a96a6');
+  circle(g, fx, y - wh - 72, 3.5, p.accent);
+  const wave = env.reducedMotion ? 0 : env.time * 3;
+  g.fillStyle = '#e0685a';
+  g.beginPath();
+  for (let i = 0; i <= 8; i++) g.lineTo(fx + 2 + i * 4.5, y - wh - 66 + Math.sin(wave + i * 0.7) * 2);
+  for (let i = 8; i >= 0; i--) g.lineTo(fx + 2 + i * 4.5, y - wh - 46 + Math.sin(wave + i * 0.7) * 2);
+  g.closePath();
+  g.fill();
+  fillRoundRect(g, fx + 8, y - wh - 61 + Math.sin(wave + 1.4) * 2, 12, 9, 1, '#ffffff');
+
+  const r = gable(g, b, p.roof, 12, 30);
+  // Envelope emblem on the gable
+  const ey = r.top + (r.base - r.top) * 0.5;
+  fillRoundRect(g, x - 18, ey - 12, 36, 24, 3, '#fffaf2');
+  g.strokeStyle = p.door;
+  g.lineWidth = 2;
+  g.beginPath();
+  g.moveTo(x - 18, ey - 11);
+  g.lineTo(x, ey + 2);
+  g.lineTo(x + 18, ey - 11);
+  g.stroke();
+  circle(g, x, ey + 3, 3.5, '#e0685a');
+}
+
+function drawGreenhouse(g: Ctx, b: BuildingDef, env: RenderEnv): void {
+  const { x, y, width: w, wallHeight: wh, roofHeight: rh, palette: p } = b;
+  const left = x - w / 2;
+  fillRoundRect(g, left - 3, y - 20, w + 6, 20, 4, '#c98a6b');
+
+  // Plants visible behind the glass
+  const leaf = ['#6aa75f', '#7cb86c', '#5f9a55'];
+  for (let i = 0; i < 9; i++) {
+    const px = left + 14 + i * ((w - 28) / 8);
+    if (Math.abs(px - x) < 26) continue;
+    circle(g, px, y - 34 - (i % 3) * 8, 13, leaf[i % 3]);
+    if (i % 2 === 0) circle(g, px + 4, y - 44 - (i % 3) * 8, 3, p.accent);
+  }
+
+  // Glass walls glow warm at night
+  g.fillStyle = env.night > 0.5 ? `rgba(255, 226, 160, ${0.25 + 0.3 * env.night})` : 'rgba(214, 240, 232, 0.55)';
+  g.fillRect(left, y - wh, w, wh - 20);
+  g.fillStyle = 'rgba(214, 240, 232, 0.78)';
+  g.beginPath();
+  g.moveTo(left - 8, y - wh + 2);
+  g.lineTo(x, y - wh - rh);
+  g.lineTo(left + w + 8, y - wh + 2);
+  g.closePath();
+  g.fill();
+
+  // White frame
+  g.strokeStyle = p.trim;
+  g.lineWidth = 3;
+  g.lineJoin = 'round';
+  g.strokeRect(left, y - wh, w, wh - 20);
+  g.beginPath();
+  for (let i = 1; i < 6; i++) {
+    const fx = left + (w * i) / 6;
+    g.moveTo(fx, y - wh);
+    g.lineTo(fx, y - 20);
+  }
+  g.moveTo(left, y - wh * 0.55);
+  g.lineTo(left + w, y - wh * 0.55);
+  g.moveTo(left - 8, y - wh + 2);
+  g.lineTo(x, y - wh - rh);
+  g.lineTo(left + w + 8, y - wh + 2);
+  g.closePath();
+  for (let i = 1; i < 5; i++) {
+    const t = i / 5;
+    const lx = left - 8 + (x - left + 8) * t;
+    const rx = left + w + 8 - (left + w + 8 - x) * t;
+    g.moveTo(lx, y - wh + 2 - rh * t);
+    g.lineTo(lx, y - wh + 2);
+    g.moveTo(rx, y - wh + 2 - rh * t);
+    g.lineTo(rx, y - wh + 2);
+  }
+  g.stroke();
+
+  g.fillStyle = `rgba(255,255,255,${0.35 * (1 - env.night)})`;
+  g.beginPath();
+  g.moveTo(left + 20, y - 24);
+  g.lineTo(left + 50, y - wh + 4);
+  g.lineTo(left + 62, y - wh + 4);
+  g.lineTo(left + 32, y - 24);
+  g.fill();
+
+  ellipse(g, x, y + 5, DOOR_W / 2 + 10, 6, '#b9a993');
+  ellipse(g, x, y + 3.5, DOOR_W / 2 + 8, 5, '#e8e0d4');
+  drawPlaque(g, x, y - DOOR_H - 16, b.name, p);
+}
+
+function drawPavilion(g: Ctx, b: BuildingDef, env: RenderEnv): void {
+  const { x, y, width: w, wallHeight: wh, roofHeight: rh, palette: p } = b;
+  const left = x - w / 2;
+
+  // Wooden deck
+  fillRoundRect(g, left - 6, y - 62, w + 12, 66, 10, shade(p.door, 0.35));
+  fillRoundRect(g, left - 6, y - 8, w + 12, 12, [0, 0, 10, 10], shade(p.door, 0.1));
+  g.strokeStyle = shade(p.door, 0.2);
+  g.lineWidth = 1.5;
+  g.beginPath();
+  for (let yy = y - 52; yy < y - 8; yy += 11) {
+    g.moveTo(left, yy);
+    g.lineTo(left + w, yy);
+  }
+  g.stroke();
+
+  // Donation crates of produce
+  const crate = (cx: number, fruit: string) => {
+    fillRoundRect(g, cx - 16, y - 40, 32, 20, 3, '#c99367');
+    for (let i = 0; i < 4; i++) circle(g, cx - 10 + i * 7, y - 42, 4, fruit);
+  };
+  crate(x - 48, '#e0685a');
+  crate(x - 14, '#f2c14e');
+  crate(x + 46, '#87b48b');
+
+  for (const px of [left + 6, left + w - 6]) fillRoundRect(g, px - 4, y - wh - 6, 8, wh, 3, p.trim);
+
+  // Hip roof
+  g.save();
+  g.lineJoin = 'round';
+  g.lineWidth = 10;
+  g.fillStyle = p.roof;
+  g.strokeStyle = p.roof;
+  g.beginPath();
+  g.moveTo(left - 18, y - wh);
+  g.lineTo(x - 24, y - wh - rh);
+  g.lineTo(x + 24, y - wh - rh);
+  g.lineTo(left + w + 18, y - wh);
+  g.closePath();
+  g.fill();
+  g.stroke();
+  g.restore();
+
+  // Scalloped trim
+  const n = 9;
+  const sw = (w + 32) / n;
+  for (let i = 0; i < n; i++) {
+    g.fillStyle = i % 2 ? p.trim : p.accent;
+    g.beginPath();
+    g.arc(left - 16 + i * sw + sw / 2, y - wh + 4, sw / 2, 0, Math.PI);
+    g.fill();
+  }
+
+  // String lights
+  g.strokeStyle = 'rgba(80, 70, 60, 0.6)';
+  g.lineWidth = 1;
+  g.beginPath();
+  g.moveTo(left + 6, y - wh + 12);
+  g.quadraticCurveTo(x, y - wh + 28, left + w - 6, y - wh + 12);
+  g.stroke();
+  for (let i = 1; i < 8; i++) {
+    const t = i / 8;
+    const lx = left + 6 + (w - 12) * t;
+    const ly = y - wh + 12 + 32 * t * (1 - t);
+    circle(g, lx, ly + 2, 2.6, env.night > 0.3 ? '#ffe08a' : ['#f49cb0', '#f7d36b', '#9fd3c7'][i % 3]);
+  }
+
+  // Heart emblem
+  const hy = y - wh - rh * 0.45;
+  g.fillStyle = '#e0685a';
+  g.beginPath();
+  g.moveTo(x, hy + 9);
+  g.bezierCurveTo(x - 16, hy - 2, x - 8, hy - 14, x, hy - 5);
+  g.bezierCurveTo(x + 8, hy - 14, x + 16, hy - 2, x, hy + 9);
+  g.fill();
+  drawPlaque(g, x, y - wh + 40, b.name, p);
 }

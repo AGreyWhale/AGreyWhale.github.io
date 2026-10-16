@@ -8,6 +8,7 @@ export interface HudActions {
   toggleTheme(): void;
   toggleMute(): void;
   interact(): void;
+  openCollection(): void;
 }
 
 /**
@@ -20,6 +21,7 @@ export class Hud {
   private readonly place: HTMLSpanElement;
   private readonly themeBtn: HTMLButtonElement;
   private readonly muteBtn: HTMLButtonElement;
+  private readonly collectBtn: HTMLButtonElement;
   private readonly prompt: HTMLButtonElement;
   private readonly promptText: HTMLSpanElement;
   private readonly toastEl: HTMLDivElement;
@@ -30,18 +32,25 @@ export class Hud {
 
   constructor(host: HTMLElement, bus: EventBus<GameEvents>, actions: HudActions) {
     this.place = h('span', { class: 'hud-place' }, "Gauri's Town");
-    const skip = h('a', { class: 'hud-skip', href: links.quickVersion }, 'Skip to the quick version');
+    const skip = h(
+      'a',
+      { class: 'hud-skip', href: links.quickVersion },
+      h('span', { class: 'skip-long' }, 'Skip to the quick version'),
+      h('span', { class: 'skip-short' }, 'Quick version'),
+    );
 
     this.themeBtn = h('button', { type: 'button', class: 'hud-btn' });
     this.themeBtn.addEventListener('click', () => actions.toggleTheme());
     this.muteBtn = h('button', { type: 'button', class: 'hud-btn hud-mute' });
     this.muteBtn.addEventListener('click', () => actions.toggleMute());
+    this.collectBtn = h('button', { type: 'button', class: 'hud-btn hud-collect' });
+    this.collectBtn.addEventListener('click', () => actions.openCollection());
 
     this.bar = h(
       'header',
       { class: 'hud', 'data-mode': 'start' },
       h('div', { class: 'hud-left' }, this.place, skip),
-      h('div', { class: 'hud-right' }, this.themeBtn, this.muteBtn),
+      h('div', { class: 'hud-right' }, this.collectBtn, this.themeBtn, this.muteBtn),
     );
 
     this.promptText = h('span', null);
@@ -67,6 +76,22 @@ export class Hud {
   /** "start" hides the in-game skip link (the start screen has its own). */
   setMode(mode: 'start' | 'play'): void {
     this.bar.dataset.mode = mode;
+  }
+
+  /** Collectible counter, e.g. 3/24. Pulses when it changes. */
+  setCollected(found: number, total: number): void {
+    const changed = this.collectBtn.dataset.found !== undefined && this.collectBtn.dataset.found !== String(found);
+    this.collectBtn.dataset.found = String(found);
+    this.collectBtn.replaceChildren(
+      h('span', { class: 'hud-collect-icon', 'aria-hidden': 'true' }, '✦'),
+      h('span', null, `${found}/${total}`),
+    );
+    this.collectBtn.setAttribute('aria-label', `Collection: ${found} of ${total} found`);
+    if (changed) {
+      this.collectBtn.classList.remove('pulse');
+      void this.collectBtn.offsetWidth;
+      this.collectBtn.classList.add('pulse');
+    }
   }
 
   setPlace(name: string): void {

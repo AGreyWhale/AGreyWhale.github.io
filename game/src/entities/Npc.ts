@@ -1,5 +1,4 @@
-import type { NpcDef } from '../content/town';
-import type { InteractionDef } from '../content/types';
+import type { InteractionDef, NpcDef } from '../content/types';
 import { drawCharacter, type Facing } from '../render/CharacterPainter';
 import type { RenderEnv } from '../render/draw';
 import type { Rect } from '../systems/CollisionSystem';

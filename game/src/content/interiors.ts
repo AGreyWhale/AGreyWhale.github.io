@@ -1,4 +1,4 @@
-import type { InteractionDef } from './types';
+import type { InteractionDef, NpcDef } from './types';
 
 /** Furniture the InteriorPainters know how to draw. */
 export type InteriorPropKind =
@@ -21,7 +21,24 @@ export type InteriorPropKind =
   | 'pegboard'
   | 'circuitTable'
   | 'toolbox'
-  | 'crate';
+  | 'crate'
+  | 'menuBoard'
+  | 'teaStation'
+  | 'register'
+  | 'cafeTable'
+  | 'stool'
+  | 'chalkboard'
+  | 'teacherDesk'
+  | 'schoolDesk'
+  | 'terminal'
+  | 'globe'
+  | 'plantTable'
+  | 'easel'
+  | 'wateringCan'
+  | 'postCounter'
+  | 'mailSlots'
+  | 'letterDesk'
+  | 'parcels';
 
 export interface InteriorPropDef {
   kind: InteriorPropKind;
@@ -46,6 +63,8 @@ export interface InteriorDef {
   floor: 'wood' | 'tile';
   floorColors: [string, string];
   props: InteriorPropDef[];
+  /** Villagers inside this room (same shape as town NPCs). */
+  npcs?: NpcDef[];
 }
 
 const panel = (label: string, id: string): InteractionDef => ({ label, action: { type: 'panel', panel: id } });
@@ -123,6 +142,130 @@ export const interiors: Record<string, InteriorDef> = {
       { kind: 'toolbox', x: 300, y: 340 },
       { kind: 'crate', x: 585, y: 395 },
       { kind: 'plant', x: 40, y: 395 },
+    ],
+  },
+
+  school: {
+    id: 'school',
+    title: 'Schoolhouse',
+    welcome: 'The Schoolhouse: coursework and the CSCE 312 curriculum.',
+    width: 680,
+    height: 440,
+    wallHeight: 120,
+    wall: '#f3e6c9',
+    wallTrim: '#c9a46f',
+    floor: 'wood',
+    floorColors: ['#c8996b', '#bd8e60'],
+    props: [
+      { kind: 'window', x: 105, y: 56 },
+      { kind: 'chalkboard', x: 340, y: 58, interact: panel('Read the chalkboard', 'school.csce312') },
+      { kind: 'window', x: 575, y: 56 },
+      { kind: 'bookshelf', x: 60, y: 178, interact: panel('Browse the course catalog', 'school.coursework') },
+      { kind: 'teacherDesk', x: 340, y: 205 },
+      { kind: 'terminal', x: 625, y: 190, interact: panel('Open the coursework terminal', 'school.coursework') },
+      { kind: 'schoolDesk', x: 200, y: 310 },
+      { kind: 'schoolDesk', x: 340, y: 310 },
+      { kind: 'schoolDesk', x: 480, y: 310 },
+      { kind: 'globe', x: 600, y: 405 },
+      { kind: 'plant', x: 40, y: 415 },
+    ],
+    npcs: [
+      {
+        id: 'librarian',
+        name: 'Ada',
+        x: 250,
+        y: 196,
+        appearance: { body: 'tall', hair: 'bun', skin: '#eec3a2', hairColor: '#9aa0ad', outfit: '#6e5a7e', accessories: ['glasses'] },
+        interact: {
+          label: 'Talk to Ada',
+          action: {
+            type: 'say',
+            speaker: 'Ada',
+            lines: [
+              'Welcome to the Schoolhouse! Mind the chalk dust.', // flavor
+              'The terminal in the corner lists every course Gauri has taken. Click a file to open it.',
+              'The chalkboard is the CSCE 312 lab curriculum: students build a working RISC-V CPU from the gate level up.',
+            ],
+          },
+        },
+      },
+    ],
+  },
+
+  greenhouse: {
+    id: 'greenhouse',
+    title: 'Greenhouse',
+    welcome: 'The Greenhouse: floral design. Mind the flowers!',
+    width: 640,
+    height: 420,
+    wallHeight: 120,
+    wall: '#e3f3ec',
+    wallTrim: '#a9cfc0',
+    floor: 'tile',
+    floorColors: ['#e9efe2', '#dee7d6'],
+    props: [
+      { kind: 'window', x: 110, y: 56 },
+      { kind: 'window', x: 320, y: 56 },
+      { kind: 'window', x: 530, y: 56 },
+      { kind: 'plantTable', x: 130, y: 210 },
+      { kind: 'easel', x: 320, y: 215, interact: panel('Look at the photo easel', 'greenhouse.floral') },
+      { kind: 'plantTable', x: 510, y: 210, variant: 1 },
+      { kind: 'plantTable', x: 140, y: 345, variant: 1 },
+      { kind: 'plantTable', x: 500, y: 345 },
+      { kind: 'wateringCan', x: 235, y: 395 },
+      { kind: 'plant', x: 40, y: 400 },
+      { kind: 'plant', x: 600, y: 400, variant: 1 },
+    ],
+  },
+
+  boba: {
+    id: 'boba',
+    title: 'Boba Shop',
+    welcome: 'The Boba Shop: grab a drink, or try making one!',
+    width: 640,
+    height: 420,
+    wallHeight: 120,
+    wall: '#fbe3d0',
+    wallTrim: '#e2a98a',
+    floor: 'tile',
+    floorColors: ['#f7efe6', '#ecdfd2'],
+    props: [
+      { kind: 'window', x: 100, y: 56 },
+      { kind: 'menuBoard', x: 320, y: 58, interact: panel('Read the menu board', 'boba.menu') },
+      { kind: 'window', x: 540, y: 56 },
+      { kind: 'teaStation', x: 240, y: 200, interact: { label: 'Make some boba (mini game)', action: { type: 'minigame', id: 'boba' } } },
+      { kind: 'register', x: 405, y: 200, interact: panel('Check the register (POS system)', 'boba.pos') },
+      // Tables sit outside the walking lines to the tea station (x≈240) and register (x≈405).
+      { kind: 'cafeTable', x: 520, y: 335 },
+      { kind: 'stool', x: 470, y: 340 },
+      { kind: 'stool', x: 570, y: 340 },
+      { kind: 'cafeTable', x: 135, y: 335, variant: 1 },
+      { kind: 'stool', x: 85, y: 340 },
+      { kind: 'stool', x: 185, y: 340 },
+      { kind: 'plant', x: 40, y: 400 },
+      { kind: 'plant', x: 600, y: 400, variant: 1 },
+    ],
+  },
+
+  post: {
+    id: 'post',
+    title: 'Post Office',
+    welcome: 'The Post Office: my resume, links, and a way to say hi.',
+    width: 660,
+    height: 420,
+    wallHeight: 120,
+    wall: '#e4ecf5',
+    wallTrim: '#a9b9cf',
+    floor: 'wood',
+    floorColors: ['#d8b48a', '#cda87d'],
+    props: [
+      { kind: 'mailSlots', x: 150, y: 58, interact: panel('Check the mail slots', 'post.links') },
+      { kind: 'window', x: 520, y: 56 },
+      { kind: 'postCounter', x: 360, y: 205, interact: panel('Send a letter', 'post.contact') },
+      { kind: 'letterDesk', x: 140, y: 310, interact: panel('Read the letter (resume)', 'post.resume') },
+      { kind: 'parcels', x: 560, y: 330 },
+      { kind: 'plant', x: 40, y: 400 },
+      { kind: 'plant', x: 620, y: 400, variant: 1 },
     ],
   },
 };
