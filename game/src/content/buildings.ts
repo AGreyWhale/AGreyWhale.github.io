@@ -36,7 +36,7 @@ export const buildings: BuildingDef[] = [
   },
   {
     id: 'lab',
-    name: 'DIVE Lab',
+    name: 'Research Lab',
     blurb: 'ML research',
     style: 'lab',
     x: 900,

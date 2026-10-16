@@ -47,6 +47,8 @@ export type PanelBlock =
   | { kind: 'socialLinks' }
   | { kind: 'gallery' }
   | { kind: 'collection' }
+  /** Every building, with a button to go straight there (quick travel). */
+  | { kind: 'directory' }
   | { kind: 'button'; label: string; action: ActionDef };
 
 export interface PanelDef {

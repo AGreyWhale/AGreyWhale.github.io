@@ -26,6 +26,11 @@ export const icons = {
   mute: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 5M21 9l-5 5"/></svg>',
   close: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
   hand: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V11m0-1V4.5a1.5 1.5 0 0 1 3 0V11m0-5.5a1.5 1.5 0 0 1 3 0V12m0-3.5a1.5 1.5 0 0 1 3 0V15a7 7 0 0 1-7 7h-1.2a7 7 0 0 1-5.6-2.8L3.5 15.6a1.6 1.6 0 0 1 2.5-2l2 2.4"/></svg>',
+  map: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4z"/><path d="M9 4v13M15 6.5v13"/></svg>',
+  spring: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="3"/><circle cx="16.3" cy="10.6" r="3"/><circle cx="14.6" cy="15.6" r="3"/><circle cx="9.4" cy="15.6" r="3"/><circle cx="7.7" cy="10.6" r="3"/><circle cx="12" cy="12" r="1.6"/></svg>',
+  summer: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9a9 9 0 0 0 18 0z"/><path d="M6.5 9a5.5 5.5 0 0 0 11 0"/><path d="M9 12.5v.01M12 13.5v.01M15 12.5v.01"/></svg>',
+  autumn: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19C5 11 10 5 19 5c0 9-6 14-14 14z"/><path d="M5 19 13 11"/></svg>',
+  winter: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7"/><path d="m9 4 3 2 3-2M9 20l3-2 3 2"/></svg>',
   arrow: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
 };
 

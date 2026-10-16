@@ -1269,3 +1269,224 @@ body.boot-failed .boot-error,
     font-size: 0.9rem;
   }
 }
+
+/* ── Cozy frames: stitched borders + corner bouquets ──────────── */
+.dialog,
+.minigame,
+.start-card {
+  position: relative;
+  overflow: visible;
+  border-radius: 28px;
+  border: 3px solid var(--accent-soft);
+  outline: 2px dashed var(--stitch);
+  outline-offset: -11px;
+  background-color: var(--surface);
+  background-image: radial-gradient(var(--line) 0.8px, transparent 1.1px);
+  background-size: 20px 20px;
+}
+
+.start-card {
+  background-color: var(--surface-glass);
+}
+
+/* Bouquets tucked over the top-right and bottom-left corners. */
+.dialog::before,
+.dialog::after,
+.minigame::before,
+.minigame::after,
+.start-card::before,
+.start-card::after {
+  content: '';
+  position: absolute;
+  width: 150px;
+  height: 112px;
+  background: var(--flowers) no-repeat center / contain;
+  opacity: var(--flower-opacity);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.dialog::before,
+.minigame::before,
+.start-card::before {
+  top: -36px;
+  right: -30px;
+  transform: scaleX(-1);
+}
+
+.dialog::after,
+.minigame::after,
+.start-card::after {
+  bottom: -32px;
+  left: -30px;
+  transform: scaleY(-1);
+}
+
+/* Keep the close button clear of the bouquet. */
+.dialog-header,
+.minigame-header {
+  padding-right: 64px;
+}
+
+.dialog-body,
+.minigame-body {
+  border-radius: 0 0 24px 24px;
+}
+
+.dialog-body {
+  font-size: 1.02rem;
+  line-height: 1.72;
+}
+
+.dialog-footer {
+  border-top: 1px dashed var(--stitch);
+}
+
+/* Speech: a soft card with the speaker's name on a tab. */
+.dialog-speech {
+  margin-top: 18px;
+}
+
+.dialog-speech .dialog-header {
+  padding: 4px 64px 0 26px;
+  min-height: 12px;
+}
+
+.dialog-speech .dialog-title {
+  position: absolute;
+  top: -17px;
+  left: 30px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 0.95rem;
+  box-shadow: 0 4px 10px rgba(40, 50, 25, 0.2);
+}
+
+.dialog-speech .dialog-close {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.dialog-speech .speech-line {
+  font-size: 1.12rem;
+  line-height: 1.6;
+  margin: 10px 0 4px;
+}
+
+.dialog-speech .dialog-footer {
+  border-top: 0;
+}
+
+/* Smaller bouquets on small screens so they never cover text. */
+@media (max-width: 560px) {
+  .dialog::before,
+  .dialog::after,
+  .minigame::before,
+  .minigame::after,
+  .start-card::before,
+  .start-card::after {
+    width: 78px;
+    height: 58px;
+  }
+  .dialog::before,
+  .minigame::before,
+  .start-card::before {
+    top: -18px;
+    right: -10px;
+  }
+  .dialog::after,
+  .minigame::after,
+  .start-card::after {
+    bottom: -16px;
+    left: -10px;
+  }
+}
+
+/* ── Phase 3: map button, directory, season button ────────────── */
+.map-btn {
+  position: absolute;
+  left: max(16px, env(safe-area-inset-left));
+  bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface-glass);
+  backdrop-filter: blur(8px);
+  color: var(--ink);
+  font: 600 0.95rem/1 var(--font);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  z-index: 15;
+}
+
+.map-btn .icon {
+  color: var(--accent);
+  width: 1.3em;
+  height: 1.3em;
+}
+
+body.touch .map-btn {
+  bottom: max(36px, calc(env(safe-area-inset-bottom) + 28px));
+}
+
+.hud-season .icon {
+  color: var(--accent);
+}
+
+.directory {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.directory-btn {
+  width: 100%;
+  display: grid;
+  gap: 2px;
+  text-align: left;
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  background: var(--surface-2);
+  color: var(--ink);
+  font: 400 0.9rem/1.3 var(--font);
+  cursor: pointer;
+  transition: transform 0.15s var(--ease), border-color 0.15s;
+}
+
+@media (max-width: 560px) {
+  .directory {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.directory-btn strong {
+  font-size: 1.02rem;
+}
+
+.directory-btn span {
+  color: var(--ink-soft);
+}
+
+.directory-btn:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 560px) {
+  .map-label {
+    display: none;
+  }
+  .map-btn {
+    padding: 12px;
+  }
+}

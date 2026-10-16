@@ -13,6 +13,7 @@ import { createContactHandler } from '../systems/contact/ContactHandler';
 import { InputManager } from '../systems/InputManager';
 import { LightingSystem } from '../systems/LightingSystem';
 import { Router, type Route } from '../systems/Router';
+import { SeasonManager } from '../systems/SeasonManager';
 import { SaveManager } from '../systems/SaveManager';
 import { ThemeManager } from '../systems/ThemeManager';
 import { CharacterSelect } from '../ui/CharacterSelect';
@@ -40,9 +41,10 @@ export class Game implements GameContext {
   readonly lighting = new LightingSystem();
   readonly viewport: Viewport;
   readonly theme: ThemeManager;
+  readonly seasons: SeasonManager;
   readonly audio: AudioManager;
   readonly collectibles: CollectibleSystem;
-  readonly env: RenderEnv = { time: 0, night: 0, reducedMotion: false };
+  readonly env: RenderEnv = { time: 0, night: 0, reducedMotion: false, season: 'summer' };
 
   private readonly scenes: SceneManager;
   private readonly loop: GameLoop;
@@ -71,12 +73,16 @@ export class Game implements GameContext {
     document.documentElement.classList.toggle('reduced-motion', motion.matches);
 
     this.theme = new ThemeManager(this.save, this.bus);
+    this.seasons = new SeasonManager(this.save, this.bus);
+    this.env.season = this.seasons.season;
     this.audio = new AudioManager(this.save, this.bus);
     this.scenes = new SceneManager(() => this.env.reducedMotion);
     this.collectibles = new CollectibleSystem(this.save, this.bus);
 
     this.hud = new Hud(ui, this.bus, {
       toggleTheme: () => this.theme.toggle(),
+      cycleSeason: () => this.seasons.cycle(),
+      openMap: () => this.runAction({ type: 'panel', panel: 'map' }),
       toggleMute: () => this.audio.toggleMute(),
       interact: () => this.input.queueInteract(),
       openCollection: () => this.runAction({ type: 'panel', panel: 'collection' }),
@@ -99,6 +105,7 @@ export class Game implements GameContext {
 
     this.wireEvents();
     this.hud.setTheme(this.theme.mode);
+    this.hud.setSeason(this.seasons.season, this.seasons.isAuto);
     this.hud.setMuted(this.audio.muted);
     const p = this.collectibles.progress;
     this.hud.setCollected(p.found, p.total);
@@ -121,7 +128,14 @@ export class Game implements GameContext {
       if (this.playing) this.audio.setVariant(mode);
     });
     this.bus.on('audio:muted', (m) => this.hud.setMuted(m));
+    this.bus.on('season:changed', (s) => {
+      this.env.season = s;
+      this.hud.setSeason(s, this.seasons.isAuto);
+      const name = s[0].toUpperCase() + s.slice(1);
+      this.hud.toast(this.seasons.isAuto ? `${name}, to match today's date` : `It's ${name.toLowerCase()} in town`);
+    });
     this.bus.on('ui:blocking', (b) => {
+      this.hud.setInert(b);
       this.blocking = b;
       this.syncInput();
     });
@@ -167,6 +181,7 @@ export class Game implements GameContext {
     this.env.time += dt;
     this.theme.update(dt, this.env.reducedMotion);
     this.env.night = this.theme.night;
+    this.env.season = this.seasons.season;
     this.scenes.update(dt);
   }
 
@@ -236,6 +251,7 @@ export class Game implements GameContext {
   }
 
   private enterBuilding(id: string): void {
+    this.dialog.close(); // e.g. when travelling from the map
     const def = findBuilding(id);
     if (!def?.interior || this.scenes.transitioning) return;
     const interiorId = def.interior;

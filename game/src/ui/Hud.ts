@@ -1,11 +1,13 @@
 import { links } from '../content/links';
 import type { EventBus } from '../core/EventBus';
 import type { GameEvents } from '../core/events';
-import type { ThemeMode } from '../systems/SaveManager';
+import type { Season, ThemeMode } from '../systems/SaveManager';
 import { h, iconSpan, icons } from './dom';
 
 export interface HudActions {
   toggleTheme(): void;
+  cycleSeason(): void;
+  openMap(): void;
   toggleMute(): void;
   interact(): void;
   openCollection(): void;
@@ -22,6 +24,8 @@ export class Hud {
   private readonly themeBtn: HTMLButtonElement;
   private readonly muteBtn: HTMLButtonElement;
   private readonly collectBtn: HTMLButtonElement;
+  private readonly seasonBtn: HTMLButtonElement;
+  private readonly mapBtn: HTMLButtonElement;
   private readonly prompt: HTMLButtonElement;
   private readonly promptText: HTMLSpanElement;
   private readonly toastEl: HTMLDivElement;
@@ -39,6 +43,10 @@ export class Hud {
       h('span', { class: 'skip-short' }, 'Quick version'),
     );
 
+    this.seasonBtn = h('button', { type: 'button', class: 'hud-btn hud-season' });
+    this.seasonBtn.addEventListener('click', () => actions.cycleSeason());
+    this.mapBtn = h('button', { type: 'button', class: 'map-btn', 'aria-label': 'Town map: jump to any building', hidden: true }, iconSpan(icons.map), h('span', { class: 'map-label' }, 'Map'));
+    this.mapBtn.addEventListener('click', () => actions.openMap());
     this.themeBtn = h('button', { type: 'button', class: 'hud-btn' });
     this.themeBtn.addEventListener('click', () => actions.toggleTheme());
     this.muteBtn = h('button', { type: 'button', class: 'hud-btn hud-mute' });
@@ -50,7 +58,7 @@ export class Hud {
       'header',
       { class: 'hud', 'data-mode': 'start' },
       h('div', { class: 'hud-left' }, this.place, skip),
-      h('div', { class: 'hud-right' }, this.collectBtn, this.themeBtn, this.muteBtn),
+      h('div', { class: 'hud-right' }, this.collectBtn, this.seasonBtn, this.themeBtn, this.muteBtn),
     );
 
     this.promptText = h('span', null);
@@ -59,12 +67,12 @@ export class Hud {
 
     this.toastEl = h('div', { class: 'toast', role: 'status', 'aria-live': 'polite' });
     this.announcer = h('div', { class: 'sr-only', 'aria-live': 'polite' });
-    host.append(this.bar, this.prompt, this.toastEl, this.announcer);
+    host.append(this.bar, this.prompt, this.mapBtn, this.toastEl, this.announcer);
 
     bus.on('prompt', (p) => {
       this.promptLabel = p?.label ?? null;
       this.renderPrompt();
-      if (p) this.announce(`${p.label}. Press E.`);
+      if (p) this.announce(`${p.label}. ${document.body.classList.contains('touch') ? 'Tap the hand button' : 'Press E'}.`);
     });
     bus.on('ui:blocking', (b) => {
       this.blocking = b;
@@ -76,6 +84,7 @@ export class Hud {
   /** "start" hides the in-game skip link (the start screen has its own). */
   setMode(mode: 'start' | 'play'): void {
     this.bar.dataset.mode = mode;
+    this.mapBtn.hidden = mode === 'start';
   }
 
   /** Collectible counter, e.g. 3/24. Pulses when it changes. */
@@ -96,6 +105,17 @@ export class Hud {
 
   setPlace(name: string): void {
     this.place.textContent = name;
+  }
+
+  setSeason(season: Season, auto: boolean): void {
+    const name = season[0].toUpperCase() + season.slice(1);
+    this.seasonBtn.replaceChildren(iconSpan(icons[season]), h('span', { class: 'hud-btn-label' }, auto ? `${name} · auto` : name));
+    this.seasonBtn.setAttribute('aria-label', `Season: ${name}${auto ? ' (matches today)' : ''}. Change season`);
+  }
+
+  /** While a popup is open, the HUD behind it can't be focused or clicked. */
+  setInert(inert: boolean): void {
+    for (const el of [this.bar, this.prompt, this.mapBtn]) el.inert = inert;
   }
 
   setTheme(mode: ThemeMode): void {

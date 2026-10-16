@@ -40,7 +40,7 @@ export abstract class WorldScene extends Scene {
   protected drawForeground(_g: CanvasRenderingContext2D, _env: RenderEnv): void {}
 
   /** Color outside the world. */
-  protected backdrop = '#2a2236';
+  protected backdrop = '#1f261b';
 
   /** How dark the scene gets at night (interiors stay cozier). */
   protected nightAmount(env: RenderEnv): number {

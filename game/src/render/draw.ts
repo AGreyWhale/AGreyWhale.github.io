@@ -1,3 +1,5 @@
+import type { Season } from '../systems/SaveManager';
+
 /** Small drawing helpers shared by all painters: rounded shapes, shadows, color math. */
 
 export type Ctx = CanvasRenderingContext2D;
@@ -9,6 +11,7 @@ export interface RenderEnv {
   /** 0 = day, 1 = night. */
   night: number;
   reducedMotion: boolean;
+  season: Season;
 }
 
 export function roundRect(g: Ctx, x: number, y: number, w: number, h: number, r: number | number[]): void {

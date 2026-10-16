@@ -50,7 +50,7 @@ export class SceneManager {
       g.save();
       g.setTransform(1, 0, 0, 1, 0, 0);
       g.globalAlpha = this.fade;
-      g.fillStyle = '#2a2236';
+      g.fillStyle = '#1f261b';
       g.fillRect(0, 0, g.canvas.width, g.canvas.height);
       g.restore();
     }

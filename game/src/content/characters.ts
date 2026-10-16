@@ -47,7 +47,7 @@ export const characterOptions = {
 
 /** Ready-made characters shown first on the start screen. */
 export const characterPresets: Array<{ name: string; appearance: CharacterAppearance }> = [
-  { name: 'Mocha', appearance: { body: 'round', hair: 'hijab', skin: '#d49c74', hairColor: '#2e2522', outfit: '#e5735f', accessories: ['beanie'] } },
+  { name: 'Mocha', appearance: { body: 'round', hair: 'long', skin: '#d49c74', hairColor: '#2e2522', outfit: '#e5735f', accessories: ['beanie'] } },
   { name: 'Matcha', appearance: { body: 'tall', hair: 'long', skin: '#f7dcc8', hairColor: '#5e3b27', outfit: '#87b48b', accessories: ['bow'] } },
   { name: 'Taro', appearance: { body: 'round', hair: 'short', skin: '#a8704c', hairColor: '#2e2522', outfit: '#9c8ad0', accessories: ['glasses'] } },
   { name: 'Peach', appearance: { body: 'tall', hair: 'bun', skin: '#eec3a2', hairColor: '#b47b4a', outfit: '#f2a69d', accessories: ['headphones'] } },

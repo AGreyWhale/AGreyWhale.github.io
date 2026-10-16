@@ -99,8 +99,8 @@ export const interiors: Record<string, InteriorDef> = {
 
   lab: {
     id: 'lab',
-    title: 'DIVE Lab',
-    welcome: 'The DIVE Lab: machine learning research.',
+    title: 'Research Lab',
+    welcome: 'The Research Lab: Different research projects I\'ve been involved with.',
     width: 700,
     height: 440,
     wallHeight: 120,

@@ -10,7 +10,11 @@ import { Npc } from '../entities/Npc';
 import { Player } from '../entities/Player';
 import { Prop } from '../entities/Prop';
 import { ellipse, type RenderEnv } from '../render/draw';
+import { seasonPalette } from '../render/seasons';
 import { TownGround } from '../render/TownGround';
+import { FootprintTrail } from '../systems/FootprintSystem';
+import type { Season } from '../systems/SaveManager';
+import { WeatherSystem } from '../systems/WeatherSystem';
 import { rectsOverlap, type Rect } from '../systems/CollisionSystem';
 import { WorldScene } from './WorldScene';
 
@@ -22,6 +26,10 @@ import { WorldScene } from './WorldScene';
 export class TownScene extends WorldScene {
   private readonly ground: TownGround;
   private attractT = 0;
+  private readonly weather = new WeatherSystem();
+  private readonly footprints = new FootprintTrail();
+  private season: Season | null = null;
+  private lastCam = { x: 0, y: 0 };
 
   constructor(ctx: GameContext, appearance: CharacterAppearance) {
     const world: Rect = { x: 0, y: 0, w: town.width, h: town.height };
@@ -80,7 +88,34 @@ export class TownScene extends WorldScene {
 
   override update(dt: number): void {
     this.attractT += dt;
+    const { env, camera, viewport } = this.ctx;
+    if (env.season !== this.season) this.applySeason(env.season);
     super.update(dt);
+
+    // Snow footprints follow the player in winter.
+    if (env.season === 'winter' && this.controllable) this.footprints.track(this.player.pos.x, this.player.pos.y);
+    this.footprints.update(dt);
+
+    // Weather drifts against camera motion so it feels like part of the world.
+    const camDx = (camera.pos.x - this.lastCam.x) * camera.zoom;
+    const camDy = (camera.pos.y - this.lastCam.y) * camera.zoom;
+    this.lastCam = { x: camera.pos.x, y: camera.pos.y };
+    const jump = Math.abs(camDx) > 200 || Math.abs(camDy) > 200;
+    this.weather.update(dt, viewport.width, viewport.height, env.season, env.night, env.reducedMotion, jump ? 0 : camDx, jump ? 0 : camDy);
+  }
+
+  override render(g: CanvasRenderingContext2D): void {
+    super.render(g);
+    this.weather.render(g, this.ctx.viewport.dpr, this.ctx.env.night);
+  }
+
+  /** Recolors the ground and clears season-specific effects. */
+  private applySeason(season: Season): void {
+    this.season = season;
+    const pal = seasonPalette(season);
+    this.ground.setStyle(pal.ground);
+    this.backdrop = pal.ground.grassDark;
+    this.footprints.clear();
   }
 
   protected computeZoom(w: number, h: number): number {
@@ -89,6 +124,15 @@ export class TownScene extends WorldScene {
 
   protected drawBackground(g: CanvasRenderingContext2D): void {
     this.ground.draw(g, this.ctx.camera, this.ctx.viewport.dpr);
+    for (const p of this.footprints.all) {
+      const a = this.footprints.opacity(p) * 0.5;
+      g.save();
+      g.translate(p.x, p.y);
+      g.rotate(p.angle);
+      ellipse(g, 0, 0, 3.6, 2.2, `rgba(120, 140, 165, ${a})`);
+      ellipse(g, 3.2, 0, 1.6, 1.6, `rgba(120, 140, 165, ${a})`);
+      g.restore();
+    }
   }
 
   /** Slow, soft cloud shadows drifting across town by day. */

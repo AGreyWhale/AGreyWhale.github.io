@@ -21,13 +21,13 @@ export const collectibleKinds: Record<CollectibleKind, { label: string; singular
   flower: { label: 'Flowers', singular: 'flower', icon: '🌸' },
 };
 
-/** Each coffee cup reveals one fun fact. PLACEHOLDERS: replace with your own! */
+/** Each coffee cup reveals one fun fact.*/
 export const funFacts: Record<string, string> = {
-  'cup-1': 'Fun fact #1: (placeholder) Edit me in game/src/content/collectibles.ts.',
-  'cup-2': 'Fun fact #2: (placeholder) My go-to coffee order is…',
-  'cup-3': 'Fun fact #3: (placeholder) The first program I ever wrote was…',
-  'cup-4': 'Fun fact #4: (placeholder) A game I could replay forever is…',
-  'cup-5': 'Fun fact #5: (placeholder) My favorite place to take photos is…',
+  'cup-1': 'Fun fact #1: I love to listen to live music! I\'ve been to over 10 concerts so far!',
+  'cup-2': 'Fun fact #2: I have a slowly growing vinyl collection. I only started 2 years ago, but I currently have 11 well loved records.',
+  'cup-3': 'Fun fact #3: BIG fan of video games, if you couldn\'t tell. One game I could play forever would definitely be Celeste.',
+  'cup-4': 'Fun fact #4: I\'m always trying to learn a new instrument. I can really only play the bass clarinet well, but I can get by with guitar, trumpet, bass, and piano.',
+  'cup-5': 'Fun fact #5: I\'ve actually lived in Texas my entire life! I\'ve visited plenty of the states, but I think it would be neat to live somewhere else one day.',
 };
 
 /** Polaroids needed to unlock the photography gallery. */

@@ -11,6 +11,8 @@ export interface GroundStyle {
   pathEdge: string;
   plaza: string;
   plazaEdge: string;
+  /** Tiny white/yellow wildflower dots in the grass. */
+  wildflowers: boolean;
 }
 
 export const DEFAULT_GROUND: GroundStyle = {
@@ -21,6 +23,7 @@ export const DEFAULT_GROUND: GroundStyle = {
   pathEdge: '#dcc39b',
   plaza: '#f0e7d9',
   plazaEdge: '#d9cab4',
+  wildflowers: true,
 };
 
 export interface GroundLayout {
@@ -158,6 +161,7 @@ export class TownGround {
       const y = rnd() * L.height;
       if (this.onPath(x, y, 6)) continue;
       if (rnd() < 0.08) {
+        if (!s.wildflowers) continue;
         ellipse(g, x, y, 1.8, 1.8, rnd() < 0.5 ? '#fffaf0' : '#f6d66b');
         continue;
       }

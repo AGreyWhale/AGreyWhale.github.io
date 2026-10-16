@@ -1,4 +1,5 @@
 import '../content/generated/coursework.css';
+import { buildings } from '../content/buildings';
 import { links } from '../content/links';
 import {
   classicUrl,
@@ -163,6 +164,18 @@ function renderBlock(b: PanelBlock, ctx: PanelContext): Node | null {
       return renderGallery(ctx.progress());
     case 'collection':
       return renderCollection(ctx.progress(), ctx.runAction);
+    case 'directory':
+      return h(
+        'ul',
+        { class: 'directory' },
+        ...buildings.map((bd) => {
+          const btn = h('button', { type: 'button', class: 'directory-btn' }, h('strong', null, bd.name), h('span', null, bd.blurb));
+          btn.addEventListener('click', () =>
+            ctx.runAction(bd.interior ? { type: 'enter', building: bd.id } : { type: 'panel', panel: bd.panel! }),
+          );
+          return h('li', null, btn);
+        }),
+      );
     case 'button': {
       const btn = h('button', { type: 'button', class: 'btn btn-primary panel-button' }, b.label);
       btn.addEventListener('click', () => ctx.runAction(b.action));

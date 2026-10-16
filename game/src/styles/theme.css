@@ -1,42 +1,46 @@
 /* Theme tokens. Day/night is the light/dark mode for every overlay.
-   Day palette echoes the classic site (cream paper, sunset reds). */
+   Palette: soft parchment with sage and olive greens; night is a deep moss. */
 :root,
 :root[data-theme='day'] {
   color-scheme: light;
-  --bg: #fbf3e7;
-  --surface: #fffaf3;
-  --surface-2: #f6ebdc;
-  --surface-glass: rgba(255, 250, 243, 0.86);
-  --ink: #2b2522;
-  --ink-soft: #6a5f58;
-  --accent: #c8483c;
-  --accent-soft: #fbe1d9;
+  --bg: #f2f0e3;
+  --surface: #fbfaf2;
+  --surface-2: #eceedc;
+  --surface-glass: rgba(251, 250, 242, 0.9);
+  --ink: #2e3326;
+  --ink-soft: #5d6550;
+  --accent: #5f7139;
+  --accent-soft: #e2e9cd;
   --accent-ink: #ffffff;
-  --gold: #e9a23b;
-  --line: rgba(43, 37, 34, 0.12);
-  --chip: #f3e6d4;
-  --focus: #1f5fd1;
-  --shadow: 0 18px 50px rgba(90, 55, 35, 0.22), 0 2px 6px rgba(90, 55, 35, 0.12);
-  --backdrop: rgba(56, 40, 48, 0.32);
+  --gold: #c99a3a;
+  --line: rgba(46, 51, 38, 0.14);
+  --chip: #e5e9d2;
+  --stitch: rgba(95, 113, 57, 0.35);
+  --focus: #2d5d9a;
+  --shadow: 0 18px 50px rgba(52, 60, 32, 0.22), 0 2px 6px rgba(52, 60, 32, 0.12);
+  --backdrop: rgba(36, 44, 26, 0.32);
+  --flower-opacity: 1;
 }
 
 :root[data-theme='night'] {
   color-scheme: dark;
-  --bg: #171a2e;
-  --surface: #222744;
-  --surface-2: #2b3157;
-  --surface-glass: rgba(34, 39, 68, 0.88);
-  --ink: #f3ece2;
-  --ink-soft: #b8b2c8;
-  --accent: #ff9a86;
-  --accent-soft: #3d3358;
-  --accent-ink: #1b1630;
-  --gold: #ffd479;
-  --line: rgba(255, 255, 255, 0.13);
-  --chip: #343b66;
-  --focus: #ffd479;
-  --shadow: 0 18px 50px rgba(5, 6, 20, 0.55), 0 2px 6px rgba(5, 6, 20, 0.4);
-  --backdrop: rgba(8, 10, 26, 0.5);
+  --bg: #171c15;
+  --surface: #232a1f;
+  --surface-2: #2e3729;
+  --surface-glass: rgba(35, 42, 31, 0.9);
+  --ink: #eef0e2;
+  --ink-soft: #b7bfa5;
+  --accent: #b6c98c;
+  --accent-soft: #38432c;
+  --accent-ink: #1b2114;
+  --gold: #f0cf7a;
+  --line: rgba(238, 240, 226, 0.14);
+  --chip: #36402f;
+  --stitch: rgba(182, 201, 140, 0.3);
+  --focus: #f0cf7a;
+  --shadow: 0 18px 50px rgba(4, 8, 2, 0.55), 0 2px 6px rgba(4, 8, 2, 0.4);
+  --backdrop: rgba(6, 10, 4, 0.5);
+  --flower-opacity: 0.82;
 }
 
 :root {
@@ -44,4 +48,6 @@
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
   --radius: 18px;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Corner bouquet for dialogs (pink, cream and lavender blooms on sage leaves). */
+  --flowers: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 90'%3E%3Cdefs%3E%3Cg id='f'%3E%3Ccircle cy='-7' r='6.5'/%3E%3Ccircle cx='6.7' cy='-2.2' r='6.5'/%3E%3Ccircle cx='4.1' cy='5.7' r='6.5'/%3E%3Ccircle cx='-4.1' cy='5.7' r='6.5'/%3E%3Ccircle cx='-6.7' cy='-2.2' r='6.5'/%3E%3Ccircle r='4' fill='%23f2c14e'/%3E%3C/g%3E%3C/defs%3E%3Cg fill='%238aa265'%3E%3Cellipse cx='58' cy='22' rx='18' ry='6.5' transform='rotate(-18 58 22)'/%3E%3Cellipse cx='20' cy='58' rx='6.5' ry='18' transform='rotate(-12 20 58)'/%3E%3C/g%3E%3Cg fill='%23a9bf82'%3E%3Cellipse cx='80' cy='14' rx='13' ry='5' transform='rotate(12 80 14)'/%3E%3Cellipse cx='12' cy='78' rx='5' ry='12'/%3E%3Cellipse cx='44' cy='48' rx='10' ry='4.5' transform='rotate(40 44 48)'/%3E%3C/g%3E%3Cuse href='%23f' transform='translate(24 24)' fill='%23f3b3bf'/%3E%3Cuse href='%23f' transform='translate(48 30) scale(.72)' fill='%23fff4e2'/%3E%3Cuse href='%23f' transform='translate(16 46) scale(.62)' fill='%23cdb9e6'/%3E%3Cuse href='%23f' transform='translate(70 8) scale(.5)' fill='%23f3b3bf'/%3E%3Ccircle cx='92' cy='22' r='3' fill='%23e58aa2'/%3E%3Ccircle cx='30' cy='70' r='2.6' fill='%23fff4e2'/%3E%3C/svg%3E");
 }

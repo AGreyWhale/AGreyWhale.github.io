@@ -132,7 +132,7 @@ export const town = {
       name: 'Riya',
       x: 1500,
       y: 200,
-      appearance: { body: 'tall', hair: 'short', skin: '#d49c74', hairColor: '#0c0906', outfit: '#1b0a61', accessories: ['flower'] },
+      appearance: { body: 'round', hair: 'short', skin: '#d49c74', hairColor: '#0c0906', outfit: '#1b0a61', accessories: ['flower'] },
       interact: {
         label: 'Talk to Riya',
         action: {

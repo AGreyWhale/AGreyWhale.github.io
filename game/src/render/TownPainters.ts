@@ -1,5 +1,6 @@
 import type { TownPropKind } from '../content/town';
 import { seededRandom } from '../core/random';
+import { seasonPalette } from './seasons';
 import { circle, ellipse, fillRoundRect, mixColor, shade, shadow, type Ctx, type RenderEnv } from './draw';
 
 export interface PropDrawArgs {
@@ -14,13 +15,15 @@ type Painter = (g: Ctx, a: PropDrawArgs, env: RenderEnv) => void;
 
 const sway = (env: RenderEnv, x: number, amt = 1.5) => (env.reducedMotion ? 0 : Math.sin(env.time * 0.8 + x * 0.013) * amt);
 
-const TREE_COLORS = [
-  { base: '#7db66b', dark: '#629a57', light: '#a3d083' },
-  { base: '#8cc27b', dark: '#6ea862', light: '#b4dc93' },
-];
+/** White snow caps, drawn on top of foliage in winter. */
+const snowCap = (g: Ctx, x: number, y: number, rx: number, ry: number) => {
+  ellipse(g, x, y, rx, ry, '#ffffff');
+  ellipse(g, x - rx * 0.3, y - ry * 0.35, rx * 0.45, ry * 0.5, '#f4f8fb');
+};
 
 const tree: Painter = (g, { x, y, scale: s, variant }, env) => {
-  const c = TREE_COLORS[variant % TREE_COLORS.length];
+  const pal = seasonPalette(env.season);
+  const c = pal.trees[variant % pal.trees.length];
   const w = sway(env, x);
   shadow(g, x + 4, y, 30 * s, 10 * s, 0.17);
   fillRoundRect(g, x - 5 * s, y - 28 * s, 10 * s, 28 * s, 4 * s, '#8c6448');
@@ -29,16 +32,26 @@ const tree: Painter = (g, { x, y, scale: s, variant }, env) => {
   circle(g, x + 15 * s + w, y - 52 * s, 22 * s, c.base);
   circle(g, x + w * 1.3, y - 66 * s, 24 * s, c.base);
   circle(g, x - 8 * s + w * 1.3, y - 72 * s, 11 * s, c.light);
+  if (pal.blossom) {
+    const rnd = seededRandom(Math.round(x * 7 + y));
+    for (let i = 0; i < 7; i++) circle(g, x + (rnd() - 0.5) * 50 * s + w, y - 50 * s - rnd() * 30 * s, 2.6 * s, pal.blossom);
+  }
+  if (pal.snow) {
+    snowCap(g, x + w * 1.3, y - 82 * s, 18 * s, 7 * s);
+    snowCap(g, x - 16 * s + w, y - 64 * s, 11 * s, 4.5 * s);
+    snowCap(g, x + 17 * s + w, y - 67 * s, 12 * s, 4.5 * s);
+  }
 };
 
 const pine: Painter = (g, { x, y, scale: s }, env) => {
   const w = sway(env, x, 1);
   shadow(g, x + 3, y, 22 * s, 8 * s, 0.17);
   fillRoundRect(g, x - 4 * s, y - 16 * s, 8 * s, 16 * s, 3 * s, '#7d5a43');
+  const pal = seasonPalette(env.season);
   const tiers = [
-    { y: -14, hw: 26, h: 34, c: '#4f8d64' },
-    { y: -36, hw: 21, h: 30, c: '#5c9d70' },
-    { y: -56, hw: 15, h: 26, c: '#6aac7c' },
+    { y: -14, hw: 26, h: 34, c: pal.pine[0] },
+    { y: -36, hw: 21, h: 30, c: pal.pine[1] },
+    { y: -56, hw: 15, h: 26, c: pal.pine[2] },
   ];
   g.save();
   g.lineJoin = 'round';
@@ -56,25 +69,34 @@ const pine: Painter = (g, { x, y, scale: s }, env) => {
     g.stroke();
   }
   g.restore();
+  if (pal.snow) {
+    for (const t of tiers) {
+      const ox = w * (1 - t.y / 80);
+      snowCap(g, x + ox, y + (t.y - t.h + 8) * s, 7 * s, 4 * s);
+    }
+  }
 };
 
-const bush: Painter = (g, { x, y, scale: s }) => {
+const bush: Painter = (g, { x, y, scale: s }, env) => {
+  const pal = seasonPalette(env.season);
   shadow(g, x + 2, y, 22 * s, 6 * s, 0.15);
-  circle(g, x - 11 * s, y - 10 * s, 11 * s, '#6aa75f');
-  circle(g, x + 11 * s, y - 10 * s, 11 * s, '#6aa75f');
-  circle(g, x, y - 15 * s, 14 * s, '#7cb86c');
-  circle(g, x - 4 * s, y - 20 * s, 6 * s, '#9ccf86');
+  circle(g, x - 11 * s, y - 10 * s, 11 * s, pal.bush.dark);
+  circle(g, x + 11 * s, y - 10 * s, 11 * s, pal.bush.dark);
+  circle(g, x, y - 15 * s, 14 * s, pal.bush.base);
+  circle(g, x - 4 * s, y - 20 * s, 6 * s, pal.bush.light);
+  if (pal.snow) snowCap(g, x, y - 26 * s, 13 * s, 5 * s);
 };
-
-const FLOWER_SETS = [
-  ['#f49cb0', '#fde2e7', '#f7c948'],
-  ['#f7d36b', '#ffffff', '#f2a65a'],
-  ['#b9a3e3', '#f2ecff', '#f49cb0'],
-];
 
 const flowers: Painter = (g, { x, y, variant }, env) => {
   const rnd = seededRandom(Math.round(x * 31 + y * 17));
-  const set = FLOWER_SETS[variant % FLOWER_SETS.length];
+  const pal = seasonPalette(env.season);
+  if (!pal.flowersBloom) {
+    // Flower beds rest under a soft mound of snow.
+    ellipse(g, x, y - 5, 30, 11, '#dfe7ee');
+    ellipse(g, x - 4, y - 8, 22, 7, '#ffffff');
+    return;
+  }
+  const set = pal.flowerSets[variant % pal.flowerSets.length];
   ellipse(g, x, y - 4, 30, 11, 'rgba(98, 150, 80, 0.35)');
   for (let i = 0; i < 9; i++) {
     const fx = x + (rnd() - 0.5) * 50;
@@ -115,15 +137,16 @@ const bench: Painter = (g, { x, y }) => {
 
 const fountain: Painter = (g, { x, y }, env) => {
   const stone = '#ddd6cd';
-  const water = mixColor('#93cfe2', '#5f7fb8', env.night * 0.6);
+  const frozen = env.season === 'winter';
+  const water = mixColor(frozen ? '#d4e8f1' : '#93cfe2', '#5f7fb8', env.night * 0.6);
   shadow(g, x, y - 4, 82, 22, 0.13);
   ellipse(g, x, y - 18, 74, 34, shade(stone, -0.18));
   ellipse(g, x, y - 26, 74, 34, stone);
   ellipse(g, x, y - 28, 62, 26, water);
 
-  // Ripples
+  // Ripples (none when the pond is frozen)
   g.lineWidth = 1.5;
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < (frozen ? 0 : 3); i++) {
     const t = env.reducedMotion ? (i + 0.5) / 3 : (env.time * 0.35 + i / 3) % 1;
     g.strokeStyle = `rgba(255,255,255,${0.5 * (1 - t)})`;
     g.beginPath();
@@ -136,7 +159,7 @@ const fountain: Painter = (g, { x, y }, env) => {
   ellipse(g, x, y - 67, 18, 6, water);
 
   // Water arcs
-  const n = 14;
+  const n = frozen ? 0 : 14;
   for (let i = 0; i < n; i++) {
     const side = i % 2 === 0 ? -1 : 1;
     const t = env.reducedMotion ? ((i >> 1) + 0.5) / (n / 2) : (env.time * 0.9 + i / n) % 1;

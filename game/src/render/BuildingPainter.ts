@@ -29,8 +29,12 @@ export function drawBuilding(g: Ctx, b: BuildingDef, env: RenderEnv): void {
   const left = x - w / 2;
 
   shadow(g, x + 8, y + 2, w / 2 + 18, 14, 0.14);
-  if (b.style === 'pavilion') return drawPavilion(g, b, env);
-  if (b.style === 'greenhouse') return drawGreenhouse(g, b, env);
+  if (b.style === 'pavilion' || b.style === 'greenhouse') {
+    if (b.style === 'pavilion') drawPavilion(g, b, env);
+    else drawGreenhouse(g, b, env);
+    if (env.season === 'winter') drawRoofSnow(g, b);
+    return;
+  }
 
   // Walls with a little side shading for depth.
   fillRoundRect(g, left, y - wh, w, wh, [4, 4, 6, 6], p.wall);
@@ -66,7 +70,67 @@ export function drawBuilding(g: Ctx, b: BuildingDef, env: RenderEnv): void {
       break;
   }
 
+  if (env.season === 'winter') drawRoofSnow(g, b);
   drawPlaque(g, x, y - DOOR_H - 18, b.name, p);
+}
+
+/** A soft blanket of snow along each roof's top edge (winter only). */
+function drawRoofSnow(g: Ctx, b: BuildingDef): void {
+  const { x, y, width: w, wallHeight: wh, roofHeight: rh } = b;
+  const snow = '#ffffff';
+  const drips = (x0: number, x1: number, yy: number) => {
+    for (let px = x0 + 8; px < x1 - 6; px += 17) ellipse(g, px, yy + 4, 4, 5, snow);
+  };
+  switch (b.style) {
+    case 'cottage':
+    case 'school':
+    case 'postOffice': {
+      const inset = b.style === 'postOffice' ? 30 : 26;
+      const top = y - wh - rh;
+      fillRoundRect(g, x - w / 2 + inset - 10, top - 8, w - inset * 2 + 20, 14, 7, snow);
+      drips(x - w / 2 + inset - 10, x + w / 2 - inset + 10, top);
+      // A dusting along the eave too.
+      fillRoundRect(g, x - w / 2 - 18, y - wh + 2, w + 36, 6, 3, 'rgba(255,255,255,0.85)');
+      break;
+    }
+    case 'lab': {
+      const top = y - wh - rh * 0.45;
+      fillRoundRect(g, x - w / 2 - 12, top - 6, w + 24, 11, 5, snow);
+      drips(x - w / 2 - 12, x + w / 2 + 12, top - 2);
+      g.beginPath();
+      g.arc(x - w * 0.24, top, 34, Math.PI * 1.15, Math.PI * 1.85);
+      g.lineWidth = 7;
+      g.strokeStyle = snow;
+      g.lineCap = 'round';
+      g.stroke();
+      break;
+    }
+    case 'workshop':
+      fillRoundRect(g, x - w / 2 - 18, y - wh - 4, w + 36, 9, 4, snow);
+      drips(x - w / 2 - 18, x + w / 2 + 18, y - wh - 4);
+      break;
+    case 'boba':
+      fillRoundRect(g, x - w / 2 - 10, y - wh - 19, w + 20, 10, 5, snow);
+      drips(x - w / 2 - 10, x + w / 2 + 10, y - wh - 19);
+      break;
+    case 'greenhouse':
+    case 'pavilion': {
+      const top = y - wh - rh;
+      // Greenhouse peaks at a point; the pavilion has a short flat ridge.
+      const half = b.style === 'greenhouse' ? 12 : 30;
+      fillRoundRect(g, x - half, top - 4, half * 2, 11, 6, snow);
+      g.strokeStyle = 'rgba(255,255,255,0.9)';
+      g.lineWidth = 5;
+      g.lineCap = 'round';
+      g.beginPath();
+      g.moveTo(x - half, top + 2);
+      g.lineTo(x - w / 2 - 6, y - wh + 2);
+      g.moveTo(x + half, top + 2);
+      g.lineTo(x + w / 2 + 6, y - wh + 2);
+      g.stroke();
+      break;
+    }
+  }
 }
 
 function drawPlanks(g: Ctx, x: number, y: number, w: number, h: number, base: string): void {

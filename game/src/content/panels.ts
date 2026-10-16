@@ -16,7 +16,7 @@ export const panels: Record<string, PanelDef> = {
       { kind: 'research', match: 'Mars', compact: true },
       { kind: 'research', match: 'CSCE 312', compact: true },
     ],
-    hint: 'Visit the Workshop and the DIVE Lab for the full stories.',
+    hint: 'Visit the Workshop and the Research Lab for the full stories.',
   },
 
   // ── Cottage (About) ───────────────────────────────────────────
@@ -51,9 +51,9 @@ export const panels: Record<string, PanelDef> = {
     ],
   },
 
-  // ── DIVE Lab (research) ───────────────────────────────────────
+  // ── Research Lab (research) ───────────────────────────────────────
   'lab.particles': {
-    eyebrow: 'DIVE Lab · research station',
+    eyebrow: 'Research Lab · research station',
     title: 'Particle collision prediction',
     blocks: [
       { kind: 'research', match: 'Particle Collision' },
@@ -62,12 +62,12 @@ export const panels: Record<string, PanelDef> = {
     ],
   },
   'lab.mars': {
-    eyebrow: 'DIVE Lab · reentry capsule model',
+    eyebrow: 'Research Lab · reentry capsule model',
     title: 'Mars reentry flow prediction',
     blocks: [{ kind: 'research', match: 'Mars' }],
   },
   'lab.past': {
-    eyebrow: 'DIVE Lab · whiteboard',
+    eyebrow: 'Research Lab · whiteboard',
     title: 'Past research',
     blocks: [
       { kind: 'research', match: 'Stroke' },
@@ -75,7 +75,7 @@ export const panels: Record<string, PanelDef> = {
     ],
   },
   'lab.cert.srw': {
-    eyebrow: 'DIVE Lab · certificate',
+    eyebrow: 'Research Lab · certificate',
     title: 'Student Research Week 2025',
     blocks: [
       { kind: 'researchBullet', match: 'Stroke', contains: 'Student Research Week' },
@@ -83,7 +83,7 @@ export const panels: Record<string, PanelDef> = {
     ],
   },
   'lab.cert.ecsm': {
-    eyebrow: 'DIVE Lab · certificate',
+    eyebrow: 'Research Lab · certificate',
     title: 'ECSM 2025 publication',
     blocks: [
       { kind: 'researchBullet', match: 'Social Media', contains: 'ECSM' },
@@ -179,6 +179,14 @@ export const panels: Record<string, PanelDef> = {
     eyebrow: 'Community corner',
     title: 'Giving back',
     blocks: [{ kind: 'service' }],
+  },
+
+  // ── Map (quick travel; also the accessible way to reach everything) ──
+  map: {
+    eyebrow: 'Town map',
+    title: 'Where would you like to go?',
+    blocks: [{ kind: 'directory' }],
+    hint: 'Tip: you can also walk up to any door and press E.',
   },
 
   // ── Collectibles ──────────────────────────────────────────────
