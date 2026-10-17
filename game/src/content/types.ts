@@ -9,7 +9,8 @@ export type ActionDef =
   | { type: 'say'; speaker?: string; lines: string[] }
   | { type: 'enter'; building: string }
   | { type: 'exit' }
-  | { type: 'minigame'; id: 'boba' };
+  | { type: 'minigame'; id: 'boba' }
+  | { type: 'wardrobe' };
 
 export interface InteractionDef {
   /** Shown in the prompt, e.g. "Read the notice board". */
@@ -59,17 +60,55 @@ export interface PanelDef {
   hint?: string;
 }
 
-export type Accessory = 'beanie' | 'bow' | 'glasses' | 'headphones' | 'cap' | 'flower' | 'crown';
+export type Accessory =
+  // Free (in the creator)
+  | 'beanie'
+  | 'bow'
+  | 'glasses'
+  | 'headphones'
+  | 'cap'
+  | 'flower'
+  | 'scarf'
+  | 'freckles'
+  | 'earrings'
+  | 'hairClip'
+  | 'backpack'
+  // Rewards (unlocked by playing; see content/rewards.ts)
+  | 'crown'
+  | 'camera'
+  | 'flowerCrown'
+  | 'catEars'
+  | 'coffeeCup'
+  // Villager-only (Riya's)
+  | 'wizardHat';
+
+export type OutfitStyle = 'plain' | 'stripes' | 'overalls' | 'dress';
 
 export interface CharacterAppearance {
   body: 'round' | 'tall';
-  hair: 'short' | 'hijab' | 'bun' | 'long';
+  hair: 'short' | 'curly' | 'pigtails' | 'hijab' | 'bun' | 'long';
   skin: string;
   /** Hair color, or the hijab's color. */
   hairColor: string;
   outfit: string;
-  /** Any combination; hats (beanie, cap, crown) are one-at-a-time. */
+  /** Defaults to 'plain'. */
+  outfitStyle?: OutfitStyle;
+  /** Any combination; hats (see HAT_ACCESSORIES) are one-at-a-time. */
   accessories: Accessory[];
+}
+
+export type CatCoat = 'orange' | 'grey' | 'tuxedo' | 'calico';
+
+/** A wandering cat you can pet. Used in town and inside buildings. */
+export interface CatDef {
+  id: string;
+  name: string;
+  /** Home spot it wanders around. */
+  x: number;
+  y: number;
+  coat: CatCoat;
+  /** How far from home it roams. 0 = stays put (a sleepy house cat). */
+  roam: number;
 }
 
 /** A villager. Used in town (content/town.ts) and inside buildings (content/interiors.ts). */

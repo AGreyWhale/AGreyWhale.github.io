@@ -1,12 +1,18 @@
 import { collectibleKinds, funFacts, GALLERY_UNLOCK, type CollectibleKind } from '../content/collectibles';
 import { galleryPhotos } from '../content/gallery';
+import { rewards } from '../content/rewards';
 import { mediaUrl, site } from '../content/site';
-import type { ActionDef } from '../content/types';
+import type { Accessory, ActionDef } from '../content/types';
 import type { Progress } from '../systems/CollectibleSystem';
 import { h } from './dom';
 
 /** The satchel: progress per collectible type, unlocked fun facts, gallery access. */
-export function renderCollection(p: Progress, runAction: (a: ActionDef) => void): HTMLElement {
+export function renderCollection(
+  p: Progress,
+  runAction: (a: ActionDef) => void,
+  earned: Accessory[] = [],
+  pets: { petted: number; total: number } = { petted: 0, total: 0 },
+): HTMLElement {
   const rows = (Object.keys(collectibleKinds) as CollectibleKind[]).map((k) => {
     const { found, total } = p.byKind[k];
     const meta = collectibleKinds[k];
@@ -24,7 +30,34 @@ export function renderCollection(p: Progress, runAction: (a: ActionDef) => void)
     'div',
     { class: 'collection' },
     h('p', { class: 'lead' }, p.allFound ? 'You found everything. Thank you for exploring!' : `Found ${p.found} of ${p.total} hidden things around town.`),
-    h('ul', { class: 'col-list' }, ...rows),
+    h(
+      'ul',
+      { class: 'col-list' },
+      ...rows,
+      h(
+        'li',
+        { class: pets.total && pets.petted === pets.total ? 'done' : undefined },
+        h('span', { class: 'col-icon', 'aria-hidden': 'true' }, '🐈'),
+        h('span', { class: 'col-label' }, 'Cats petted'),
+        h('progress', { max: String(pets.total), value: String(pets.petted), 'aria-label': 'Cats petted' }),
+        h('span', { class: 'col-count' }, `${pets.petted}/${pets.total}`),
+      ),
+    ),
+    h('h3', { class: 'block-heading' }, 'Wardrobe rewards'),
+    h(
+      'ul',
+      { class: 'reward-list' },
+      ...rewards.map((r) => {
+        const have = earned.includes(r.accessory);
+        return h(
+          'li',
+          { class: have ? 'have' : undefined },
+          h('span', { class: 'reward-mark', 'aria-hidden': 'true' }, have ? '✦' : '·'),
+          h('strong', null, r.label),
+          h('span', null, have ? 'Unlocked! Wear it from the wardrobe.' : r.hint),
+        );
+      }),
+    ),
     h('h3', { class: 'block-heading' }, 'Fun facts from coffee cups'),
   );
   const unlocked = Object.entries(funFacts).filter(([id]) => p.foundIds.has(id));
@@ -36,7 +69,9 @@ export function renderCollection(p: Progress, runAction: (a: ActionDef) => void)
   const btn = h('button', { type: 'button', class: 'btn btn-quiet panel-button' }, p.galleryUnlocked ? 'Open the photo gallery' : `Gallery unlocks at ${GALLERY_UNLOCK} polaroids`);
   if (p.galleryUnlocked) btn.addEventListener('click', () => runAction({ type: 'panel', panel: 'gallery' }));
   else btn.disabled = true;
-  root.append(btn);
+  const wardrobe = h('button', { type: 'button', class: 'btn btn-primary panel-button' }, 'Open the wardrobe');
+  wardrobe.addEventListener('click', () => runAction({ type: 'wardrobe' }));
+  root.append(h('div', { class: 'panel-buttons' }, wardrobe, btn));
   return root;
 }
 

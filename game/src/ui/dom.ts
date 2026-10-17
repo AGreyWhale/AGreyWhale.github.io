@@ -31,6 +31,7 @@ export const icons = {
   summer: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9a9 9 0 0 0 18 0z"/><path d="M6.5 9a5.5 5.5 0 0 0 11 0"/><path d="M9 12.5v.01M12 13.5v.01M15 12.5v.01"/></svg>',
   autumn: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19C5 11 10 5 19 5c0 9-6 14-14 14z"/><path d="M5 19 13 11"/></svg>',
   winter: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7"/><path d="m9 4 3 2 3-2M9 20l3-2 3 2"/></svg>',
+  hanger: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7.5a2 2 0 1 1 2-2c0 1.2-2 1.6-2 3.2"/><path d="M12 8.7 3 15.5a1.3 1.3 0 0 0 .8 2.3h16.4a1.3 1.3 0 0 0 .8-2.3z"/></svg>',
   arrow: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
 };
 

@@ -8,6 +8,7 @@ export interface HudActions {
   toggleTheme(): void;
   cycleSeason(): void;
   openMap(): void;
+  openWardrobe(): void;
   toggleMute(): void;
   interact(): void;
   openCollection(): void;
@@ -26,6 +27,7 @@ export class Hud {
   private readonly collectBtn: HTMLButtonElement;
   private readonly seasonBtn: HTMLButtonElement;
   private readonly mapBtn: HTMLButtonElement;
+  private readonly wardrobeBtn: HTMLButtonElement;
   private readonly prompt: HTMLButtonElement;
   private readonly promptText: HTMLSpanElement;
   private readonly toastEl: HTMLDivElement;
@@ -47,6 +49,8 @@ export class Hud {
     this.seasonBtn.addEventListener('click', () => actions.cycleSeason());
     this.mapBtn = h('button', { type: 'button', class: 'map-btn', 'aria-label': 'Town map: jump to any building', hidden: true }, iconSpan(icons.map), h('span', { class: 'map-label' }, 'Map'));
     this.mapBtn.addEventListener('click', () => actions.openMap());
+    this.wardrobeBtn = h('button', { type: 'button', class: 'map-btn wardrobe-btn', 'aria-label': 'Wardrobe: change your look', hidden: true }, iconSpan(icons.hanger), h('span', { class: 'map-label' }, 'Wardrobe'));
+    this.wardrobeBtn.addEventListener('click', () => actions.openWardrobe());
     this.themeBtn = h('button', { type: 'button', class: 'hud-btn' });
     this.themeBtn.addEventListener('click', () => actions.toggleTheme());
     this.muteBtn = h('button', { type: 'button', class: 'hud-btn hud-mute' });
@@ -67,7 +71,7 @@ export class Hud {
 
     this.toastEl = h('div', { class: 'toast', role: 'status', 'aria-live': 'polite' });
     this.announcer = h('div', { class: 'sr-only', 'aria-live': 'polite' });
-    host.append(this.bar, this.prompt, this.mapBtn, this.toastEl, this.announcer);
+    host.append(this.bar, this.prompt, h('div', { class: 'corner-btns' }, this.mapBtn, this.wardrobeBtn), this.toastEl, this.announcer);
 
     bus.on('prompt', (p) => {
       this.promptLabel = p?.label ?? null;
@@ -85,6 +89,7 @@ export class Hud {
   setMode(mode: 'start' | 'play'): void {
     this.bar.dataset.mode = mode;
     this.mapBtn.hidden = mode === 'start';
+    this.wardrobeBtn.hidden = mode === 'start';
   }
 
   /** Collectible counter, e.g. 3/24. Pulses when it changes. */
@@ -115,7 +120,7 @@ export class Hud {
 
   /** While a popup is open, the HUD behind it can't be focused or clicked. */
   setInert(inert: boolean): void {
-    for (const el of [this.bar, this.prompt, this.mapBtn]) el.inert = inert;
+    for (const el of [this.bar, this.prompt, this.mapBtn, this.wardrobeBtn]) el.inert = inert;
   }
 
   setTheme(mode: ThemeMode): void {

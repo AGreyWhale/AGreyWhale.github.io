@@ -5,7 +5,7 @@ import { FileTrack, type MusicSource } from './audio/MusicSource';
 import { ProceduralAmbience } from './audio/ProceduralAmbience';
 import type { SaveManager, ThemeMode } from './SaveManager';
 
-export type Sfx = 'blip' | 'open' | 'close' | 'door' | 'collect' | 'success' | 'fail';
+export type Sfx = 'blip' | 'open' | 'close' | 'door' | 'collect' | 'success' | 'fail' | 'purr' | 'chirp';
 
 /**
  * Music + sound effects. Nothing is created until `unlock()` runs inside the
@@ -120,6 +120,31 @@ export class AudioManager {
         break;
       case 'close':
         tone(880, t, 0.25, 0.25, 'triangle', 600);
+        break;
+      case 'purr': {
+        // Low rumble with a fast tremolo.
+        const o = ctx.createOscillator();
+        o.type = 'triangle';
+        o.frequency.value = 62;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.5, t + 0.15);
+        g.gain.linearRampToValueAtTime(0, t + 1.1);
+        const lfo = ctx.createOscillator();
+        lfo.frequency.value = 24;
+        const depth = ctx.createGain();
+        depth.gain.value = 0.25;
+        lfo.connect(depth).connect(g.gain);
+        o.connect(g).connect(this.sfxBus);
+        o.start(t);
+        lfo.start(t);
+        o.stop(t + 1.2);
+        lfo.stop(t + 1.2);
+        break;
+      }
+      case 'chirp':
+        tone(2400, t, 0.07, 0.12, 'sine', 3400);
+        tone(2600, t + 0.1, 0.07, 0.1, 'sine', 3600);
         break;
       case 'collect':
         [784, 988, 1319].forEach((f, i) => tone(f, t + i * 0.07, 0.3, 0.22, 'triangle'));

@@ -4,7 +4,9 @@ import { town, type TownPropDef } from '../content/town';
 import type { ActionDef, CharacterAppearance } from '../content/types';
 import type { GameContext } from '../core/GameContext';
 import { seededRandom } from '../core/random';
+import { Bird } from '../entities/Bird';
 import { Building } from '../entities/Building';
+import { Cat } from '../entities/Cat';
 import { Door } from '../entities/Door';
 import { Npc } from '../entities/Npc';
 import { Player } from '../entities/Player';
@@ -51,9 +53,17 @@ export class TownScene extends WorldScene {
     }
     for (const def of town.props) this.entities.push(new Prop(def, (i) => act(i.action)));
     for (const def of town.npcs) this.entities.push(new Npc(def, this.player, (i) => act(i.action)));
+    for (const def of town.cats) this.entities.push(new Cat(def, this.collision, (c) => this.petted(c)));
+    for (let i = 0; i < town.birds.count; i++) {
+      this.entities.push(new Bird(town.birds.spots, this.player, () => this.controllable && ctx.audio.play('chirp'), i));
+    }
     for (const def of this.decorTrees()) this.entities.push(new Prop(def, () => undefined));
     this.spawnCollectibles('town');
     this.rebuildSolids();
+  }
+
+  private petted(cat: Cat): void {
+    this.ctx.bus.emit('cat:petted', { id: cat.def.id, name: cat.def.name });
   }
 
   setAppearance(a: CharacterAppearance): void {
@@ -129,8 +139,9 @@ export class TownScene extends WorldScene {
       g.save();
       g.translate(p.x, p.y);
       g.rotate(p.angle);
-      ellipse(g, 0, 0, 3.6, 2.2, `rgba(120, 140, 165, ${a})`);
-      ellipse(g, 3.2, 0, 1.6, 1.6, `rgba(120, 140, 165, ${a})`);
+      // Wide ball of the foot in front (direction of travel), small heel behind.
+      ellipse(g, 1.6, 0, 3, 2.3, `rgba(120, 140, 165, ${a})`);
+      ellipse(g, -3.2, 0, 1.7, 1.6, `rgba(120, 140, 165, ${a})`);
       g.restore();
     }
   }

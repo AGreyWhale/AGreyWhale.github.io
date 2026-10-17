@@ -2,6 +2,7 @@ import { interiors, type InteriorDef } from '../content/interiors';
 import type { ActionDef, CharacterAppearance } from '../content/types';
 import type { GameContext } from '../core/GameContext';
 import { Entity } from '../entities/Entity';
+import { Cat } from '../entities/Cat';
 import { InteriorProp } from '../entities/InteriorProp';
 import { Npc } from '../entities/Npc';
 import { Player } from '../entities/Player';
@@ -61,6 +62,11 @@ export class InteriorScene extends WorldScene {
     this.entities.push(this.player, new ExitMat(W / 2, H + 2, () => this.leave()));
     for (const p of def.props) this.entities.push(new InteriorProp(p, WH, (i) => act(i.action)));
     for (const n of def.npcs ?? []) this.entities.push(new Npc(n, this.player, (i) => act(i.action)));
+    for (const c of def.cats ?? []) {
+      this.entities.push(
+        new Cat(c, this.collision, (cat) => ctx.bus.emit('cat:petted', { id: cat.def.id, name: cat.def.name })),
+      );
+    }
     this.spawnCollectibles(def.id);
     this.rebuildSolids();
   }

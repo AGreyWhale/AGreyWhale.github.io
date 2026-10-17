@@ -1,4 +1,5 @@
-import { characterOptions, characterPresets, HAT_ACCESSORIES, rewardAccessories } from '../content/characters';
+import { characterOptions, characterPresets, HAT_ACCESSORIES } from '../content/characters';
+import { rewards } from '../content/rewards';
 import { links } from '../content/links';
 import type { Accessory, CharacterAppearance } from '../content/types';
 import { drawCharacter } from '../render/CharacterPainter';
@@ -11,7 +12,8 @@ const OPTION_LABELS: Record<OptionKey, string> = {
   hair: 'Hair',
   skin: 'Skin tone',
   hairColor: 'Hair / hijab color',
-  outfit: 'Outfit',
+  outfit: 'Outfit color',
+  outfitStyle: 'Outfit style',
   accessories: 'Accessories (mix and match)',
 };
 
@@ -19,7 +21,7 @@ const COLOR_KEYS: ReadonlySet<OptionKey> = new Set(['skin', 'hairColor', 'outfit
 
 /** Same look, ignoring accessory order. */
 function sameLook(a: CharacterAppearance, b: CharacterAppearance): boolean {
-  const norm = (c: CharacterAppearance) => JSON.stringify({ ...c, accessories: [...c.accessories].sort() });
+  const norm = (c: CharacterAppearance) => JSON.stringify({ ...c, outfitStyle: c.outfitStyle ?? 'plain', accessories: [...c.accessories].sort() });
   return norm(a) === norm(b);
 }
 
@@ -51,6 +53,12 @@ export class CharacterSelect {
   private readonly startBtn: HTMLButtonElement;
   private appearance: CharacterAppearance;
   private name: string;
+  private readonly title: HTMLHeadingElement;
+  private readonly eyebrow: HTMLParagraphElement;
+  private readonly customDetails: HTMLDetailsElement;
+  /** Set while the wardrobe (in-game outfit change) is open. */
+  private onWardrobeDone: ((a: CharacterAppearance) => void) | null = null;
+  private startLabel = '';
 
   constructor(
     host: HTMLElement,
@@ -88,15 +96,22 @@ export class CharacterSelect {
       ),
     );
 
-    const custom = h(
+    const custom = (this.customDetails = h(
       'details',
       { class: 'customize' },
       h('summary', null, 'Customize'),
       ...(Object.keys(characterOptions) as OptionKey[]).map((key) => this.optionGroup(key)),
-    );
+    ));
 
     this.startBtn = h('button', { type: 'button', class: 'btn btn-primary start-btn' }, saved ? 'Continue exploring' : 'Start exploring');
-    this.startBtn.addEventListener('click', () => this.onStart({ ...this.appearance }));
+    this.startLabel = this.startBtn.textContent ?? '';
+    this.startBtn.addEventListener('click', () => {
+      const a = { ...this.appearance, accessories: [...this.appearance.accessories] };
+      if (this.onWardrobeDone) this.onWardrobeDone(a);
+      else this.onStart(a);
+    });
+    this.eyebrow = h('p', { class: 'eyebrow' }, 'Welcome to');
+    this.title = h('h1', { id: 'start-title' }, "Gauri's Town");
 
     const skip = h('a', { class: 'skip-big', href: links.quickVersion }, 'Skip to the quick version', iconSpan(icons.arrow));
 
@@ -106,8 +121,8 @@ export class CharacterSelect {
       h(
         'div',
         { class: 'start-card' },
-        h('p', { class: 'eyebrow' }, 'Welcome to'),
-        h('h1', { id: 'start-title' }, "Gauri's Town"),
+        this.eyebrow,
+        this.title,
         h('p', { class: 'start-sub' }, 'A cozy little portfolio you can walk around. Pick a villager, wander into the buildings, and see what I have been building.'),
         h(
           'div',
@@ -128,6 +143,45 @@ export class CharacterSelect {
     );
     host.append(this.root);
     this.syncCustomInputs();
+    this.root.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.onWardrobeDone) {
+        e.stopPropagation();
+        this.startBtn.click();
+      }
+    });
+  }
+
+  /**
+   * Reopens the creator mid-game as a wardrobe, so earned rewards can be worn
+   * right away. `onDone` receives the new look.
+   */
+  showWardrobe(current: CharacterAppearance, onDone: (a: CharacterAppearance) => void): void {
+    this.onWardrobeDone = (a) => {
+      this.closeWardrobe();
+      onDone(a);
+    };
+    this.appearance = { ...current, accessories: [...current.accessories] };
+    this.customize({});
+    this.syncCustomInputs();
+    this.root.dataset.mode = 'wardrobe';
+    this.root.setAttribute('role', 'dialog');
+    this.root.setAttribute('aria-modal', 'true');
+    this.eyebrow.textContent = 'Your';
+    this.title.textContent = 'Wardrobe';
+    this.startBtn.textContent = 'Back to town';
+    this.customDetails.open = true;
+    this.show();
+  }
+
+  private closeWardrobe(): void {
+    this.onWardrobeDone = null;
+    delete this.root.dataset.mode;
+    this.root.removeAttribute('role');
+    this.root.removeAttribute('aria-modal');
+    this.eyebrow.textContent = 'Welcome to';
+    this.title.textContent = "Gauri's Town";
+    this.startBtn.textContent = this.startLabel;
+    this.hide();
   }
 
   show(): void {
@@ -166,7 +220,7 @@ export class CharacterSelect {
   /** Checkboxes: wear any combination, but only one hat at a time. */
   private accessoryGroup(): HTMLFieldSetElement {
     const group = h('fieldset', { class: 'option-group pills accessories' }, h('legend', null, OPTION_LABELS.accessories));
-    const opts = [...characterOptions.accessories, ...rewardAccessories];
+    const opts = [...characterOptions.accessories, ...rewards.map((r) => ({ value: r.accessory, label: r.label }))];
     for (const o of opts) {
       const value = o.value as Accessory;
       const input = h('input', { type: 'checkbox', name: 'opt-accessories', value, class: 'sr-only' });
@@ -179,7 +233,7 @@ export class CharacterSelect {
         this.customize({ accessories: next });
         this.syncCustomInputs();
       });
-      const isReward = rewardAccessories.some((r) => r.value === value);
+      const isReward = rewards.some((r) => r.accessory === value);
       group.append(h('label', { class: isReward ? 'option reward' : 'option', 'data-value': value }, input, h('span', { class: 'pill' }, o.label)));
     }
     return group;
@@ -201,7 +255,7 @@ export class CharacterSelect {
 
   private syncCustomInputs(): void {
     for (const key of Object.keys(characterOptions) as OptionKey[]) {
-      const value = this.appearance[key];
+      const value = key === 'outfitStyle' ? (this.appearance.outfitStyle ?? 'plain') : this.appearance[key];
       this.root.querySelectorAll<HTMLInputElement>(`input[name="opt-${key}"]`).forEach((i) => {
         i.checked = Array.isArray(value) ? value.includes(i.value as Accessory) : i.value === value;
       });

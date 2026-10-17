@@ -37,5 +37,5 @@ export const bobaRules = {
   strikes: 3,
 };
 
-/** Customer names on order tickets. Flavor text: edit freely. */
-export const bobaCustomers = ['Riya', 'Sam', 'Jules', 'Priya', 'Leo', 'Mina', 'Theo', 'Ana', 'Kai', 'Noor'];
+
+export const bobaCustomers = ['Riya', 'Claire', 'Grant', 'Elizabeth', 'Anand', 'Uswa', 'Zarin', 'Athul', 'Prisha', 'Jenny', 'Sanjana'];

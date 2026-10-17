@@ -1,4 +1,5 @@
 import type { CollectibleDef } from '../content/collectibles';
+import type { RewardDef } from '../content/rewards';
 import type { ActionDef } from '../content/types';
 import type { Progress } from '../systems/CollectibleSystem';
 import type { Season, ThemeMode } from '../systems/SaveManager';
@@ -15,4 +16,7 @@ export interface GameEvents {
   'ui:blocking': boolean;
   toast: string;
   collected: { def: CollectibleDef; progress: Progress; galleryJustUnlocked: boolean; allJustFound: boolean };
+  /** A reward accessory was earned for the first time. */
+  'reward:unlocked': RewardDef;
+  'cat:petted': { id: string; name: string };
 }

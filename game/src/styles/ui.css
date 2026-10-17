@@ -356,8 +356,12 @@ body.touch .prompt {
 }
 
 .dialog-body {
+  flex: 1 1 auto;
+  min-height: 0;
   padding: 6px 26px 12px;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   line-height: 1.6;
   user-select: text;
 }
@@ -1488,5 +1492,85 @@ body.touch .map-btn {
   }
   .map-btn {
     padding: 12px;
+  }
+}
+
+/* ── Wardrobe + rewards ───────────────────────────────────────── */
+.corner-btns {
+  position: absolute;
+  left: max(16px, env(safe-area-inset-left));
+  bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
+  display: flex;
+  gap: 10px;
+  z-index: 15;
+}
+
+body.touch .corner-btns {
+  bottom: max(36px, calc(env(safe-area-inset-bottom) + 28px));
+}
+
+.corner-btns .map-btn {
+  position: static;
+}
+
+.reward-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px;
+  display: grid;
+  gap: 6px;
+}
+
+.reward-list li {
+  display: grid;
+  grid-template-columns: 1.4em 8.5em 1fr;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  color: var(--ink-soft);
+}
+
+.reward-list li.have {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.reward-list li strong {
+  color: var(--ink);
+}
+
+.reward-mark {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.panel-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.option.reward .pill {
+  border-color: var(--gold);
+  border-style: dashed;
+}
+
+/* The creator reopened mid-game as a wardrobe: just the outfit controls. */
+.start-screen[data-mode='wardrobe'] {
+  z-index: 45;
+}
+
+.start-screen[data-mode='wardrobe'] :is(.start-sub, .start-note, .controls-hint, .old-site, .skip-big, .presets) {
+  display: none;
+}
+
+@media (max-width: 560px) {
+  .reward-list li {
+    grid-template-columns: 1.4em 1fr;
+  }
+  .reward-list li span:last-child {
+    grid-column: 2;
   }
 }

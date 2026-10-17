@@ -1,4 +1,4 @@
-import type { InteractionDef, NpcDef } from './types';
+import type { CatDef, InteractionDef, NpcDef } from './types';
 
 export type { NpcDef };
 
@@ -132,7 +132,7 @@ export const town = {
       name: 'Riya',
       x: 1500,
       y: 200,
-      appearance: { body: 'round', hair: 'short', skin: '#d49c74', hairColor: '#0c0906', outfit: '#1b0a61', accessories: ['flower'] },
+      appearance: { body: 'round', hair: 'curly', skin: '#d49c74', hairColor: '#0c0906', outfit: '#1b0a61', accessories: ['wizardHat'] },
       interact: {
         label: 'Talk to Riya',
         action: {
@@ -141,12 +141,36 @@ export const town = {
           lines: [
             "Hey! I'm Gauri's roomate Riya! Been so for the past 4 years!",
             'I\'m not entirely sure what I\'m doing here but I REALLY wanted to be in the game',
+            'I also REALLY wanted a wizard hat.',
             '...I may be a couple of bucks short.',
           ],
         },
       },
     }
   ] as NpcDef[],
+
+  /** Cats that wander near home and can be petted. EDIT names and coats freely. */
+  cats: [
+    { id: 'mochi', name: 'Mochi', x: 760, y: 900, coat: 'orange', roam: 140 },
+    { id: 'pepper', name: 'Pepper', x: 1180, y: 760, coat: 'tuxedo', roam: 120 },
+    { id: 'sesame', name: 'Sesame', x: 560, y: 450, coat: 'grey', roam: 110 },
+  ] as CatDef[],
+
+  /** Where birds like to land (they fly off when you get close, and roost at night). */
+  birds: {
+    count: 4,
+    spots: [
+      [820, 830],
+      [985, 600],
+      [610, 760],
+      [1210, 820],
+      [700, 470],
+      [1100, 470],
+      [520, 880],
+      [1300, 560],
+      [900, 1010],
+    ] as Array<[number, number]>,
+  },
 
   /** Seed for the decorative tree ring and grass detail. */
   decorSeed: 7,

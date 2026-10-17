@@ -13,6 +13,10 @@ export interface SaveData {
   seasonOverride: Season | null;
   /** Ids of collectibles found so far. */
   collected: string[];
+  /** Ids of cats the player has petted. */
+  petted: string[];
+  /** Reward accessories already announced (so each is celebrated once). */
+  rewardsSeen: string[];
   /** Best Boba Rush score. */
   bobaBest: number;
   /** True once the 'found everything' reward has been shown. */
@@ -33,13 +37,34 @@ export const DEFAULT_SAVE: Readonly<SaveData> = Object.freeze({
   themeOverride: null,
   seasonOverride: null,
   collected: [],
+  petted: [],
+  rewardsSeen: [],
   bobaBest: 0,
   rewardClaimed: false,
 });
 
 const SEASONS: readonly Season[] = ['spring', 'summer', 'autumn', 'winter'];
-const ACCESSORIES: readonly Accessory[] = ['beanie', 'bow', 'glasses', 'headphones', 'cap', 'flower', 'crown'];
-const HAIR = ['short', 'hijab', 'bun', 'long'] as const;
+/** Accessories a player may wear. The wizard hat is deliberately missing: it's Riya's alone. */
+const ACCESSORIES: readonly Accessory[] = [
+  'beanie',
+  'bow',
+  'glasses',
+  'headphones',
+  'cap',
+  'flower',
+  'scarf',
+  'freckles',
+  'earrings',
+  'hairClip',
+  'backpack',
+  'crown',
+  'camera',
+  'flowerCrown',
+  'catEars',
+  'coffeeCup',
+];
+const OUTFIT_STYLES = ['plain', 'stripes', 'overalls', 'dress'] as const;
+const HAIR = ['short', 'curly', 'pigtails', 'hijab', 'bun', 'long'] as const;
 const isColor = (v: unknown): v is string => typeof v === 'string' && /^#[0-9a-f]{3,8}$/i.test(v);
 
 /**
@@ -58,6 +83,7 @@ export function sanitizeCharacter(input: unknown): CharacterAppearance | null {
     skin: o.skin,
     hairColor: o.hairColor,
     outfit: o.outfit,
+    outfitStyle: (OUTFIT_STYLES as readonly unknown[]).includes(o.outfitStyle) ? (o.outfitStyle as CharacterAppearance['outfitStyle']) : 'plain',
     accessories: [...new Set(rawAcc.filter((a): a is Accessory => (ACCESSORIES as readonly unknown[]).includes(a)))],
   };
 }
@@ -78,7 +104,7 @@ export function browserStorage(): StorageLike | null {
 
 /** Validates untrusted parsed JSON field by field, falling back to defaults. */
 export function sanitizeSave(input: unknown): SaveData {
-  const d: SaveData = { ...DEFAULT_SAVE, collected: [] };
+  const d: SaveData = { ...DEFAULT_SAVE, collected: [], petted: [], rewardsSeen: [] };
   if (!input || typeof input !== 'object') return d;
   const o = input as Record<string, unknown>;
   d.character = sanitizeCharacter(o.character);
@@ -89,6 +115,11 @@ export function sanitizeSave(input: unknown): SaveData {
   }
   if (typeof o.bobaBest === 'number' && Number.isFinite(o.bobaBest) && o.bobaBest >= 0) d.bobaBest = Math.floor(o.bobaBest);
   if (typeof o.rewardClaimed === 'boolean') d.rewardClaimed = o.rewardClaimed;
+  const strings = (v: unknown) => (Array.isArray(v) ? [...new Set(v.filter((x): x is string => typeof x === 'string'))] : []);
+  d.petted = strings(o.petted);
+  d.rewardsSeen = strings(o.rewardsSeen);
+  // Saves from before rewardsSeen existed: the crown was already celebrated.
+  if (d.rewardClaimed && !d.rewardsSeen.includes('crown')) d.rewardsSeen.push('crown');
   if (Array.isArray(o.collected)) d.collected = [...new Set(o.collected.filter((x): x is string => typeof x === 'string'))];
   return d;
 }
@@ -131,7 +162,7 @@ export class SaveManager {
   }
 
   reset(): void {
-    this.state = { ...DEFAULT_SAVE, collected: [] };
+    this.state = { ...DEFAULT_SAVE, collected: [], petted: [], rewardsSeen: [] };
     try {
       this.storage?.removeItem(this.key);
     } catch {

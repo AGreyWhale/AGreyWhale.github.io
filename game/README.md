@@ -19,9 +19,11 @@ npm run preview:site   # production build of BOTH sites, served at http://localh
 | --- | --- |
 | Panel titles, which research/project each object shows | `src/content/panels.ts` |
 | Town layout, notice board, villagers in town | `src/content/town.ts` |
+| Cats (names, coats, how far they roam) and bird landing spots | `src/content/town.ts` (`cats`, `birds`); indoor cats in `src/content/interiors.ts` |
 | Buildings (position, colors, room or panel) | `src/content/buildings.ts` |
 | Room furniture and villagers inside rooms | `src/content/interiors.ts` |
-| Character options and presets | `src/content/characters.ts` |
+| Character options and presets (colors, hair, outfit styles, free accessories) | `src/content/characters.ts` |
+| Wardrobe rewards (what unlocks them, what they say) | `src/content/rewards.ts` |
 | Hidden collectibles and coffee-cup fun facts | `src/content/collectibles.ts` |
 | Photography gallery photos | `src/content/gallery.ts` (+ files in `src/assets/photos/`) |
 | Boba Rush menu, round length, customer names | `src/content/boba.ts` |

@@ -12,7 +12,7 @@ import {
   type ProjectItem,
   type ResearchItem,
 } from '../content/site';
-import type { ActionDef, PanelBlock, PanelDef } from '../content/types';
+import type { Accessory, ActionDef, PanelBlock, PanelDef } from '../content/types';
 import type { Progress } from '../systems/CollectibleSystem';
 import type { ContactHandler } from '../systems/contact/ContactHandler';
 import { renderCollection, renderGallery } from './CollectionView';
@@ -163,7 +163,7 @@ function renderBlock(b: PanelBlock, ctx: PanelContext): Node | null {
     case 'gallery':
       return renderGallery(ctx.progress());
     case 'collection':
-      return renderCollection(ctx.progress(), ctx.runAction);
+      return renderCollection(ctx.progress(), ctx.runAction, ctx.unlockedRewards(), ctx.pets());
     case 'directory':
       return h(
         'ul',
@@ -232,6 +232,8 @@ function renderBlock(b: PanelBlock, ctx: PanelContext): Node | null {
 export interface PanelContext {
   runAction(action: ActionDef): void;
   progress(): Progress;
+  unlockedRewards(): Accessory[];
+  pets(): { petted: number; total: number };
   contact: ContactHandler | null;
 }
 

@@ -1,6 +1,7 @@
 import { findBuilding } from '../content/buildings';
 import { characterPresets } from '../content/characters';
 import { collectibleKinds, funFacts } from '../content/collectibles';
+import type { RewardDef } from '../content/rewards';
 import { panels } from '../content/panels';
 import type { ActionDef, CharacterAppearance } from '../content/types';
 import type { RenderEnv } from '../render/draw';
@@ -12,6 +13,7 @@ import { CollectibleSystem } from '../systems/CollectibleSystem';
 import { createContactHandler } from '../systems/contact/ContactHandler';
 import { InputManager } from '../systems/InputManager';
 import { LightingSystem } from '../systems/LightingSystem';
+import { RewardSystem } from '../systems/RewardSystem';
 import { Router, type Route } from '../systems/Router';
 import { SeasonManager } from '../systems/SeasonManager';
 import { SaveManager } from '../systems/SaveManager';
@@ -44,6 +46,9 @@ export class Game implements GameContext {
   readonly seasons: SeasonManager;
   readonly audio: AudioManager;
   readonly collectibles: CollectibleSystem;
+  readonly rewards: RewardSystem;
+  /** Rewards waiting until no dialog is open, so they never cover a fun fact. */
+  private rewardQueue: RewardDef[] = [];
   readonly env: RenderEnv = { time: 0, night: 0, reducedMotion: false, season: 'summer' };
 
   private readonly scenes: SceneManager;
@@ -78,11 +83,13 @@ export class Game implements GameContext {
     this.audio = new AudioManager(this.save, this.bus);
     this.scenes = new SceneManager(() => this.env.reducedMotion);
     this.collectibles = new CollectibleSystem(this.save, this.bus);
+    this.rewards = new RewardSystem(this.save, this.bus);
 
     this.hud = new Hud(ui, this.bus, {
       toggleTheme: () => this.theme.toggle(),
       cycleSeason: () => this.seasons.cycle(),
       openMap: () => this.runAction({ type: 'panel', panel: 'map' }),
+      openWardrobe: () => this.runAction({ type: 'wardrobe' }),
       toggleMute: () => this.audio.toggleMute(),
       interact: () => this.input.queueInteract(),
       openCollection: () => this.runAction({ type: 'panel', panel: 'collection' }),
@@ -90,6 +97,8 @@ export class Game implements GameContext {
     this.dialog = new DialogOverlay(ui, this.bus, {
       runAction: (a) => this.runAction(a),
       progress: () => this.collectibles.progress,
+      unlockedRewards: () => this.rewards.unlocked(),
+      pets: () => this.rewards.pets,
       contact: createContactHandler(),
     });
     this.touch = new TouchControls(ui, canvas, this.input, this.bus);
@@ -100,7 +109,7 @@ export class Game implements GameContext {
       ui,
       this.save.data.character,
       (a) => this.beginPlay(a),
-      () => (this.collectibles.progress.allFound ? ['crown'] : []),
+      () => this.rewards.unlocked(),
     );
 
     this.wireEvents();
@@ -136,11 +145,21 @@ export class Game implements GameContext {
     });
     this.bus.on('ui:blocking', (b) => {
       this.hud.setInert(b);
+      if (!b) window.setTimeout(() => this.flushRewards(), 500);
       this.blocking = b;
       this.syncInput();
     });
     this.router.onChange((r) => this.onRoute(r));
     this.bus.on('collected', (e) => this.onCollected(e));
+    this.bus.on('cat:petted', ({ id, name }) => {
+      this.audio.play('purr');
+      this.hud.toast(`${name} purrs happily`);
+      this.rewards.recordPet(id);
+    });
+    this.bus.on('reward:unlocked', (r) => {
+      this.rewardQueue.push(r);
+      window.setTimeout(() => this.flushRewards(), 900);
+    });
   }
 
   /** Feedback for a found collectible: counter, toast or fun fact, unlocks, final reward. */
@@ -156,19 +175,34 @@ export class Game implements GameContext {
     if (galleryJustUnlocked) {
       window.setTimeout(() => this.hud.toast('📷 Photo gallery unlocked! Visit the camera in the Cottage.'), 1800);
     }
-    if (allJustFound && !this.save.data.rewardClaimed) {
-      this.save.update({ rewardClaimed: true });
-      burstConfetti(this.ui, this.env.reducedMotion);
-      this.audio.play('success');
-      window.setTimeout(
-        () =>
-          this.dialog.openSpeech('✦ You found everything!', [
-            'Every cup, polaroid, pearl and flower. Thank you so much for exploring my little town!',
-            'As a reward, a golden crown is now in your wardrobe. Choose it under Customize next time you visit.',
-          ]),
-        900,
-      );
-    }
+    if (allJustFound) this.save.update({ rewardClaimed: true });
+    this.rewards.check();
+  }
+
+  /** Shows the next earned reward, once nothing else is on screen. */
+  private flushRewards(): void {
+    if (this.blocking || !this.rewardQueue.length) return;
+    const r = this.rewardQueue.shift()!;
+    const big = r.goal.type === 'everything';
+    if (big) burstConfetti(this.ui, this.env.reducedMotion);
+    this.audio.play(big ? 'success' : 'collect');
+    this.dialog.openSpeech(big ? '✦ You found everything!' : `✦ New look: ${r.label}`, [
+      r.message,
+      'Open the wardrobe (the hanger button, bottom left) to try it on.',
+    ]);
+  }
+
+  /** Reopens the character creator mid-game so new looks can be worn right away. */
+  private openWardrobe(): void {
+    if (!this.playing) return;
+    this.dialog.close();
+    this.bus.emit('ui:blocking', true);
+    this.select.showWardrobe(this.town.player.appearance, (a) => {
+      this.save.update({ character: a });
+      this.town.setAppearance(a);
+      if (this.interior) this.interior.player.appearance = a;
+      this.bus.emit('ui:blocking', false);
+    });
   }
 
   private syncInput(): void {
@@ -183,6 +217,7 @@ export class Game implements GameContext {
     this.env.night = this.theme.night;
     this.env.season = this.seasons.season;
     this.scenes.update(dt);
+    this.select.tick(this.env.time, this.env.reducedMotion);
   }
 
   /** Start button handler: runs inside the click, so audio may start here. */
@@ -223,6 +258,9 @@ export class Game implements GameContext {
         break;
       case 'exit':
         this.exitBuilding();
+        break;
+      case 'wardrobe':
+        this.openWardrobe();
         break;
       case 'minigame':
         void this.openMiniGame();

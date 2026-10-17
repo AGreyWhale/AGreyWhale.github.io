@@ -12,7 +12,9 @@
 
 .minigame {
   width: min(900px, 100%);
-  max-height: calc(100% - 8px);
+  /* Viewport units: a % height here resolves to nothing, letting the box overflow the screen. */
+  max-height: calc(100vh - 24px);
+  max-height: calc(100dvh - 24px);
   display: flex;
   flex-direction: column;
   background: var(--surface);
@@ -39,8 +41,14 @@
 }
 
 .minigame-body {
+  /* min-height: 0 lets this flex child shrink, so it scrolls instead of overflowing off-screen. */
+  flex: 1 1 auto;
+  min-height: 0;
   padding: 8px 24px 22px;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .boba-intro .lead,

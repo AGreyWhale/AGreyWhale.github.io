@@ -1,4 +1,4 @@
-import type { InteractionDef, NpcDef } from './types';
+import type { CatDef, InteractionDef, NpcDef } from './types';
 
 /** Furniture the InteriorPainters know how to draw. */
 export type InteriorPropKind =
@@ -65,6 +65,8 @@ export interface InteriorDef {
   props: InteriorPropDef[];
   /** Villagers inside this room (same shape as town NPCs). */
   npcs?: NpcDef[];
+  /** Cats living in this room. */
+  cats?: CatDef[];
 }
 
 const panel = (label: string, id: string): InteractionDef => ({ label, action: { type: 'panel', panel: id } });
@@ -95,6 +97,7 @@ export const interiors: Record<string, InteriorDef> = {
       { kind: 'plant', x: 40, y: 395 },
       { kind: 'plant', x: 585, y: 395, variant: 1 },
     ],
+    cats: [{ id: 'biscuit', name: 'Biscuit', x: 230, y: 330, coat: 'calico', roam: 0 }],
   },
 
   lab: {
