@@ -9,7 +9,9 @@ export type ActionDef =
   | { type: 'say'; speaker?: string; lines: string[] }
   | { type: 'enter'; building: string }
   | { type: 'exit' }
-  | { type: 'minigame'; id: 'boba' }
+  | { type: 'minigame'; id: 'boba' | 'bouquet' }
+  /** Make a wish at the fountain (random; very rarely unlocks the wizard hat). */
+  | { type: 'wish' }
   | { type: 'wardrobe' };
 
 export interface InteractionDef {
@@ -79,7 +81,7 @@ export type Accessory =
   | 'flowerCrown'
   | 'catEars'
   | 'coffeeCup'
-  // Villager-only (Riya's)
+  // Riya's; players can only win it with a lucky wish
   | 'wizardHat';
 
 export type OutfitStyle = 'plain' | 'stripes' | 'overalls' | 'dress';

@@ -5,6 +5,8 @@ import type { Accessory } from './types';
 export type RewardGoal =
   | { type: 'collect'; kind: CollectibleKind }
   | { type: 'pets' }
+  /** Won by chance (the lucky fountain wish). */
+  | { type: 'luck' }
   | { type: 'everything' };
 
 export interface RewardDef {
@@ -46,6 +48,13 @@ export const rewards: RewardDef[] = [
     goal: { type: 'pets' },
     hint: 'Pet every cat (one lives indoors)',
     message: 'Every cat in town has been petted! They made you honorary cat ears.',
+  },
+  {
+    accessory: 'wizardHat',
+    label: 'Wizard hat',
+    goal: { type: 'luck' },
+    hint: 'A very lucky wish…',
+    message: 'The fountain granted a rare wish: Riya’s wizard hat is yours to wear!',
   },
   {
     accessory: 'crown',

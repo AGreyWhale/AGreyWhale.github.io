@@ -1,9 +1,9 @@
-import { ambiencePresets, musicTracks } from '../content/audio';
+import { ambiencePresets, musicTracks, type MusicKey } from '../content/audio';
 import type { EventBus } from '../core/EventBus';
 import type { GameEvents } from '../core/events';
 import { FileTrack, type MusicSource } from './audio/MusicSource';
 import { ProceduralAmbience } from './audio/ProceduralAmbience';
-import type { SaveManager, ThemeMode } from './SaveManager';
+import type { SaveManager } from './SaveManager';
 
 export type Sfx = 'blip' | 'open' | 'close' | 'door' | 'collect' | 'success' | 'fail' | 'purr' | 'chirp';
 
@@ -18,7 +18,7 @@ export class AudioManager {
   private musicBus!: GainNode;
   private sfxBus!: GainNode;
   private current: MusicSource | null = null;
-  private variant: ThemeMode | null = null;
+  private variant: MusicKey | null = null;
   private _muted: boolean;
 
   constructor(
@@ -59,13 +59,18 @@ export class AudioManager {
     else void ctx.resume();
   }
 
-  /** Switches between day and night music with a crossfade. */
-  setVariant(v: ThemeMode): void {
-    if (!this.ctx || v === this.variant) return;
+  /**
+   * Crossfades to another piece: a season + time of day ("autumn-night") or a
+   * mini game ("boba"). Uses a licensed file if one is set for that key (or for
+   * just "day"/"night"), otherwise the procedural preset.
+   */
+  setMusic(key: MusicKey): void {
+    if (!this.ctx || key === this.variant) return;
     const first = this.variant === null;
-    this.variant = v;
-    const url = musicTracks[v];
-    const next: MusicSource = url ? new FileTrack(this.ctx, url) : new ProceduralAmbience(this.ctx, ambiencePresets[v]);
+    this.variant = key;
+    const timeOfDay = key.endsWith('-night') ? 'night' : key.endsWith('-day') ? 'day' : null;
+    const url = musicTracks[key] ?? (timeOfDay ? musicTracks[timeOfDay] : undefined);
+    const next: MusicSource = url ? new FileTrack(this.ctx, url) : new ProceduralAmbience(this.ctx, ambiencePresets[key]);
     next.output.connect(this.musicBus);
     next.start(first ? 3 : 2.5);
     this.current?.stop(2.5);

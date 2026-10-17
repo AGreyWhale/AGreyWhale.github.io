@@ -1,6 +1,7 @@
 import { findBuilding } from '../content/buildings';
 import { characterPresets } from '../content/characters';
 import { collectibleKinds, funFacts } from '../content/collectibles';
+import { musicKeyFor } from '../content/audio';
 import type { RewardDef } from '../content/rewards';
 import { panels } from '../content/panels';
 import type { ActionDef, CharacterAppearance } from '../content/types';
@@ -14,6 +15,7 @@ import { createContactHandler } from '../systems/contact/ContactHandler';
 import { InputManager } from '../systems/InputManager';
 import { LightingSystem } from '../systems/LightingSystem';
 import { RewardSystem } from '../systems/RewardSystem';
+import { makeWish } from '../systems/wish';
 import { Router, type Route } from '../systems/Router';
 import { SeasonManager } from '../systems/SeasonManager';
 import { SaveManager } from '../systems/SaveManager';
@@ -64,6 +66,8 @@ export class Game implements GameContext {
   private playing = false;
   private blocking = false;
   private miniGameOpen = false;
+  /** Which mini game is open (it gets its own music). */
+  private miniGameId: 'boba' | 'bouquet' | null = null;
   private readonly ui: HTMLElement;
 
   constructor(root: HTMLElement) {
@@ -134,11 +138,12 @@ export class Game implements GameContext {
     this.bus.on('action', ({ action }) => this.runAction(action));
     this.bus.on('theme:changed', (mode) => {
       this.hud.setTheme(mode);
-      if (this.playing) this.audio.setVariant(mode);
+      this.updateMusic();
     });
     this.bus.on('audio:muted', (m) => this.hud.setMuted(m));
     this.bus.on('season:changed', (s) => {
       this.env.season = s;
+      this.updateMusic();
       this.hud.setSeason(s, this.seasons.isAuto);
       const name = s[0].toUpperCase() + s.slice(1);
       this.hud.toast(this.seasons.isAuto ? `${name}, to match today's date` : `It's ${name.toLowerCase()} in town`);
@@ -192,6 +197,12 @@ export class Game implements GameContext {
     ]);
   }
 
+  /** Picks music for where you are: the open mini game, or the season and time of day. */
+  private updateMusic(): void {
+    if (!this.playing) return;
+    this.audio.setMusic(musicKeyFor(this.miniGameId, this.seasons.season, this.theme.mode));
+  }
+
   /** Reopens the character creator mid-game so new looks can be worn right away. */
   private openWardrobe(): void {
     if (!this.playing) return;
@@ -224,11 +235,11 @@ export class Game implements GameContext {
   private beginPlay(appearance: CharacterAppearance): void {
     this.save.update({ character: appearance });
     this.audio.unlock();
-    this.audio.setVariant(this.theme.mode);
     this.town.setAppearance(appearance);
     this.town.setAttract(false);
     this.town.placeAtSpawn();
     this.playing = true;
+    this.updateMusic(); // after playing = true, still inside the Start click
     this.hud.setMode('play');
     this.syncInput();
 
@@ -263,21 +274,36 @@ export class Game implements GameContext {
         this.openWardrobe();
         break;
       case 'minigame':
-        void this.openMiniGame();
+        void this.openMiniGame(action.id);
         break;
+      case 'wish': {
+        const wish = makeWish(Math.random, this.save.data.wizardHatWon);
+        if (wish.lucky) {
+          this.save.update({ wizardHatWon: true });
+          this.audio.play('success');
+        }
+        this.dialog.openSpeech(wish.lucky ? '✦ A lucky wish!' : undefined, [wish.line]);
+        if (wish.lucky) this.rewards.check();
+        break;
+      }
     }
   }
 
   /** Lazy-loads and opens the Boba mini game over the current scene. */
-  private async openMiniGame(): Promise<void> {
+  private async openMiniGame(id: 'boba' | 'bouquet'): Promise<void> {
     if (this.miniGameOpen) return;
     this.miniGameOpen = true;
     this.dialog.close();
     try {
-      const { BobaGame } = await import('../minigames/BobaGame');
+      // Each game is its own lazy-loaded chunk.
+      const Game = id === 'boba' ? (await import('../minigames/BobaGame')).BobaGame : (await import('../minigames/BouquetGame')).BouquetGame;
       this.bus.emit('ui:blocking', true);
-      const game = new BobaGame(this.ui, { audio: this.audio, save: this.save, reducedMotion: this.env.reducedMotion }, () => {
+      this.miniGameId = id;
+      this.updateMusic();
+      const game = new Game(this.ui, { audio: this.audio, save: this.save, reducedMotion: this.env.reducedMotion }, () => {
         this.miniGameOpen = false;
+        this.miniGameId = null;
+        this.updateMusic();
         this.bus.emit('ui:blocking', false);
       });
       game.open();

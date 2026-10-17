@@ -3,6 +3,7 @@
  * The JSON is regenerated on every dev/build/test run by scripts/extract-content.mjs.
  */
 import raw from './generated/site.json';
+import { extraProjects } from './projects';
 
 export interface SiteLink {
   href: string;
@@ -68,7 +69,8 @@ export function findResearch(match: string, data: SiteData = site): ResearchItem
 
 /** Finds a project whose title contains `match` (case-insensitive). */
 export function findProject(match: string, data: SiteData = site): ProjectItem | undefined {
-  return data.projects.find((p) => norm(p.title).includes(norm(match)));
+  // Classic-site projects first, then game-only ones from content/projects.ts.
+  return [...data.projects, ...extraProjects].find((p) => norm(p.title).includes(norm(match)));
 }
 
 export function findCourseEntry(match: string, data: SiteData = site): CourseEntry | undefined {

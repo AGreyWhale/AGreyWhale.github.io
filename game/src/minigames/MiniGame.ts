@@ -1,3 +1,4 @@
+import './minigame.css';
 import type { AudioManager } from '../systems/AudioManager';
 import type { SaveManager } from '../systems/SaveManager';
 import { h, iconSpan, icons } from '../ui/dom';
@@ -98,6 +99,8 @@ export abstract class MiniGame {
       }
       return;
     }
+    // Letter/number shortcuts never fire while typing in a text field.
+    if (e.target instanceof Element && e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
     if (this.onKey(e)) e.preventDefault();
   };
 }

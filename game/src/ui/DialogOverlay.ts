@@ -127,7 +127,9 @@ export class DialogOverlay {
       this.close();
       return;
     }
-    if (e.code === 'KeyE' && !e.ctrlKey && !e.metaKey) {
+    // E is a shortcut only when not typing (e.g. in the "Send a letter" form).
+    const typing = e.target instanceof Element && !!e.target.closest('input, textarea, select, [contenteditable="true"]');
+    if (e.code === 'KeyE' && !typing && !e.ctrlKey && !e.metaKey) {
       e.preventDefault();
       e.stopPropagation();
       if (e.repeat) return;

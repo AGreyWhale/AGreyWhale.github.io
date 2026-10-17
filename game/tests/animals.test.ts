@@ -47,16 +47,16 @@ describe('birds', () => {
 });
 
 describe('new character options', () => {
-  it('offers curly hair, but keeps the wizard hat for Riya alone', () => {
+  it('offers curly hair, but never the wizard hat as a free option', () => {
     expect(characterOptions.hair.some((h) => h.value === 'curly')).toBe(true);
     expect(characterOptions.accessories.map((a) => a.value as string)).not.toContain('wizardHat');
     expect(HAT_ACCESSORIES).toContain('wizardHat');
     expect(town.npcs.find((n) => n.name === 'Riya')?.appearance.accessories).toContain('wizardHat');
   });
 
-  it('saves curly hair, but strips the wizard hat from player saves', () => {
+  it('saves curly hair (and a wizard hat, once it has been won)', () => {
     const c = sanitizeCharacter({ body: 'tall', hair: 'curly', skin: '#ffffff', hairColor: '#000000', outfit: '#123456', accessories: ['wizardHat', 'glasses'] });
     expect(c?.hair).toBe('curly');
-    expect(c?.accessories).toEqual(['glasses']);
+    expect(c?.accessories).toEqual(['wizardHat', 'glasses']);
   });
 });

@@ -105,6 +105,11 @@ export const panels: Record<string, PanelDef> = {
       { kind: 'image', src: 'images/cs312/MainCircuit.png', alt: 'Logisim circuit diagram of the CPU datapath', caption: 'The main circuit in Logisim' },
     ],
   },
+  'workshop.rover': {
+    eyebrow: 'Workshop · Mars rover',
+    title: 'TAMU Karura Mars Rover',
+    blocks: [{ kind: 'project', match: 'Karura' }],
+  },
   'workshop.skills': {
     eyebrow: 'Workshop · pegboard',
     title: 'Tools of the trade',
@@ -131,6 +136,7 @@ export const panels: Record<string, PanelDef> = {
     blocks: [
       { kind: 'courseEntry', match: 'floral' },
       { kind: 'slideshow', set: 'floral', label: 'Arrangements from the course' },
+      { kind: 'button', label: 'Try arranging a bouquet', action: { type: 'minigame', id: 'bouquet' } },
     ],
   },
 

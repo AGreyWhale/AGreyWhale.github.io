@@ -36,10 +36,12 @@ describe('rewards', () => {
     expect(all).not.toContain('catEars');
   });
 
-  it('has unique reward accessories, none of them the wizard hat', () => {
+  it('has unique reward accessories; the wizard hat only comes from luck', () => {
     const acc = rewards.map((r) => r.accessory);
     expect(new Set(acc).size).toBe(acc.length);
-    expect(acc).not.toContain('wizardHat');
+    expect(rewards.find((r) => r.accessory === 'wizardHat')?.goal.type).toBe('luck');
+    expect(unlockedRewards(computeProgress(collectibles.map((c) => c.id)), cats, cats, false)).not.toContain('wizardHat');
+    expect(unlockedRewards(computeProgress([]), [], cats, true)).toEqual(['wizardHat']);
   });
 
   it('migrates the old crown flag into rewardsSeen', () => {

@@ -21,6 +21,7 @@ export type InteriorPropKind =
   | 'pegboard'
   | 'circuitTable'
   | 'toolbox'
+  | 'marsRover'
   | 'crate'
   | 'menuBoard'
   | 'teaStation'
@@ -142,7 +143,7 @@ export const interiors: Record<string, InteriorDef> = {
       { kind: 'workbench', x: 160, y: 205, interact: panel('Look at the workbench', 'workshop.papertrail') },
       { kind: 'circuitTable', x: 455, y: 225, interact: panel('Inspect the circuit board', 'workshop.cpu') },
       { kind: 'floorLamp', x: 600, y: 182 },
-      { kind: 'toolbox', x: 300, y: 340 },
+      { kind: 'marsRover', x: 300, y: 345, interact: panel('Inspect the Mars rover', 'workshop.rover') },
       { kind: 'crate', x: 585, y: 395 },
       { kind: 'plant', x: 40, y: 395 },
     ],
@@ -210,12 +211,12 @@ export const interiors: Record<string, InteriorDef> = {
       { kind: 'window', x: 110, y: 56 },
       { kind: 'window', x: 320, y: 56 },
       { kind: 'window', x: 530, y: 56 },
-      { kind: 'plantTable', x: 130, y: 210 },
+      { kind: 'plantTable', x: 130, y: 210, interact: { label: 'Arrange a bouquet (mini game)', action: { type: 'minigame', id: 'bouquet' } } },
       { kind: 'easel', x: 320, y: 215, interact: panel('Look at the photo easel', 'greenhouse.floral') },
-      { kind: 'plantTable', x: 510, y: 210, variant: 1 },
-      { kind: 'plantTable', x: 140, y: 345, variant: 1 },
-      { kind: 'plantTable', x: 500, y: 345 },
-      { kind: 'wateringCan', x: 235, y: 395 },
+      { kind: 'plantTable', x: 510, y: 210, variant: 1, interact: { label: 'Arrange a bouquet (mini game)', action: { type: 'minigame', id: 'bouquet' } } },
+      { kind: 'plantTable', x: 140, y: 345, variant: 1, interact: { label: 'Arrange a bouquet (mini game)', action: { type: 'minigame', id: 'bouquet' } } },
+      { kind: 'plantTable', x: 500, y: 345, interact: { label: 'Arrange a bouquet (mini game)', action: { type: 'minigame', id: 'bouquet' } } },
+      { kind: 'wateringCan', x: 40, y: 320 }, // against the wall, out of every walking line
       { kind: 'plant', x: 40, y: 400 },
       { kind: 'plant', x: 600, y: 400, variant: 1 },
     ],

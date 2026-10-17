@@ -61,7 +61,7 @@ export const town = {
       y: plaza.y + 26,
       interact: {
         label: 'Make a wish',
-        action: { type: 'say', lines: ['You toss a coin into the fountain. Somewhere, a bug quietly fixes itself.'] }, // flavor
+        action: { type: 'wish' }, // the wishes themselves are in content/wishes.ts
       },
     },
     {

@@ -134,7 +134,7 @@ export class ProceduralAmbience implements MusicSource {
 
   private pluck(n: number, t: number): void {
     const osc = this.ctx.createOscillator();
-    osc.type = 'triangle';
+    osc.type = this.p.pluckWave ?? 'triangle';
     osc.frequency.value = midiHz(n);
     const g = this.ctx.createGain();
     g.gain.setValueAtTime(0, t);

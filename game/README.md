@@ -24,12 +24,15 @@ npm run preview:site   # production build of BOTH sites, served at http://localh
 | Room furniture and villagers inside rooms | `src/content/interiors.ts` |
 | Character options and presets (colors, hair, outfit styles, free accessories) | `src/content/characters.ts` |
 | Wardrobe rewards (what unlocks them, what they say) | `src/content/rewards.ts` |
+| Projects shown in town but not on the classic site yet (e.g. Karura) | `src/content/projects.ts` |
 | Hidden collectibles and coffee-cup fun facts | `src/content/collectibles.ts` |
 | Photography gallery photos | `src/content/gallery.ts` (+ files in `src/assets/photos/`) |
 | Boba Rush menu, round length, customer names | `src/content/boba.ts` |
+| Bloom & Arrange flowers and customer requests (Greenhouse game) | `src/content/bouquet.ts` |
+| Fountain wishes and the wizard hat's 5% chance | `src/content/wishes.ts` |
 | How "Send a letter" delivers mail | `src/content/contact.ts` |
 | Old TAMU site link, quick-version link | `src/content/links.ts` |
-| Music (procedural by default) | `src/content/audio.ts` |
+| Music: one piece per season × day/night, plus each mini game (procedural by default) | `src/content/audio.ts` |
 
 ## Adding a villager (NPC)
 

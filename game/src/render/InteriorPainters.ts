@@ -367,6 +367,68 @@ const circuitTable: Painter = (g, { x, y }, env) => {
   g.stroke();
 };
 
+/** A six-wheeled Mars rover with a camera mast, spotting a rock (with a detection box). */
+const marsRover: Painter = (g, { x, y }, env) => {
+  shadow(g, x, y, 42, 7);
+  // A little rock it has "detected", with a dashed bounding box and confidence.
+  const rx = x + 52;
+  ellipse(g, rx, y - 5, 9, 6, '#b9775a');
+  ellipse(g, rx - 2, y - 7, 4.5, 3, '#cf9070');
+  g.strokeStyle = '#7be0a5';
+  g.lineWidth = 1.2;
+  g.setLineDash([3, 2]);
+  g.strokeRect(rx - 12, y - 15, 24, 15);
+  g.setLineDash([]);
+  g.fillStyle = '#2f6a4c';
+  g.font = `600 6px ${UI_FONT}`;
+  g.textAlign = 'left';
+  g.textBaseline = 'alphabetic';
+  g.fillText('rock 0.84', rx - 12, y - 17);
+
+  // Rocker-bogie legs and six wheels
+  g.strokeStyle = '#7b8798';
+  g.lineWidth = 2.5;
+  g.lineCap = 'round';
+  g.beginPath();
+  g.moveTo(x - 26, y - 6);
+  g.lineTo(x - 12, y - 20);
+  g.lineTo(x, y - 6);
+  g.moveTo(x + 26, y - 6);
+  g.lineTo(x + 12, y - 20);
+  g.lineTo(x, y - 6);
+  g.stroke();
+  for (const wx of [-26, 0, 26]) {
+    circle(g, x + wx, y - 6, 6.5, '#4a4656');
+    circle(g, x + wx, y - 6, 2.5, '#9aa7b5');
+  }
+  // Body + solar deck
+  fillRoundRect(g, x - 24, y - 32, 48, 14, 3, '#e9e2d3');
+  fillRoundRect(g, x - 28, y - 37, 56, 6, 2, '#3f5f8a');
+  g.strokeStyle = 'rgba(255,255,255,0.35)';
+  g.lineWidth = 1;
+  g.beginPath();
+  for (let i = 1; i < 6; i++) {
+    g.moveTo(x - 28 + i * 9.3, y - 37);
+    g.lineTo(x - 28 + i * 9.3, y - 31);
+  }
+  g.stroke();
+  fillRoundRect(g, x - 18, y - 28, 14, 6, 1.5, '#d9653f');
+  // Camera mast + head (the eyes of the detector)
+  fillRoundRect(g, x + 12, y - 58, 3, 22, 1, '#7b8798');
+  fillRoundRect(g, x + 6, y - 64, 16, 8, 2.5, '#5a5469');
+  circle(g, x + 10.5, y - 60, 2.2, '#cfe3ec');
+  circle(g, x + 17.5, y - 60, 2.2, '#cfe3ec');
+  // Antenna with a blinking light
+  g.strokeStyle = '#7b8798';
+  g.lineWidth = 1.5;
+  g.beginPath();
+  g.moveTo(x - 16, y - 37);
+  g.lineTo(x - 20, y - 54);
+  g.stroke();
+  const blink = env.reducedMotion ? 1 : (Math.sin(env.time * 4) + 1) / 2;
+  circle(g, x - 20, y - 55, 2, `rgba(123, 224, 165, ${0.35 + 0.65 * blink})`);
+};
+
 const toolbox: Painter = (g, { x, y }) => {
   shadow(g, x, y, 26, 5);
   fillRoundRect(g, x - 24, y - 22, 48, 22, 4, '#e0685a');
@@ -740,6 +802,7 @@ export const interiorPainters: Record<InteriorPropKind, Painter> = {
   pegboard,
   circuitTable,
   toolbox,
+  marsRover,
   crate,
 };
 
@@ -773,6 +836,7 @@ export const INTERIOR_FOOTPRINTS: Partial<Record<InteriorPropKind, { x: number; 
   workbench: { x: -72, y: -30, w: 144, h: 30 },
   circuitTable: { x: -56, y: -30, w: 112, h: 30 },
   toolbox: { x: -24, y: -14, w: 48, h: 14 },
+  marsRover: { x: -34, y: -14, w: 68, h: 14 },
   crate: { x: -22, y: -18, w: 44, h: 18 },
   teaStation: { x: -82, y: -34, w: 164, h: 34 },
   register: { x: -82, y: -34, w: 164, h: 34 },

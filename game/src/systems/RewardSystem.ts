@@ -13,7 +13,7 @@ export function allCatIds(): string[] {
 }
 
 /** Whether one reward's goal is met. Pure, so it's unit-tested. */
-export function isEarned(r: RewardDef, progress: Progress, petted: readonly string[], catIds: readonly string[]): boolean {
+export function isEarned(r: RewardDef, progress: Progress, petted: readonly string[], catIds: readonly string[], lucky = false): boolean {
   switch (r.goal.type) {
     case 'collect': {
       const k = progress.byKind[r.goal.kind];
@@ -23,12 +23,20 @@ export function isEarned(r: RewardDef, progress: Progress, petted: readonly stri
       return catIds.length > 0 && catIds.every((id) => petted.includes(id));
     case 'everything':
       return progress.allFound;
+    case 'luck':
+      return lucky;
   }
 }
 
 /** Which reward accessories are unlocked. Pure, so it's unit-tested. */
-export function unlockedRewards(progress: Progress, petted: readonly string[], catIds: readonly string[], defs: readonly RewardDef[] = rewards): Accessory[] {
-  return defs.filter((r) => isEarned(r, progress, petted, catIds)).map((r) => r.accessory);
+export function unlockedRewards(
+  progress: Progress,
+  petted: readonly string[],
+  catIds: readonly string[],
+  lucky = false,
+  defs: readonly RewardDef[] = rewards,
+): Accessory[] {
+  return defs.filter((r) => isEarned(r, progress, petted, catIds, lucky)).map((r) => r.accessory);
 }
 
 /**
@@ -48,7 +56,7 @@ export class RewardSystem {
   }
 
   unlocked(): Accessory[] {
-    return unlockedRewards(computeProgress(this.save.data.collected), this.save.data.petted, this.catIds);
+    return unlockedRewards(computeProgress(this.save.data.collected), this.save.data.petted, this.catIds, this.save.data.wizardHatWon);
   }
 
   recordPet(catId: string): void {

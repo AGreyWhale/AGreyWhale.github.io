@@ -19,6 +19,10 @@ export interface SaveData {
   rewardsSeen: string[];
   /** Best Boba Rush score. */
   bobaBest: number;
+  /** Best Bloom & Arrange score (stars). */
+  bouquetBest: number;
+  /** True once the lucky fountain wish has granted the wizard hat. */
+  wizardHatWon: boolean;
   /** True once the 'found everything' reward has been shown. */
   rewardClaimed: boolean;
 }
@@ -40,11 +44,13 @@ export const DEFAULT_SAVE: Readonly<SaveData> = Object.freeze({
   petted: [],
   rewardsSeen: [],
   bobaBest: 0,
+  bouquetBest: 0,
+  wizardHatWon: false,
   rewardClaimed: false,
 });
 
 const SEASONS: readonly Season[] = ['spring', 'summer', 'autumn', 'winter'];
-/** Accessories a player may wear. The wizard hat is deliberately missing: it's Riya's alone. */
+/** Accessories a player may wear (rewards only show up in the wardrobe once earned). */
 const ACCESSORIES: readonly Accessory[] = [
   'beanie',
   'bow',
@@ -62,6 +68,7 @@ const ACCESSORIES: readonly Accessory[] = [
   'flowerCrown',
   'catEars',
   'coffeeCup',
+  'wizardHat',
 ];
 const OUTFIT_STYLES = ['plain', 'stripes', 'overalls', 'dress'] as const;
 const HAIR = ['short', 'curly', 'pigtails', 'hijab', 'bun', 'long'] as const;
@@ -114,6 +121,8 @@ export function sanitizeSave(input: unknown): SaveData {
     d.seasonOverride = o.seasonOverride as Season;
   }
   if (typeof o.bobaBest === 'number' && Number.isFinite(o.bobaBest) && o.bobaBest >= 0) d.bobaBest = Math.floor(o.bobaBest);
+  if (typeof o.bouquetBest === 'number' && Number.isFinite(o.bouquetBest) && o.bouquetBest >= 0) d.bouquetBest = Math.floor(o.bouquetBest);
+  if (typeof o.wizardHatWon === 'boolean') d.wizardHatWon = o.wizardHatWon;
   if (typeof o.rewardClaimed === 'boolean') d.rewardClaimed = o.rewardClaimed;
   const strings = (v: unknown) => (Array.isArray(v) ? [...new Set(v.filter((x): x is string => typeof x === 'string'))] : []);
   d.petted = strings(o.petted);
