@@ -67,8 +67,8 @@ describe('makeWish', () => {
     expect(makeWish(seq(0.001), true).lucky).toBe(false);
   });
 
-  it('has 7 wishes and roughly a 5% chance', () => {
-    expect(wishes).toHaveLength(7);
+  it('has wishes (add or remove freely) and roughly a 5% chance', () => {
+    expect(wishes.length).toBeGreaterThan(0);
     expect(WIZARD_HAT_CHANCE).toBeCloseTo(0.05);
     let seed = 3;
     const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
