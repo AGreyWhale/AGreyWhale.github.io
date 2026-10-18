@@ -45,18 +45,6 @@ Deployment is automated by `.github/workflows/deploy.yml`: on every push to
 publishes it with the official `configure-pages`, `upload-pages-artifact` and
 `deploy-pages` actions.
 
-**One-time setup (do this before the first merge):**
-
-1. Repo **Settings → Pages**.
-2. **Build and deployment → Source:** choose **GitHub Actions**
-   (instead of "Deploy from a branch"). Your current site stays live until the
-   first new deployment replaces it.
-3. Leave the custom domain empty (unless you add one later).
-4. Merge the `game-world` branch into `main`. Watch it run under the
-   **Actions** tab; the deploy job prints the live URL.
-
-If a deploy ever fails, the previous version stays online. Fix the error and
-push again, or re-run the workflow from the Actions tab (**Run workflow**).
 
 ## Making the town the homepage (flip root ↔ /world/)
 
@@ -76,12 +64,7 @@ update automatically. Flip back the same way.
 Deep links inside the town use hashes (e.g. `/world/#/b/lab`), so they never
 404 on GitHub Pages.
 
-## Editing the town
 
-See [`game/README.md`](game/README.md) for which file controls what (panels,
-buildings, NPCs, collectibles and fun facts, gallery photos, Boba Rush menu,
-contact delivery, music). In short: everything is plain data in
-`game/src/content/`.
 
 ## Music
 
@@ -90,21 +73,8 @@ by day, softer at night), so there are no audio files and no licensing
 concerns. Nothing plays until the visitor presses Start, and the mute
 choice is remembered.
 
-To use real tracks instead, add **properly licensed** short looping files
-(for example CC0 or tracks you have a license for; aim for under 1 MB each) to
-`game/src/assets/audio/`, then follow the comment at the top of
-`game/src/content/audio.ts`. Never commit music you don't have the rights to.
 
-## Old school-hosted site
 
-- **Link from here to there:** `game/src/content/links.ts` → `oldSchoolSite`
-  (set it to `null` to hide it). It appears on the start screen and in the
-  Post Office.
-- **Link from there back to here:** on
-  `https://people.tamu.edu/~gauriagrawal`, add a link near the top of the main
-  page, e.g.
-  `<a href="https://agreywhale.github.io/">My new site has moved to agreywhale.github.io →</a>`.
-  If you flip the town to the root, that same URL lands visitors in the town.
 
 ## Project layout
 
